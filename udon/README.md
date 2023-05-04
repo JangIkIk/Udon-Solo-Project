@@ -66,6 +66,25 @@
 
 
 
+[설치한패키지]
+```
+npx i create-react-app udon --template typescript
+npm i axios
+npm i styled-components
+npm i @types/styled-components
+npm i express
+npm i sqlite3
+npm i @reduxjs/toolkit
+```
+
+[역할구분]
+- Client : React(TypeScript)
+- ApiServer : Express
+- DB : sqlite3
+- 상태관리 : Redux-toolkit
+
+
+
 
 
     
