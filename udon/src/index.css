@@ -18,3 +18,16 @@ h1,h2,h3,h4,h5,h6,p,button,span,li,ul,ol,a{
   background-color: transparent;
 }
 
+#root{
+  min-width: 320px;
+  max-width: 1080px;
+  height: 100%;
+  margin: 0 auto;
+  background-color: red;
+}
+
+.App{
+  background-color: blue;
+  height: 100%;
+}
+

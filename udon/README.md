@@ -84,7 +84,9 @@ npm i react-router-dom
 - DB : sqlite3
 - 상태관리 : Redux-toolkit
 
-
+[반응형]
+최소 320 X 568
+최대 1080 X 2400
 
 
 
