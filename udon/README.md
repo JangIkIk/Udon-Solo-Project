@@ -75,6 +75,7 @@ npm i @types/styled-components
 npm i express
 npm i sqlite3
 npm i @reduxjs/toolkit
+npm i react-router-dom
 ```
 
 [역할구분]
