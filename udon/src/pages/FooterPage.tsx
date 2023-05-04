@@ -2,35 +2,35 @@ import styled from "styled-components";
 import { BiHomeAlt, BiUser, BiConversation, BiBell, BiPencil, BiKey } from "react-icons/bi";
 
 const Layout = styled.div`
+  font-size: 1.5rem;
   width: 100%;
   max-width: 1080px;
   min-width: 320px;
   position: fixed;
   background-color: white;
   bottom: 0;
-  height: 70px;
+  height: 7rem;
   display: flex;
 
   .in-box {
     flex: 1;
     display: flex;
     justify-content: space-around;
-    align-items: center;
-    gap: 10px;
-    padding: 10px;
+    gap: 1rem;
+    padding: 1rem;
     
 
     .icons {
       display: flex;
-      padding: 5px;
       flex-direction: column;
       align-items: center;
+      justify-content:center;
       flex: 1;
-      font-size: 20px;
-      border-radius:10px;
+      border-radius:1rem;
 
       &:hover{
         background-color:gray;
+        border:1px solid black;
       }
     }
   }
@@ -57,7 +57,7 @@ function FooterPage() {
             <span>알림</span>
         </a>
       </div>
-      <div className="in-box">
+      {/* <div className="in-box">
         <a href="/login" className="icons">
           <span>
             <BiKey />
@@ -70,7 +70,7 @@ function FooterPage() {
           </span>
           <span>회원가입</span>
         </a>
-      </div>
+      </div> */}
     </Layout>
   );
 }
