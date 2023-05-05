@@ -6,7 +6,7 @@ const Layout = styled.div`
   padding: 1rem;
   gap:10px;
   
-  .group-img {
+  .group-list-img {
     width: 10rem;
     heigth: 10rem;
     background-color:red;
@@ -18,19 +18,19 @@ const Layout = styled.div`
     }
   }
 
-  .group-content {
+  .group-list-content {
     font-size:1.1rem;
     flex: 1;
     display:flex;
     flex-direction: column;
     overflow: hidden;
 
-    .group-map{
+    .group-list-map{
         display:flex;
         align-items: center;
       }
 
-    .group-title{
+    .group-list-title{
         font-size: 1.2rem;
         display:flex;
         align-items: center;
@@ -43,10 +43,11 @@ const Layout = styled.div`
         }
     }
 
-    .group-info{
+    .group-list-info{
         display:flex;
         align-items: center;
         gap: 1rem;
+        font-size: 0.9rem;
     }
   }
 
@@ -56,25 +57,25 @@ const Layout = styled.div`
 export const GroupList = () => {
   return (
     <Layout>
-      <div className="group-img">
+      <div className="group-list-img">
         <img
           src="https://mblogthumb-phinf.pstatic.net/MjAyMDA0MjhfMjAz/MDAxNTg4MDQwOTA5MjE0.i6ARBaBdi_HYODiTR0f1ma8OvblzSh01bJGL8U5gDZUg.1oPlzYogIg8H_TAk5iZvUMYOLsZkZM1ITTVrfUsIHHog.JPEG.mijung011040/20200424_192926.jpg?type=w800"
           alt="클라이밍사진"
         />
       </div>
-      <div className="group-content">
-        <div className="group-map">
+      <div className="group-list-content">
+        <div className="group-list-map">
           <span>
             <BiInfoCircle />
           </span>
           <span>{"강남구"}</span>
         </div>
 
-        <div className="group-title">
-          <span>{"[정자역] 클라이밍 초자분들 환영sssssss!"}</span>
+        <div className="group-list-title">
+          <span>{"[정자역] 클라이밍 초자분들 환영 나이제한없음X"}</span>
         </div>
 
-        <div className="group-info">
+        <div className="group-list-info">
           <div>
             <span>
               <BiStreetView />
