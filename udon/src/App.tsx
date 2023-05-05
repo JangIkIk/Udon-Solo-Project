@@ -30,10 +30,10 @@ function App() {
         <Routes>
           <Route element={<CommonFooter />}>
             <Route path="/" element={<HomePage />} />
-            <Route path="/mypage" element={<MyPage />} />
-            <Route path="/group" element={<GroupPage />} />
+            <Route path="/mypage" element={<MyPage />} />            
             <Route path="/news" element={<NewsPage />} />
           </Route>
+          <Route path="/group" element={<GroupPage />} />
           <Route path="loding" element={<LodingPage />}></Route>
           <Route path="/signup" element={<SignUpPage />}></Route>
           <Route path="/login" element={<LoginPage />}></Route>
