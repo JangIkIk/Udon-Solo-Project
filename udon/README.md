@@ -76,6 +76,7 @@ npm i express
 npm i sqlite3
 npm i @reduxjs/toolkit
 npm i react-router-dom
+npm i react-icons
 ```
 
 [역할구분]
