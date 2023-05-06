@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { BiInfoCircle, BiStreetView, BiBeenHere } from "react-icons/bi";
+import { BiInfoCircle, BiStreetView, BiBeenHere, BiHeart } from "react-icons/bi";
 
 const Layout = styled.div`
   display: flex;
@@ -48,6 +48,11 @@ const Layout = styled.div`
         align-items: center;
         gap: 1rem;
         font-size: 0.9rem;
+
+        & > div{
+          display:flex;
+        }
+        
     }
   }
 
@@ -88,6 +93,12 @@ export const GroupList = () => {
               <BiBeenHere />
             </span>
             <span>{"정자역 5번출구"}</span>
+          </div>
+          <div>
+            <span>
+              <BiHeart/>
+            </span>
+            <span>{"찜하기"}</span>
           </div>
         </div>
       </div>
