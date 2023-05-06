@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { BiCalendarCheck, BiInfoCircle, BiWon } from "react-icons/bi";
+import { BiCalendarCheck, BiInfoCircle, BiWon, BiHeart } from "react-icons/bi";
 import { useState } from "react";
 import { GroupPeople } from "./GroupPeople";
 
@@ -74,7 +74,7 @@ const Layout = styled.div<stylesProps>`
         }
     }
 
-    .group-info-join{
+    .group-info-footer{
         margin: 0 auto;
         width: 100%;
         text-align: center;
@@ -83,11 +83,31 @@ const Layout = styled.div<stylesProps>`
         max-width: 1080px;
         min-width: 320px;
         bottom:0;
-        left: 0px;
+        left: 0;
         height: 4.5rem;
         display:flex;
-        justify-content:center;
-        align-items:center;
+        padding: 0.5rem;
+
+        & > span {
+          display:flex;
+          justify-content: center;
+          align-items: center;
+        }
+
+        .group-info-footer-keep{
+          flex-basis: 10rem;
+          color: red;
+          font-size: 2rem;
+        }
+
+        .group-info-footer-join{
+          background-color:blue;
+          color: white;
+          border-radius: 10px;
+          flex:1;
+        }
+
+        
     }
 `;
 
@@ -97,6 +117,36 @@ export const GroupInfo = () => {
     안녕하세요 정자역 클라이밍입니다.
     클라이밍을 재밌게하실분들을 모집합니다!!
 
+    since 22.10.16
+    ♈️가입조건
+    > 활발한 활동 가능!!
+    > 나이 : 민증만있으면가능!!
+    > 왕초보 모두가능!!
+    since 22.10.16
+    ♈️가입조건
+    > 활발한 활동 가능!!
+    > 나이 : 민증만있으면가능!!
+    > 왕초보 모두가능!!
+    since 22.10.16
+    ♈️가입조건
+    > 활발한 활동 가능!!
+    > 나이 : 민증만있으면가능!!
+    > 왕초보 모두가능!!
+    since 22.10.16
+    ♈️가입조건
+    > 활발한 활동 가능!!
+    > 나이 : 민증만있으면가능!!
+    > 왕초보 모두가능!!
+    since 22.10.16
+    ♈️가입조건
+    > 활발한 활동 가능!!
+    > 나이 : 민증만있으면가능!!
+    > 왕초보 모두가능!!
+    since 22.10.16
+    ♈️가입조건
+    > 활발한 활동 가능!!
+    > 나이 : 민증만있으면가능!!
+    > 왕초보 모두가능!!
     since 22.10.16
     ♈️가입조건
     > 활발한 활동 가능!!
@@ -176,8 +226,9 @@ export const GroupInfo = () => {
             </div>
           </div>
         </div>
-        <div className="group-info-join">
-            <span>가입하기</span>
+        <div className="group-info-footer">
+            <span className="group-info-footer-keep"><BiHeart/></span>
+            <span className="group-info-footer-join">가입하기</span>
         </div>
       </div>
     </Layout>
