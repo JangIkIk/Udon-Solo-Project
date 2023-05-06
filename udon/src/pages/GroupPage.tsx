@@ -36,6 +36,7 @@ const Layout = styled.div`
             text-align: center;
             & > li{
                 flex:1;
+                padding-bottom: 1rem;
             }
         }
     }
@@ -74,7 +75,7 @@ function GroupPage(){
                 <ul className="group-tap">
                     {tapText.map((item, idx)=>{
                         return(
-                            <li key={idx} onClick={()=> setGroupTap(idx)} style={{ borderBottom: groupTap === idx ? "1px solid black" : "none"}}>{item}</li>
+                            <li key={idx} onClick={()=> setGroupTap(idx)} style={{ borderBottom: groupTap === idx ? "2px solid black" : "none"}}>{item}</li>
                         );
                     })}
                 </ul>
