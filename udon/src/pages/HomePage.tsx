@@ -1,21 +1,20 @@
 import styled from "styled-components";
-import { BiSearch, BiRightIndent, BiMoon, BiWorld } from "react-icons/bi";
 import { GroupList } from "../components/GroupList";
 import { useNavigate } from "react-router-dom";
 
 const Layout = styled.div`
-padding:10px;
+padding:1rem;
   main {
     text-align: center;
-    background-color: gray;
 
     ul{
         display:flex;
         flex-direction: column;
         gap:10px;
         .group-list{
+          background-color: gray;
             margin: 0 auto;
-            width:80%;
+            width:100%;
             border: 1px solid black;
             border-radius: 10px;
             
