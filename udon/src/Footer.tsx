@@ -48,7 +48,7 @@ function Footer() {
             <span><BiUser/></span>
             <span>프로필</span>
         </a>
-        <a href="/group" className="icons">
+        <a href="/groupsetting" className="icons">
             <span><BiConversation/></span>
             <span>그룹</span>
         </a>

@@ -10,6 +10,7 @@ import MyPage from "./pages/MyPage";
 import LoginPage from "./pages/LoginPage";
 import SignUpPage from "./pages/SignUpPage";
 import NewsPage from "./pages/NewsPage";
+import GroupSetting from "./pages/GroupSetting"
 
 const CommonFooter = () => {
   return (
@@ -32,6 +33,7 @@ function App() {
             <Route path="/" element={<HomePage />} />
             <Route path="/mypage" element={<MyPage />} />            
             <Route path="/news" element={<NewsPage />} />
+            <Route path="/groupsetting" element={<GroupSetting />} />
           </Route>
           <Route path="/group" element={<GroupPage />} />
           <Route path="loding" element={<LodingPage />}></Route>
