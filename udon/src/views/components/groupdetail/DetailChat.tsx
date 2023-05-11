@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { GroupMessageOthers, GroupMessageMe} from "./GroupMessage"
+import { DetailMessageMe, DetailMessageOthers } from "@groupdetail";
 
 const Layout = styled.div`
     padding: 1rem;
@@ -48,15 +48,15 @@ const Layout = styled.div`
     }
 `;
 
-export const GroupChat = () => {
+export const DetailChat = () => {
   return (
     <Layout>
       <div  className="groupchat-message">
         <div className="groupchat-others">
-            <GroupMessageOthers/>
+            <DetailMessageOthers/>
         </div>
         <div className="groupchat-me">
-            <GroupMessageMe/>
+            <DetailMessageMe/>
         </div>
       </div>
       <div className="groupchat-input">

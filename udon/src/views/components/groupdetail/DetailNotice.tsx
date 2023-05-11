@@ -1,6 +1,8 @@
 import styled from "styled-components";
 
 const Layout = styled.div`
+    // height: 100%;
+    background-color:red;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -17,7 +19,7 @@ const Layout = styled.div`
 
 `
 
-export const GroupNews = ()=>{
+export const DetailNotice = ()=>{
     return(
         <Layout>
             <div className="groupnews-each">

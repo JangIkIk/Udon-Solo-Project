@@ -1,8 +1,11 @@
 import styled from "styled-components";
-import { GroupList } from "../components/GroupList";
 import { useNavigate } from "react-router-dom";
+import { GroupList } from "@components/GroupList";
+
 
 const Layout = styled.div`
+background-color:yellow;
+height: 100%;
 padding:1rem;
   main {
     text-align: center;
@@ -27,7 +30,8 @@ padding:1rem;
 `;
 
 const HomePage = () => {
-    const test = [1,2,3,4,5,6,7,8,9,10,11,12,13];
+    const test = [1,2,3,4,5,6,7,9,10,11,12,13,14,15];
+    // const test = [1,2,3];
     const navigate = useNavigate();
 
     const clickGroup = ()=>{

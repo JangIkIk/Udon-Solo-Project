@@ -14,7 +14,7 @@ const Layout = styled.div`
     }
 `
 
-export const GroupPhoto = ()=>{
+export const DetailPhoto = ()=>{
     return(
         <Layout>
             <div className="groupphoto-each">

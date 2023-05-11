@@ -1,11 +1,8 @@
+import styled from "styled-components";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import styled from "styled-components";
-import { GroupInfo } from "../components/GroupInfo";
-import { GroupNews } from "../components/GroupNews";
-import { GroupPhoto } from "../components/GroupPhoto";
-import { GroupChat } from "../components/GroupChat";
 import { BiLeftArrowAlt } from "react-icons/bi";
+import { DetailChat, DetailInfo, DetailNotice, DetailPhoto } from "@groupdetail";
 
 
 type styleProps = {
@@ -13,7 +10,10 @@ type styleProps = {
 }
 
 const Layout = styled.div<styleProps>`
-  
+    height:100%;
+    background-color: red;
+    display: flex;
+    // flex-direction: column;
 
     .grouppage-header{
         position: fixed;
@@ -70,11 +70,12 @@ const Layout = styled.div<styleProps>`
   
 
   .grouppage-main{
+    flex:1;
     padding-top: 7rem;
   }
 `;
 
-function GroupPage() {
+function GroupDetailPage() {
   const [groupTap, setGroupTap] = useState<number>(0);
   const navigate = useNavigate();
   const tapText = ["정보", "게시판", "사진첩", "채팅"];
@@ -82,13 +83,13 @@ function GroupPage() {
   const tapcontent = () => {
     switch (groupTap) {
       case 0:
-        return <GroupInfo />;
+        return <DetailInfo />;
       case 1:
-        return <GroupNews />;
+        return <DetailNotice />;
       case 2:
-        return <GroupPhoto />;
+        return <DetailPhoto />;
       case 3:
-        return <GroupChat />;
+        return <DetailChat />;
       default:
         return null;
     }
@@ -124,4 +125,4 @@ function GroupPage() {
   );
 }
 
-export default GroupPage;
+export default GroupDetailPage;

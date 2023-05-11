@@ -1,16 +1,7 @@
-import React from "react";
 import { BrowserRouter, Routes, Route, Outlet } from "react-router-dom";
-import "./App.css";
-import HomePage from "./pages/HomePage";
-import LodingPage from "./pages/LodingPage";
-import Header from "./Header";
-import Footer from "./Footer";
-import GroupPage from "./pages/GroupPage";
-import MyPage from "./pages/MyPage";
-import LoginPage from "./pages/LoginPage";
-import SignUpPage from "./pages/SignUpPage";
-import NewsPage from "./pages/NewsPage";
-import GroupSetting from "./pages/GroupSetting"
+import { HomePage, LodingPage, MyPage, LoginPage, SignUpPage, NewsPage, GroupDetailPage, GroupSettingPage} from "@pages";
+import {Footer, Header} from "@components"
+import "@styles/index.css"
 
 const CommonFooter = () => {
   return (
@@ -33,9 +24,9 @@ function App() {
             <Route path="/" element={<HomePage />} />
             <Route path="/mypage" element={<MyPage />} />            
             <Route path="/news" element={<NewsPage />} />
-            <Route path="/groupsetting" element={<GroupSetting />} />
+            <Route path="/groupsetting" element={<GroupSettingPage />} />
           </Route>
-          <Route path="/group" element={<GroupPage />} />
+          <Route path="/group" element={<GroupDetailPage />} />
           <Route path="loding" element={<LodingPage />}></Route>
           <Route path="/signup" element={<SignUpPage />}></Route>
           <Route path="/login" element={<LoginPage />}></Route>

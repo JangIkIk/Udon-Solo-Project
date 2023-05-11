@@ -1,15 +1,17 @@
+import { useState } from "react";
 import styled from "styled-components";
 import { BiCalendarCheck, BiInfoCircle, BiWon, BiHeart } from "react-icons/bi";
-import { useState } from "react";
-import { GroupPeople } from "./GroupPeople";
+import { GroupPeople } from "@components/GroupPeople";
 
 type stylesProps ={
     profile: number
 }
 
 const Layout = styled.div<stylesProps>`
-    padding-bottom: 4.5rem;
+    height: 100%;
+    background-color:blue;
 
+    padding-bottom: 4.5rem;
     .group-info-photo {
       display: flex;
       justify-content: center;
@@ -111,7 +113,7 @@ const Layout = styled.div<stylesProps>`
     }
 `;
 
-export const GroupInfo = () => {
+export const DetailInfo = () => {
   const [profile, setProfile] = useState<number[]>([1, 2, 3, 4]);
   const text = `
     안녕하세요 정자역 클라이밍입니다.
@@ -124,9 +126,6 @@ export const GroupInfo = () => {
     > 왕초보 모두가능!!
     since 22.10.16
     ♈️가입조건
-    > 활발한 활동 가능!!
-    > 나이 : 민증만있으면가능!!
-    > 왕초보 모두가능!!
     since 22.10.16
     ♈️가입조건
     > 활발한 활동 가능!!
@@ -134,49 +133,8 @@ export const GroupInfo = () => {
     > 왕초보 모두가능!!
     since 22.10.16
     ♈️가입조건
-    > 활발한 활동 가능!!
-    > 나이 : 민증만있으면가능!!
-    > 왕초보 모두가능!!
     since 22.10.16
-    ♈️가입조건
-    > 활발한 활동 가능!!
-    > 나이 : 민증만있으면가능!!
-    > 왕초보 모두가능!!
-    since 22.10.16
-    ♈️가입조건
-    > 활발한 활동 가능!!
-    > 나이 : 민증만있으면가능!!
-    > 왕초보 모두가능!!
-    since 22.10.16
-    ♈️가입조건
-    > 활발한 활동 가능!!
-    > 나이 : 민증만있으면가능!!
-    > 왕초보 모두가능!!
-    since 22.10.16
-    ♈️가입조건
-    > 활발한 활동 가능!!
-    > 나이 : 민증만있으면가능!!
-    > 왕초보 모두가능!!
-    since 22.10.16
-    ♈️가입조건
-    > 활발한 활동 가능!!
-    > 나이 : 민증만있으면가능!!
-    > 왕초보 모두가능!!
-    since 22.10.16
-    ♈️가입조건
-    > 활발한 활동 가능!!
-    > 나이 : 민증만있으면가능!!
-    > 왕초보 모두가능!!
-    since 22.10.16
-    ♈️가입조건
-    > 활발한 활동 가능!!
-    > 나이 : 민증만있으면가능!!
-    > 왕초보 모두가능!!
-    since 22.10.16
-    ♈️가입조건
-    > 활발한 활동 가능!!
-    > 나이 : 민증만있으면가능!!
-    > 왕초보 모두가능!!
+   
     `;
 
   return (

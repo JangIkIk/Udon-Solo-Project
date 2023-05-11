@@ -1,8 +1,10 @@
 import styled from "styled-components";
 import { BiMaleFemale, BiBeenHere, BiHeart } from "react-icons/bi";
-import { GroupList } from "../components/GroupList";
+import { GroupList } from "@components/GroupList";
 
 const Layout = styled.div`
+  height: 100%;
+  background-color:red;
   padding: 1rem;
   font-size: 1.2rem;
 

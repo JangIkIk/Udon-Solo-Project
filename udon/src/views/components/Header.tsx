@@ -1,5 +1,5 @@
-import { BiSearch, BiRightIndent, BiMoon, BiWorld } from "react-icons/bi";
 import styled from "styled-components";
+import { BiSearch, BiRightIndent, BiMoon, BiWorld } from "react-icons/bi";
 
 const Layout = styled.div`
 position: fixed;

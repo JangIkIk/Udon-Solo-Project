@@ -76,12 +76,14 @@
 npx i create-react-app udon --template typescript
 npm i axios
 npm i styled-components
-npm i @types/styled-components
 npm i express
 npm i sqlite3
 npm i @reduxjs/toolkit
 npm i react-router-dom
 npm i react-icons
+
+npm i @craco/craco --save-dev
+npm i @types/styled-components--save-dev
 ```
 
 [역할구분]
@@ -93,6 +95,35 @@ npm i react-icons
 [반응형]
 최소 320 X 568
 최대 1080 X 2400
+
+
+[css구조]
+
+html
+body
+└──root
+    └──App
+        └──
+
+
+├
+├── Package.resolved
+├── Package.swift
+├── Sources
+│   ├── App
+│   │   ├── Controllers
+│   │   ├── configure.swift
+│   │   └── routes.swift
+│   └── Run
+│       └── main.swift
+├── Tests
+│   └── AppTests
+│       └── AppTests.swift
+└── docker-compose.yml
+
+
+
+[파일구조]
 
 
 
