@@ -1,5 +1,16 @@
 {
   "compilerOptions": {
+    "baseUrl": "./src",
+      "paths": {
+        "@pages": ["views/pages/index.ts"],
+        "@pages/*": ["views/pages/*"],
+        "@components": ["views/components/index.ts"],
+        "@components/*": ["views/components/*"],
+        "@groupdetail": ["views/components/groupdetail/index.ts"],
+        "@groupdetail/*": ["views/components/groupdetail/*"],
+        "@styles/*": ["views/styles/*"],
+      },
+      
     "target": "es5",
     "lib": [
       "dom",
@@ -20,7 +31,5 @@
     "noEmit": true,
     "jsx": "react-jsx"
   },
-  "include": [
-    "src"
-  ]
+  "include": ["src"],
 }
