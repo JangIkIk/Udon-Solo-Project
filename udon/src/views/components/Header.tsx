@@ -1,29 +1,32 @@
 import styled from "styled-components";
 import { BiSearch, BiRightIndent, BiMoon, BiWorld } from "react-icons/bi";
+import {
+  flex_column_align_cneter,
+  flex_row_align_center,
+  baseHover,
+  baseBorder,
+} from "@components/AllComponent"
 
 const Layout = styled.div`
+display: flex;
 position: fixed;
 width: 100%;
-top:0;
 max-width: 1080px;
 min-width: 320px;
-background-color: white;
-display: flex;
-height:10rem;
+top:0;
+box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
+height:8rem;
 
 header {
   flex:1;
-  display: flex;
-  flex-direction: column;
-  align-items:center;
+  ${flex_column_align_cneter}
   padding: 10px;
   gap: 0.8rem;
 
   .title-search {
       width:100%;
       text-align:center;
-      display: flex;
-      align-items:center;
+      ${flex_row_align_center}
       gap:1rem;
 
     .title {
@@ -33,9 +36,8 @@ header {
 
     .searach {
       flex: 5;
-      display: flex;
+      ${flex_row_align_center}
       gap: 10px;
-      align-items: center;
 
       #searach-value {
         padding: 1rem;
@@ -49,23 +51,18 @@ header {
         height: 1.7rem;
         font-size: 1.7rem;
         border-radius: 50%;
-        cursor: pointer;
-        &:hover {
-          background-color: gray;
-        }
+        ${baseHover}
       }
     }
   }
   .filter{
-      padding:10px;
-      margin: 0 auto;
       display:flex;
-      gap: 2.5rem;
+      gap: 2rem;
       font-size:1rem;
       span{
-          padding:0.5rem;
+          padding:0.2rem;
           border-radius: 5px;
-          border:1px solid red;
+          ${baseBorder}
       }
   }
 }

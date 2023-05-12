@@ -1,36 +1,38 @@
 import styled from "styled-components";
 import { BiHomeAlt, BiUser, BiConversation, BiBell, BiPencil, BiKey } from "react-icons/bi";
+import { 
+  flex_column, 
+  SpanFlex,
+  baseHover,
+
+ } from "@components/AllComponent"
 
 const Layout = styled.div`
-  font-size: 1.5rem;
+  display: flex;
+  position: fixed;
   width: 100%;
+  font-size: 1.5rem;
   max-width: 1080px;
   min-width: 320px;
-  position: fixed;
-  background-color: white;
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
   bottom: 0;
   height: 4.5rem;
-  display: flex;
 
   .in-box {
+    padding: 0.5rem;
     flex: 1;
     display: flex;
     justify-content: space-around;
     gap: 1rem;
-    padding: 1rem;
     
-
     .icons {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content:center;
       flex: 1;
-      border-radius:1rem;
+      ${flex_column}
+      border-radius:0.5rem;
 
-      &:hover{
-        background-color:gray;
-        border:1px solid black;
+      ${baseHover}
+      &> span{
+        flex:1;
       }
     }
   }
@@ -41,20 +43,20 @@ function Footer() {
     <Layout>
       <div className="in-box">
         <a href="/" className="icons">
-            <span><BiHomeAlt/></span>
-            <span>홈</span>
+            <SpanFlex><BiHomeAlt/></SpanFlex>
+            <SpanFlex>홈</SpanFlex>
         </a> 
         <a href="/mypage" className="icons">
-            <span><BiUser/></span>
-            <span>프로필</span>
+            <SpanFlex><BiUser/></SpanFlex>
+            <SpanFlex>프로필</SpanFlex>
         </a>
         <a href="/groupsetting" className="icons">
-            <span><BiConversation/></span>
-            <span>그룹</span>
+            <SpanFlex><BiConversation/></SpanFlex>
+            <SpanFlex>그룹</SpanFlex>
         </a>
         <a href="/news" className="icons">
-            <span><BiBell/></span>
-            <span>알림</span>
+            <SpanFlex><BiBell/></SpanFlex>
+            <SpanFlex>알림</SpanFlex>
         </a>
       </div>
       {/* <div className="in-box">

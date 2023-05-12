@@ -1,41 +1,50 @@
 import styled from "styled-components";
-import { BiInfoCircle, BiStreetView, BiBeenHere, BiHeart } from "react-icons/bi";
+import "@styles/index.css"
+import { BiInfoCircle, BiStreetView, BiBeenHere} from "react-icons/bi";
+import { GroupListInfo } from "@pages/HomePage";
+import { AiFillHeart } from "react-icons/ai";
+import { 
+  flex_row_all_cneter, 
+  ImgCover, 
+  SpanFlex, 
+  DivFlexAlign,
+  flex_column,
+  flex_row_align_center,
+  baseHover,
+  baseBorder,
+} from "@components/AllComponent";
+
+
+type GroupListInfoProps = {
+  item: GroupListInfo;
+}
 
 const Layout = styled.div`
   display: flex;
+  ${baseBorder}
+  border-radius: 10px;
   padding: 1rem;
   gap:10px;
   
+  ${baseHover}
+  
   .group-list-img {
-    width: 10rem;
-    heigth: 10rem;
-    background-color:red;
+    width: 8rem;
+    height: 8rem;
     overflow: hidden;
-    border-radius: 10px;
-    img {
-      width: 100%;
-      vertical-align: top;
-    }
+    border-radius: 50%;
   }
 
   .group-list-content {
     font-size:1.1rem;
     flex: 1;
-    display:flex;
-    flex-direction: column;
+    ${flex_column}
     overflow: hidden;
-
-    .group-list-map{
-        display:flex;
-        align-items: center;
-      }
 
     .group-list-title{
         font-size: 1.2rem;
-        display:flex;
-        align-items: center;
+        ${flex_row_align_center}
         flex:1;
-        
         span{
             white-space: nowrap;
             overflow: hidden;
@@ -44,59 +53,52 @@ const Layout = styled.div`
     }
 
     .group-list-info{
-        display:flex;
-        align-items: center;
+        ${flex_row_all_cneter}
         gap: 1rem;
         font-size: 0.9rem;
-
         & > div{
           display:flex;
         }
         
     }
   }
-
   
 `;
 
-export const GroupList = () => {
+
+
+export const GroupList = ( { item } : GroupListInfoProps ) => {
+  
   return (
     <Layout>
       <div className="group-list-img">
-        <img
-          src="https://mblogthumb-phinf.pstatic.net/MjAyMDA0MjhfMjAz/MDAxNTg4MDQwOTA5MjE0.i6ARBaBdi_HYODiTR0f1ma8OvblzSh01bJGL8U5gDZUg.1oPlzYogIg8H_TAk5iZvUMYOLsZkZM1ITTVrfUsIHHog.JPEG.mijung011040/20200424_192926.jpg?type=w800"
-          alt="클라이밍사진"
-        />
+        <ImgCover src={item.img} alt="그룹사진"/>
       </div>
       <div className="group-list-content">
-        <div className="group-list-map">
-          <span>
-            <BiInfoCircle />
-          </span>
-          <span>{"강남구"}</span>
-        </div>
-
+        <DivFlexAlign>
+            <SpanFlex><BiInfoCircle /></SpanFlex>
+          <span>{item.region}</span>
+        </DivFlexAlign>
         <div className="group-list-title">
-          <span>{"[정자역] 클라이밍 초자분들 환영 나이제한없음X"}</span>
+          <span>{item.title}</span>
         </div>
-
         <div className="group-list-info">
           <div>
             <span>
               <BiStreetView />
             </span>
-            <span>{"85명"}</span>
+            <span>{`${item.people}명`}</span>
           </div>
 
           <div>
             <span>
               <BiBeenHere />
             </span>
-            <span>{"정자역 5번출구"}</span>
+            <span>{item.detailedArea}</span>
           </div>
           <div>
-            <span>
-              <BiHeart/>
+            <span >
+              <AiFillHeart color={item.iskeep ? "red" : "black"}/>
             </span>
             <span>{"찜하기"}</span>
           </div>
