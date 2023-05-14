@@ -2,9 +2,8 @@ import styled from "styled-components";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { BiMaleFemale, BiBeenHere, BiHeart } from "react-icons/bi";
-import { GroupList } from "@components/GroupList";
 import { useState, useEffect } from "react";
-import { GroupListInfo } from "@pages/HomePage"
+import { GroupList, GroupListType } from "@components/GroupList";
 import { 
   BaseLayout, 
   ImgBase, 
@@ -56,11 +55,11 @@ const Layout = styled(BaseLayout)`
 `;
 
 function MyPage() {
-  const [groupList, setGroupList] = useState<GroupListInfo[]>([]);
+  const [groupList, setGroupList] = useState<GroupListType[]>([]);
   const navigate = useNavigate();
 
   useEffect(()=>{
-    axios.get<any>(`${process.env.REACT_APP_API_ROOT}/groupList`)
+    axios.get<GroupListType[]>(`${process.env.REACT_APP_API_ROOT}/groupList`)
     .then( res => setGroupList(res.data));
   },[])
 
@@ -98,7 +97,7 @@ function MyPage() {
         <ul>
             {groupList.map((item)=>{
                 return(
-                  <li key={item.id} onClick={clickGroup} className="group-list"><GroupList item={item}/></li> 
+                  <li key={item.id} onClick={clickGroup}><GroupList item={item}/></li> 
                 );
             })}
         </ul>

@@ -1,7 +1,6 @@
 import styled from "styled-components"; 
 import "@styles/index.css"
 import { BiInfoCircle, BiStreetView, BiBeenHere} from "react-icons/bi";
-import { GroupListInfo } from "@pages/HomePage";
 import { AiFillHeart } from "react-icons/ai";
 import { 
   flex_row_all_cneter, 
@@ -15,8 +14,18 @@ import {
 } from "@components/AllComponent";
 
 
-type GroupListInfoProps = {
-  item: GroupListInfo;
+export interface GroupListType{
+  id: number,
+  region: string,
+  img: string,
+  title: string,
+  people: string,
+  detailedArea: string,
+  iskeep: boolean,
+}
+
+type GroupListTypeProps = {
+  item: GroupListType;
 }
 
 const Layout = styled.div`
@@ -39,6 +48,7 @@ const Layout = styled.div`
     flex: 1;
     ${flex_column}
     overflow: hidden;
+    gap:2px;
 
     .group-list-title{
         font-size: 1.2rem;
@@ -64,15 +74,16 @@ const Layout = styled.div`
   
 `;
 
+export const GroupList = ( { item } : GroupListTypeProps ) => {
 
-
-export const GroupList = ( { item } : GroupListInfoProps ) => {
   
   return (
     <Layout>
-      <div className="group-list-img">
+      {item.img === undefined ? null :
+       <div className="group-list-img">
         <ImgBase src={item.img} alt="그룹사진"/>
-      </div>
+      </div>}
+      
       <div className="group-list-content">
         <DivFlexAlign>
             <SpanFlex><BiInfoCircle /></SpanFlex>
@@ -95,12 +106,13 @@ export const GroupList = ( { item } : GroupListInfoProps ) => {
             </span>
             <span>{item.detailedArea}</span>
           </div>
-          <div>
+          {item.iskeep === undefined ? null : <div>
             <span >
               <AiFillHeart color={item.iskeep ? "red" : "black"}/>
             </span>
             <span>{"찜하기"}</span>
-          </div>
+          </div>}
+          
         </div>
       </div>
     </Layout>

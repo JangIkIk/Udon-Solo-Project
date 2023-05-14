@@ -1,21 +1,12 @@
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import { GroupList } from "@components";
+import { GroupList, GroupListType } from "@components/GroupList";
 import { BaseLayout, flex_column } from '@components/AllComponent'
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-export interface GroupListInfo{
-  id: number,
-  region: string,
-  img: string,
-  title: string,
-  people: string,
-  detailedArea: string,
-  iskeep: boolean,
-}
-
 const Layout = styled(BaseLayout)`
+  
     ul{
        ${flex_column}
         gap:10px;
@@ -25,11 +16,11 @@ const Layout = styled(BaseLayout)`
 
 
 const HomePage = () => {
-  const [groupList, setGroupList] = useState<GroupListInfo[]>([]);
+  const [groupList, setGroupList] = useState<GroupListType[]>([]);
   const navigate = useNavigate();
 
   useEffect(()=>{
-    axios.get<GroupListInfo[]>(`${process.env.REACT_APP_API_ROOT}/groupList`)
+    axios.get<GroupListType[]>(`${process.env.REACT_APP_API_ROOT}/groupList`)
     .then( res => setGroupList(res.data))
     
   },[])
