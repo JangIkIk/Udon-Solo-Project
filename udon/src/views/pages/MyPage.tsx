@@ -1,94 +1,87 @@
 import styled from "styled-components";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import { BiMaleFemale, BiBeenHere, BiHeart } from "react-icons/bi";
 import { GroupList } from "@components/GroupList";
+import { useState, useEffect } from "react";
+import { GroupListInfo } from "@pages/HomePage"
+import { 
+  BaseLayout, 
+  ImgBase, 
+  flex_column, 
+  SpanFlex,
+  flex_row_all_cneter,
+ } from "@components/AllComponent";
 
-const Layout = styled.div`
-  height: 100%;
-  background-color:red;
-  padding: 1rem;
-  font-size: 1.2rem;
-
-  .mypage-info {
-    display: flex;
-    gap: 1rem;
-
-    .mypage-photo {
-      width: 5rem;
-
-      & > img {
-        width: 100%;
-      }
-    }
-
-    .mypage-content {
-      flex: 1;
+const Layout = styled(BaseLayout)`
+    .mypage-info {
       display: flex;
       gap: 1rem;
 
-      & > div{
-        display: flex;
-        flex-direction: column;
-        justify-content: space-around;
+      .mypage-photo {
+        width: 5rem;
+      }
 
-        & > span{
-          display: flex;
+      .mypage-content {
+        flex: 1;
+        display: flex;
+        gap: 1rem;
+
+        & > div{
+          ${flex_column}        
+          justify-content: space-around;
+        }
+      }
+
+      .mypage-modify {
+        ${flex_row_all_cneter}
+        flex-basis: 5rem;
+        & > button {
+          color: blue;
+          font-size: 1.2rem;
         }
       }
     }
 
-    .mypage-modify {
-      display: flex;
-      flex-basis: 5rem;
-      justify-content: center;
-      align-items: center;
-
-      & > button {
-        color: blue;
-        font-size: 1.2rem;
-      }
-    }
-  }
-
-
-
-
-
-
   .mypage-keep {
     padding-top: 1rem;
-    // background-color:blue;
-
-
     .mypage-keep-content {
-      // background-color:red;
-      
 
+      & > ul{
+          ${flex_column}
+           gap:10px;
+      }
     }
   }
 `;
 
 function MyPage() {
+  const [groupList, setGroupList] = useState<GroupListInfo[]>([]);
+  const navigate = useNavigate();
+
+  useEffect(()=>{
+    axios.get<any>(`${process.env.REACT_APP_API_ROOT}/groupList`)
+    .then( res => setGroupList(res.data));
+  },[])
+
+  const clickGroup = ()=>{
+    navigate("/group")
+}
+
   return (
     <Layout>
       <div className="mypage-info">
         <div className="mypage-photo">
-          <img
-            src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
-            alt="#"
-          />
+          <ImgBase src={"https://cdn-icons-png.flaticon.com/512/3135/3135715.png"} alt="#" fit="contain"/>
         </div>
         <div className="mypage-content">
           <div>
-            <span>홍길동</span>
-            <span>
-              <BiMaleFemale /> 남
-            </span>
+            <SpanFlex>홍길동</SpanFlex>
+            <SpanFlex><BiMaleFemale /> 남</SpanFlex>
           </div>
           <div>
-            <span>2000. 11. 09</span>
-            <span>
-              <BiBeenHere /> 경기도
-            </span>
+          <SpanFlex>2000. 11. 09</SpanFlex>
+          <SpanFlex><BiBeenHere /> 경기도</SpanFlex>
           </div>
         </div>
         <div className="mypage-modify">
@@ -102,9 +95,13 @@ function MyPage() {
           찜한모임
         </h3>
         <div className="mypage-keep-content">
-          <GroupList/>
-          <GroupList/>
-          <GroupList/>
+        <ul>
+            {groupList.map((item)=>{
+                return(
+                  <li key={item.id} onClick={clickGroup} className="group-list"><GroupList item={item}/></li> 
+                );
+            })}
+        </ul>
         </div>
       </div>
     </Layout>
