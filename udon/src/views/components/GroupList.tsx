@@ -1,11 +1,11 @@
-import styled from "styled-components";
+import styled from "styled-components"; 
 import "@styles/index.css"
 import { BiInfoCircle, BiStreetView, BiBeenHere} from "react-icons/bi";
 import { GroupListInfo } from "@pages/HomePage";
 import { AiFillHeart } from "react-icons/ai";
 import { 
   flex_row_all_cneter, 
-  ImgCover, 
+  ImgBase, 
   SpanFlex, 
   DivFlexAlign,
   flex_column,
@@ -27,7 +27,6 @@ const Layout = styled.div`
   gap:10px;
   
   ${baseHover}
-  
   .group-list-img {
     width: 8rem;
     height: 8rem;
@@ -72,7 +71,7 @@ export const GroupList = ( { item } : GroupListInfoProps ) => {
   return (
     <Layout>
       <div className="group-list-img">
-        <ImgCover src={item.img} alt="그룹사진"/>
+        <ImgBase src={item.img} alt="그룹사진"/>
       </div>
       <div className="group-list-content">
         <DivFlexAlign>

@@ -2,9 +2,8 @@ import styled, { css } from 'styled-components';
 
 
 //  타입정의
-type ImgCoverProps = {
-    src: string,
-    alt: string,
+type ImgBaseProps = {
+    fit?: string,
 }
 
 
@@ -68,16 +67,12 @@ export const flex_column_justify_cneter = css`
 
 
 // 스타일 태그
-export const ImgCover = ( {src, alt} : ImgCoverProps)=>{
-    const Img = styled.img`
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    `
-    return(
-        <Img src={src} alt={alt}/>
-    );
-}
+
+export const ImgBase = styled.img<ImgBaseProps>`
+    width: 100%;
+    height: 100%;
+    object-fit: ${ props => props.fit ?? "cover"};
+`
 
 
 export const SpanFlex = styled.span`
@@ -94,5 +89,9 @@ export const DivFlexAlign = styled.div`
 // 커스텀 컴포넌트
 
 export const BaseLayout = styled.div`
+    font-size: 1.2rem;
+    padding:1rem;
     height: 100%;
 `
+
+
