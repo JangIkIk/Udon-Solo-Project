@@ -1,192 +1,116 @@
 import { useState } from "react";
 import styled from "styled-components";
 import { BiCalendarCheck, BiInfoCircle, BiWon, BiHeart } from "react-icons/bi";
-import { GroupPeople } from "@components/GroupPeople";
+import { Detailmeetimg } from "./Detailmeeting";
+import { useLocation } from "react-router-dom";
+import { ImgBase, flex_row_justify_center, flex_column } from "@components/AllComponent";
 
-type stylesProps ={
-    profile: number
-}
+const Layout = styled.div`
+  height: 100%;
+  padding-bottom: 4.5rem;
 
-const Layout = styled.div<stylesProps>`
-    height: 100%;
-    background-color:blue;
+  .detailinfo-photo {
+    ${flex_row_justify_center}
+    margin: 0 auto;
+    width: 100%;
+  }
 
-    padding-bottom: 4.5rem;
-    .group-info-photo {
+  .detailinfo-content {
+    & > p {
+      white-space: pre;
+    }
+
+    .detailinfo-groupschedule {
+      ${flex_column}
+      gap: 1rem;
+    }
+  }
+
+  .group-info-footer {
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
+    margin: 0 auto;
+    width: 100%;
+    text-align: center;
+    background-color: white;
+    transform: translate(-50%, 0);
+    position: fixed;
+    max-width: 1080px;
+    min-width: 320px;
+    bottom: 0;
+    left: 50%;
+    height: 4.5rem;
+    display: flex;
+    padding: 0.5rem;
+
+    & > span {
       display: flex;
       justify-content: center;
-      background-color: red;
-      max-height: 25rem;
-      img {
-        width: 100%;
-      }
+      align-items: center;
     }
 
-    .group-info-content {
-        padding: 1rem;
-        .group-info-subtitle {
-        }
-
-        .group-info-subcontent {
-          white-space: pre;
-          padding-top: 1rem;
-        }
-        .group-info-meet {
-          padding: 1rem;
-        }
-
-        .group-info-meet-info {
-          display: flex;
-          gap: 1rem;
-        }
-
-        .group-info-meet-list {
-          padding: 0.5rem;
-        }
-
-        .group-info-meet-info-left {
-            flex-basis: 4rem;
-            align-self: center;
-            display: flex;
-            align-items: center;
-            flex-direction: column;
-            gap: 0.2rem;
-        }
-
-        .group-info-meet-info-center {
-            flex-basis: 14rem;
-            display: flex;
-            flex-direction: column;
-            gap: 0.2rem;
-
-            & > div {
-                display: flex;
-                align-items: center;
-
-                & > span:first-child {
-                  display: flex;
-                  gap: 0.5rem;
-                }
-            }
-        }
-
-        .group-info-meet-info-right {
-            flex: 1;
-            flex-basis: 8.5rem;
-        }
+    .group-info-footer-keep {
+      flex-basis: 10rem;
+      color: red;
+      font-size: 2rem;
     }
 
-    .group-info-footer{
-        margin: 0 auto;
-        width: 100%;
-        text-align: center;
-        background-color:white;
-        position: fixed;
-        max-width: 1080px;
-        min-width: 320px;
-        bottom:0;
-        left: 0;
-        height: 4.5rem;
-        display:flex;
-        padding: 0.5rem;
-
-        & > span {
-          display:flex;
-          justify-content: center;
-          align-items: center;
-        }
-
-        .group-info-footer-keep{
-          flex-basis: 10rem;
-          color: red;
-          font-size: 2rem;
-        }
-
-        .group-info-footer-join{
-          background-color:blue;
-          color: white;
-          border-radius: 10px;
-          flex:1;
-        }
-
-        
+    .group-info-footer-join {
+      background-color: blue;
+      color: white;
+      border-radius: 10px;
+      flex: 1;
     }
+  }
 `;
 
-export const DetailInfo = () => {
-  const [profile, setProfile] = useState<number[]>([1, 2, 3, 4]);
-  const text = `
-    안녕하세요 정자역 클라이밍입니다.
-    클라이밍을 재밌게하실분들을 모집합니다!!
+export type UserType = {
+  id: number;
+  img: string;
+  years: string;
+  name: string;
+};
 
-    since 22.10.16
-    ♈️가입조건
-    > 활발한 활동 가능!!
-    > 나이 : 민증만있으면가능!!
-    > 왕초보 모두가능!!
-    since 22.10.16
-    ♈️가입조건
-    since 22.10.16
-    ♈️가입조건
-    > 활발한 활동 가능!!
-    > 나이 : 민증만있으면가능!!
-    > 왕초보 모두가능!!
-    since 22.10.16
-    ♈️가입조건
-    since 22.10.16
-   
-    `;
+export interface GroupScheduleType {
+  id: number;
+  day: string;
+  time: string;
+  detailedArea: string;
+  money: number;
+  user: UserType[];
+}
+
+export const DetailInfo = () => {
+  const location = useLocation();
 
   return (
-    <Layout profile={profile.length}>
-      <div className="group-info-photo">
-        <img
-          src="https://mblogthumb-phinf.pstatic.net/MjAyMDA0MjhfMjAz/MDAxNTg4MDQwOTA5MjE0.i6ARBaBdi_HYODiTR0f1ma8OvblzSh01bJGL8U5gDZUg.1oPlzYogIg8H_TAk5iZvUMYOLsZkZM1ITTVrfUsIHHog.JPEG.mijung011040/20200424_192926.jpg?type=w800"
-          alt="클라이밍사진"
-        />
+    <Layout>
+      <div className="detailinfo-photo">
+        <ImgBase src={location.state.img} alt="그룹사진" />
       </div>
-      <div className="group-info-content">
-        <div className="group-info-subtitle">
-          <h3>{"[정자역] 클라이밍 초자분들 환영 나이제한없음X"}</h3>
-        </div>
-
-        <p className="group-info-subcontent">{text}</p>
-
-        <div className="group-info-meet">
+      <div className="detailinfo-content">
+        <h3>{location.state.title}</h3>
+        <p>{location.state.content}</p>
+        <div>
           <h5>모임 정모</h5>
-          <div className="group-info-meet-list">
-            <div className="group-info-meet-info">
-              <div className="group-info-meet-info-left">
-                <span>일요일</span>
-                <span>내일</span>
-              </div>
-
-              <div className="group-info-meet-info-center">
-                <div>
-                  <span>
-                    <BiCalendarCheck /> {"10월 4일 (일) 오후 1:30분"}
-                  </span>
-                </div>
-                <div>
-                  <span>
-                    <BiInfoCircle /> {"안국역 원서레인즈"}
-                  </span>
-                </div>
-                <div>
-                  <span>
-                    <BiWon /> {"18.000원"}
-                  </span>
-                </div>
-              </div>
-              <div className="group-info-meet-info-right">
-                <GroupPeople personnel={profile}/>
-              </div>
-            </div>
-          </div>
+          <ul className="detailinfo-groupschedule">
+            {location.state.groupSchedule.length !== 0 ? (
+              location.state.groupSchedule.map((item: GroupScheduleType) => {
+                return (
+                  <li key={item.id}>
+                    <Detailmeetimg item={item} />
+                  </li>
+                );
+              })
+            ) : (
+              <li>모임이 없습니다.</li>
+            )}
+          </ul>
         </div>
         <div className="group-info-footer">
-            <span className="group-info-footer-keep"><BiHeart/></span>
-            <span className="group-info-footer-join">가입하기</span>
+          <span className="group-info-footer-keep">
+            <BiHeart />
+          </span>
+          <span className="group-info-footer-join">가입하기</span>
         </div>
       </div>
     </Layout>
