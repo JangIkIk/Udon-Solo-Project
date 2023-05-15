@@ -19,6 +19,9 @@
     html{
       font-size: 12px;
     }
+    .my-group .group-list-img {
+      display: none;
+    }
   }
   
   
