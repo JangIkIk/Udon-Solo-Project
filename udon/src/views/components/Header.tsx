@@ -5,16 +5,13 @@ import {
   flex_row_align_center,
   baseHover,
   baseBorder,
+  fixedBase
 } from "@components/AllComponent"
 
 const Layout = styled.div`
 display: flex;
-position: fixed;
-width: 100%;
-max-width: 1080px;
-min-width: 320px;
+${fixedBase}
 top:0;
-box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
 height:8rem;
 
 header {

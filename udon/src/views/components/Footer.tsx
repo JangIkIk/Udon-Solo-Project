@@ -4,17 +4,14 @@ import {
   flex_column, 
   SpanFlex,
   baseHover,
+  fixedBase,
 
  } from "@components/AllComponent"
 
 const Layout = styled.div`
   display: flex;
-  position: fixed;
-  width: 100%;
+  ${fixedBase}
   font-size: 1.5rem;
-  max-width: 1080px;
-  min-width: 320px;
-  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
   bottom: 0;
   height: 4.5rem;
 
