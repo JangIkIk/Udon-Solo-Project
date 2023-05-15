@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
 import { GroupList, GroupListType } from "@components/GroupList";
 import { BaseLayout, flex_column } from '@components/AllComponent'
 import { useEffect, useState } from "react";
@@ -17,7 +16,6 @@ const Layout = styled(BaseLayout)`
 
 const HomePage = () => {
   const [groupList, setGroupList] = useState<GroupListType[]>([]);
-  const navigate = useNavigate();
 
   useEffect(()=>{
     axios.get<GroupListType[]>(`${process.env.REACT_APP_API_ROOT}/groupList`)
@@ -25,9 +23,6 @@ const HomePage = () => {
     
   },[])
 
-    const clickGroup = ()=>{
-        navigate("/group")
-    }
 
   return (
     <Layout>
@@ -35,7 +30,7 @@ const HomePage = () => {
         <ul>
             {groupList.map((item)=>{
                 return(
-                    <li key={item.id} onClick={clickGroup}>
+                    <li key={item.id}>
                       <GroupList item={item}/>
                     </li>
                 );
