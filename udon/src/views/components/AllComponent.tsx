@@ -12,6 +12,10 @@ type ImgBaseProps = {
 export const colors = {
     hoverColor: "#C0FFFF",
     borderColor: "gray",
+    buttonCreateColor: "#1478FF",
+    buttonDeleteColor: "#FF607F",
+    buttonPatchColor: "#7878FF",
+
 }
 
 // css 기본속성
@@ -33,7 +37,7 @@ export const baseHover = css`
 export const flex_row_all_cneter = css`
     display:flex;
     align-items:center;
-    justify-conenter: center;
+    justify-content:center;
 `
 export const flex_row_align_center = css`
     display:flex;
@@ -41,7 +45,7 @@ export const flex_row_align_center = css`
 `
 export const flex_row_justify_center = css`
     display:flex;
-    justify-contner: center;
+    justify-content: center;
 `
 export const flex_column = css`
     display:flex;
@@ -51,7 +55,7 @@ export const flex_column_all_cneter = css`
     display:flex;
     flex-direction: column;
     align-items:center;
-    justify-conenter: center;
+    justify-content: center;
 `
 export const flex_column_align_cneter = css`
     display:flex;
@@ -61,9 +65,19 @@ export const flex_column_align_cneter = css`
 export const flex_column_justify_cneter = css`
     display:flex;
     flex-direction: column;
-    justify-conenter: center;
+    justify-content: center;
 `
 
+export const fixedBase = css `
+    background-color: white;
+    position: fixed;
+    transform: translate(-50%,0);
+    left: 50%;
+    width: 100%;
+    max-width: 1080px;
+    min-width: 320px;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
+`
 
 
 // 스타일 태그
@@ -79,6 +93,10 @@ export const SpanFlex = styled.span`
     display: flex;
     align-items: center;
     justify-content: center;
+`
+export const SpanFlexAlign = styled.span`
+    display: flex;
+    align-items: center;
 `
 
 export const DivFlexAlign = styled.div`
