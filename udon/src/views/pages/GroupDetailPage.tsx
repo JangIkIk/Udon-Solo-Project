@@ -3,43 +3,35 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { BiLeftArrowAlt } from "react-icons/bi";
 import { DetailChat, DetailInfo, DetailNotice, DetailPhoto } from "@groupdetail";
+import { BaseLayout, fixedBase, flex_row_align_center, flex_row_all_cneter} from "@components/AllComponent"
 
 
 type styleProps = {
     groupTap: number,
 }
 
-const Layout = styled.div<styleProps>`
-    height:100%;
-    background-color: red;
+const Layout = styled(BaseLayout)<styleProps>`
     display: flex;
-    // flex-direction: column;
-
+    font-size: 1rem;
+    text-align: center;
+    
     .grouppage-header{
-        position: fixed;
-        width: 100%;
+      ${fixedBase}
         top:0;
-        max-width: 1080px;
-        min-width: 320px;
-        background-color: white;
-
-            header {
+              header {
                 height: 4rem;
                 padding: 1rem 0.1rem;
-                display: flex;
-                align-items: center;
-                text-align: center;
-            
-                .group-page-icon {
-                  font-size: 1.5rem;
-                  display: flex;
-                  align-items: center;
-                  cursor: pointer;
-                }
-            
+                ${flex_row_align_center}
+
                 & > h2 {
                   flex: 1;
                 }
+                .group-page-icon {
+                  font-size: 1.5rem;
+                  ${flex_row_align_center}
+                  cursor: pointer;
+                }
+               
               }
           
               main {
@@ -50,13 +42,10 @@ const Layout = styled.div<styleProps>`
                     flex:1;
                     font-size: 1.2rem;
                     display: flex;
-                    text-align: center;
-
                     & > li {   
                         flex: 1;
-                        display:flex;
-                        justify-content:center;
-                        align-items:center;   
+                        ${flex_row_all_cneter}
+                        cursor: pointer;  
                         
                         &:nth-child(${( {groupTap} )=> groupTap + 1}){
                             color: blue;
@@ -65,14 +54,13 @@ const Layout = styled.div<styleProps>`
                     }
                 }
               }
+      }
+
+    .grouppage-main{
+      flex:1;
+      text-align: left;
+      padding-top: 7rem;
     }
-
-  
-
-  .grouppage-main{
-    flex:1;
-    padding-top: 7rem;
-  }
 `;
 
 function GroupDetailPage() {
@@ -110,9 +98,7 @@ function GroupDetailPage() {
               return (
                 <li
                     key={idx}
-                    onClick={() => setGroupTap(idx)
-                }
-                >
+                    onClick={() => setGroupTap(idx)}>
                   {item}
                 </li>
               );
