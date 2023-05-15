@@ -1,9 +1,9 @@
 import styled from "styled-components"; 
+import { useNavigate } from "react-router-dom";
 import "@styles/index.css"
 import { BiInfoCircle, BiStreetView, BiBeenHere} from "react-icons/bi";
 import { AiFillHeart } from "react-icons/ai";
 import { 
-  flex_row_all_cneter, 
   ImgBase, 
   SpanFlex, 
   DivFlexAlign,
@@ -35,6 +35,7 @@ const Layout = styled.div`
   padding: 1rem;
   gap:10px;
   
+  
   ${baseHover}
   .group-list-img {
     width: 8rem;
@@ -62,7 +63,7 @@ const Layout = styled.div`
     }
 
     .group-list-info{
-        ${flex_row_all_cneter}
+        ${flex_row_align_center}
         gap: 1rem;
         font-size: 0.9rem;
         & > div{
@@ -75,10 +76,17 @@ const Layout = styled.div`
 `;
 
 export const GroupList = ( { item } : GroupListTypeProps ) => {
+  const navigate = useNavigate();
 
-  
+  // console.log(item);
+
+  const clickGroup = ()=>{
+    navigate("/group", {state: item})
+  }
+
+
   return (
-    <Layout>
+    <Layout onClick={clickGroup}>
       {item.img === undefined ? null :
        <div className="group-list-img">
         <ImgBase src={item.img} alt="그룹사진"/>
