@@ -4,6 +4,8 @@ import { DetailMessageOthers } from "./DetailMessageOthers";
 import { DetailMessageMe } from "./DetailMessageMe"
 import { DetailNotice } from "./DetailNotice";
 import { DetailPhoto } from "./DetailPhoto";
+import { Detailmeetimg } from "./Detailmeeting";
+import { DetailPeople } from "./DetailPeople"
 
 export{
     DetailChat,
@@ -12,5 +14,7 @@ export{
     DetailMessageMe,
     DetailNotice,
     DetailPhoto,
+    Detailmeetimg,
+    DetailPeople,
 }
 
