@@ -1,11 +1,10 @@
 import styled from "styled-components";
+import { BaseLayout } from "@components/AllComponent"
 
-const Layout = styled.div`
+const Layout = styled(BaseLayout)`
+    background-color:red;
     display:flex;
     flex-wrap: wrap;
-    gap: 0.7rem;
-    justify-content: center;
-
     .groupphoto-each{
         width: 15rem;
         img{

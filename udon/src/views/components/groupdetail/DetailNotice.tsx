@@ -1,12 +1,8 @@
 import styled from "styled-components";
+import { BaseLayout} from "@components/AllComponent"
 
-const Layout = styled.div`
-    // height: 100%;
+const Layout = styled(BaseLayout)`
     background-color:red;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    gap: 1rem;
     padding: 1rem;
 
     .groupnews-each{

@@ -1,29 +1,22 @@
 import styled from "styled-components";
 import { DetailMessageMe, DetailMessageOthers } from "@groupdetail";
+import { BaseLayout } from "@components/AllComponent";
 
-const Layout = styled.div`
+const Layout = styled(BaseLayout)`
+    background-color:red;
     padding: 1rem;
 
-    .groupchat-message{
-
-      .groupchat-others {
-          // background-color: white;
-        }
-      
-        .groupchat-me {
-          // background-color: blue;
-        }
-    }
-
   .groupchat-input {
-        background-color: rgb(113, 107, 107);
+        background-color:white;
+        box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
         width: 100%;
         height: 4rem;
         padding: 0 1rem;
         max-width: 1080px;
         min-width: 320px;
+        transform: translate(-50%,0);
         position: fixed;
-        left: 0;
+        left: 50%;
         bottom: 0;
         display:flex;
         gap: 1rem;
@@ -51,11 +44,11 @@ const Layout = styled.div`
 export const DetailChat = () => {
   return (
     <Layout>
-      <div  className="groupchat-message">
-        <div className="groupchat-others">
+      <div>
+        <div>
             <DetailMessageOthers/>
         </div>
-        <div className="groupchat-me">
+        <div>
             <DetailMessageMe/>
         </div>
       </div>
