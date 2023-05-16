@@ -56,16 +56,11 @@ const Layout = styled(BaseLayout)`
 
 function MyPage() {
   const [groupList, setGroupList] = useState<GroupListType[]>([]);
-  const navigate = useNavigate();
 
   useEffect(()=>{
     axios.get<GroupListType[]>(`${process.env.REACT_APP_API_ROOT}/groupList`)
     .then( res => setGroupList(res.data));
   },[])
-
-  const clickGroup = ()=>{
-    navigate("/group")
-}
 
   return (
     <Layout>
@@ -96,8 +91,9 @@ function MyPage() {
         <div className="mypage-keep-content">
         <ul>
             {groupList.map((item)=>{
+              console.log(item)
                 return(
-                  <li key={item.id} onClick={clickGroup}><GroupList item={item}/></li> 
+                  <li key={item.id}><GroupList item={item}/></li> 
                 );
             })}
         </ul>
