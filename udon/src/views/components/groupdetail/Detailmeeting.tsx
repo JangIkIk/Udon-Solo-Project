@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { BiCalendarCheck, BiInfoCircle, BiWon, BiHeart } from "react-icons/bi";
+import { BiCalendarCheck, BiInfoCircle, BiWon} from "react-icons/bi";
 import { GroupScheduleType } from "./DetailInfo";
 import { DetailPeople } from "./DetailPeople";
 import {
@@ -7,7 +7,6 @@ import {
     flex_column,
     SpanFlexAlign,
     SpanFlex,
-    flex_column_all_cneter
 } from "@components/AllComponent";
 
 type DetailmeetimgProps = {
@@ -30,10 +29,10 @@ const Layout = styled.div`
             ${flex_column}
             justify-content: space-around;
             gap: 0.2rem;
+            flex-basis: 13rem;
         }
 
         .group-info-meet-info-right {
-            background-color: green; 
             flex:1;
         }
     }

@@ -59,7 +59,7 @@ const Layout = styled(BaseLayout)<styleProps>`
     .grouppage-main{
       flex:1;
       text-align: left;
-      padding-top: 7rem;
+      padding-top: 6rem;
     }
 `;
 
