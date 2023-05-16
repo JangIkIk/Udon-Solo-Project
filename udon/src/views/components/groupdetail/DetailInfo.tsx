@@ -16,14 +16,23 @@ const Layout = styled.div`
   }
 
   .detailinfo-content {
+    & > h3{
+      padding-top: 1rem;
+    }
+
     & > p {
+      padding-top: 1rem;
       white-space: pre;
     }
 
-    .detailinfo-groupschedule {
-      ${flex_column}
-      gap: 1rem;
+    .detailinfo-time{
+      padding-top: 1rem;
+      .detailinfo-groupschedule {
+        ${flex_column}
+        gap: 1rem;
+      }
     }
+    
   }
 
   .group-info-footer {
@@ -90,7 +99,7 @@ export const DetailInfo = () => {
       <div className="detailinfo-content">
         <h3>{location.state.title}</h3>
         <p>{location.state.content}</p>
-        <div>
+        <div className="detailinfo-time">
           <h5>모임 정모</h5>
           <ul className="detailinfo-groupschedule">
             {location.state.groupSchedule.length !== 0 ? (
