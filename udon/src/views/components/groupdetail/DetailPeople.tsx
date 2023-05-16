@@ -6,75 +6,61 @@ interface GroupPeopleProps{
     personnel: UserType[];
 }
 
-const Layout = styled.div`
+
+
+const Layout = styled.div<{profile : number}>`
   ${flex_column}
     gap: 0.5rem;
     font-size: 1.5rem;
 
     .group-people-profile {
         display: flex;
-        gap: 1rem;
-          & > li {
+        gap: 0.5rem;
+          .group-people-profile-li {
               border: 1px solid black;
               width: 3rem;
               height: 3rem;
               overflow: hidden;
               border-radius: 50%;
+              position: relative;
+
+              ${ ( props ) => props.profile > 3 ?
+              ` &:last-child::after{
+                position: absolute;
+                top:0;
+                right:0;
+                bottom:0;
+                left:0;
+                font-size: 2rem;
+                display:flex;
+                justify-content: center;
+                align-items: center;
+                content:"...";
+                background-color: rgba(128, 128, 128, 0.7);
+                border-radius: 50%;
+                cursor: pointer;
+              }` : ""}
           }
-      }
-
-      @media screen and (max-width: 855px){
-        .group-people-profile-li:nth-child(n+10){
-          display: none;
-        }
-      }
-      @media screen and (max-width: 740px){
-        .group-people-profile-li:nth-child(n+9){
-          display: none;
-        }
-      }
-      @media screen and (max-width: 686px){
-        .group-people-profile-li:nth-child(n+8){
-          display: none;
-        }
-      }
-      @media screen and (max-width: 635px){
-        .group-people-profile-li:nth-child(n+7){
-          display: none;
-        }
-      }
-      @media screen and (max-width: 538px){
-        .group-people-profile-li:nth-child(n+6){
-          display: none;
-        }
-      }
-      @media screen and (max-width: 489px){
-        .group-people-profile-li:nth-child(n+5){
-          display: none;
-        }
-      }
-      @media screen and (max-width: 440px){
-        .group-people-profile-li:nth-child(n+4){
-          display: none;
-        }
-      }
-      @media screen and (max-width: 340px){
-        .group-people-profile-li:nth-child(n+3){
-          display: none;
-        }
-      }
-
 `
 
 export const DetailPeople = ( {personnel} : GroupPeopleProps )=>{
   
+  const test = (e : number)=>{
+  
+    if(personnel.length <= 3){
+      return
+    } else{
+      console.log("3번째요소클릭Index", e);
+    }
+  }
+
     return(
-        <Layout>
+        <Layout profile={personnel.length}>
                 <h6>참여멤버 {`16 / ${personnel.length} 명`}</h6>
                 <ul className="group-people-profile">
-                  {personnel.map(( item )=>{
-                    return(
-                      <li key={item.id} className="group-people-profile-li">
+                  {personnel.slice(0, 3).map(( item, idx)=>{
+                    return (
+                      <li key={item.id} className="group-people-profile-li" onClick={ () => test(idx)}>
                         <ImgBase src={item.img} alt="프로필"/>
                       </li>
                     );
