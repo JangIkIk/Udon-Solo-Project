@@ -1,6 +1,5 @@
 import styled, { css } from "styled-components";
-import {SetStateAction, useState } from "react";
-
+import { SetStateAction, useState } from "react";
 
 // 색상모음
 export const colors = {
@@ -90,39 +89,39 @@ const CommonInputLayout = styled.div`
     gap: 0.5rem;
 
     & > span {
-        font-size: 1.1rem;
-        flex-basis:10rem;
+      font-size: 1.1rem;
+      flex-basis: 10rem;
     }
 
     & > input {
-        flex: 1;
-        padding: 0.5rem;
-        border-radius: 10px;
-        border: 3px solid black;
+      flex: 1 1 80%;
+      padding: 0.5rem;
+      border-radius: 10px;
+      border: 3px solid black;
     }
     & > div {
-        align-self: stretch;
-        display:flex;
-        justify-content:center;
-        flex-basis: 10rem;
-        font-size: 1rem;
-        width: 8rem;
+      align-self: stretch;
+      display: flex;
+      justify-content: center;
+      flex-basis: 10rem;
+      font-size: 1rem;
+      width: 8rem;
 
-        & > button{
-            font-size: 1.2rem;
-            background-color: ${colors.buttonCreateColor};
-            flex:1;
-            border-radius: 10px;
-            color: white;
-            cursor: pointer;
-        }
+      & > button {
+        font-size: 1.2rem;
+        background-color: ${colors.buttonCreateColor};
+        flex: 1;
+        border-radius: 10px;
+        color: white;
+        cursor: pointer;
+      }
     }
   }
 `;
 
 // 스타일 태그
 
-export const ImgBase = styled.img<{fit?: string}>`
+export const ImgBase = styled.img<{ fit?: string }>`
   width: 100%;
   height: 100%;
   object-fit: ${(props) => props.fit ?? "cover"};
@@ -157,18 +156,15 @@ export type RegexInputDataType = {
   userName: string;
 };
 
-
-
 export type PasswordInputDataType = {
   userPassword: string;
   userPasswordCheck: string;
 };
 
-
 interface PasswordInputType {
-    formPassword: PasswordInputDataType;
-    setFormPassword: React.Dispatch<React.SetStateAction<PasswordInputDataType>>;
-  }
+  formPassword: PasswordInputDataType;
+  setFormPassword: React.Dispatch<React.SetStateAction<PasswordInputDataType>>;
+}
 
 interface RegexInputType {
   children: string;
@@ -179,11 +175,14 @@ interface RegexInputType {
   setState: React.Dispatch<SetStateAction<RegexInputDataType>>;
   text: string;
   buttons?: string;
+  placeholder?:string;
 }
 
 /********* 비밀번호 컴포넌트 시작 라인 *********/
 
-const PasswordInputLayout = styled(CommonInputLayout)<{ styles: {original : boolean, check: boolean} }>`
+const PasswordInputLayout = styled(CommonInputLayout)<{
+  styles: { original: boolean; check: boolean };
+}>`
   .passwordinput-original {
     & > input {
       border-color: ${(props) => (props.styles.original ? "black" : "red")};
@@ -200,7 +199,10 @@ export const PasswordInput = ({
   formPassword,
   setFormPassword,
 }: PasswordInputType): JSX.Element => {
-  const [passwordRegex, setPasswordRegex] = useState<{original : boolean, check: boolean}>({
+  const [passwordRegex, setPasswordRegex] = useState<{
+    original: boolean;
+    check: boolean;
+  }>({
     original: true,
     check: true,
   });
@@ -231,6 +233,7 @@ export const PasswordInput = ({
           name="userPassword"
           value={formPassword.userPassword}
           onChange={passwordHandler}
+          placeholder="비밀번호를 입력해주세요"
         />
         <div></div>
       </label>
@@ -246,6 +249,7 @@ export const PasswordInput = ({
           name="userPasswordCheck"
           value={formPassword.userPasswordCheck}
           onChange={checkHandler}
+          placeholder="비밀번호를 확인해주세요"
         />
         <div></div>
       </label>
@@ -258,18 +262,18 @@ export const PasswordInput = ({
 
 /********* regex input 시작 라인 *********/
 
-const RegexInputLayout = styled(CommonInputLayout)<{styles: boolean}>`
-    label {
-        input{
-            border-color: ${ (props) => props.styles ? "black" : "red"}; 
-        }
-        & > div{
-            & > button{
-                background-color: ${ (props) => props.styles ? colors.buttonCreateColor : "gray"}; 
-            }
-        }
+const RegexInputLayout = styled(CommonInputLayout)<{ styles: boolean }>`
+  label {
+    input {
+      border-color: ${(props) => (props.styles ? "black" : "red")};
     }
-
+    & > div {
+      & > button {
+        background-color: ${(props) =>
+          props.styles ? colors.buttonCreateColor : "gray"};
+      }
+    }
+  }
 `;
 
 export const RegexInput = ({
@@ -281,6 +285,7 @@ export const RegexInput = ({
   state,
   setState,
   buttons,
+  placeholder
 }: RegexInputType) => {
   const [isRegex, setIsRegex] = useState<boolean>(true);
 
@@ -304,9 +309,12 @@ export const RegexInput = ({
           name={name}
           value={state[name]}
           onChange={inputChangeHandler}
+          placeholder={placeholder}
         />
         <div>
-            {buttons !== undefined ? <button disabled={!isRegex} >{buttons}</button> : null }
+          {buttons !== undefined ? (
+            <button disabled={!isRegex}>{buttons}</button>
+          ) : null}
         </div>
       </label>
       {isRegex ? null : <p>{text}</p>}
@@ -318,46 +326,57 @@ export const RegexInput = ({
 
 /********* 기본 input 시작 라인 *********/
 
-export type SimpleInputDataType ={
-    userGender: string;
-    userYears: string;
-    userActivity: string;
-    userIntroduce: string;
+export type SimpleInputDataType = {
+  userGender: string;
+  userYears: string;
+  userActivity: string;
+  userIntroduce: string;
+};
+
+interface SimpleInputType {
+  placeholder?: string
+  children: string;
+  type: string;
+  name: keyof SimpleInputDataType;
+  state: SimpleInputDataType;
+  setState: React.Dispatch<SetStateAction<SimpleInputDataType>>;
 }
 
-interface SimpleInputType{
-    children: string;
-}
+const SimpleInputLayout = styled(CommonInputLayout)`
 
-const SimpleInputLayout = styled.div`
-
-`
+`;
 
 export const SimpleInput = ({
-    children
-} : SimpleInputType) =>{
-    return(
-        <SimpleInputLayout>
-          <span>{children}</span>
-          <div>
-            <span>남</span>
-            <input
-            //   type="radio"
-            //   name="userGender"
-            //   value="남"
-            //   onChange={handleInput}
-            />
-            <span>여</span>
-            <input
-            //   type="radio"
-            //   name="userGender"
-            //   value="여"
-            //   onChange={handleInput}
-            />
-          </div>
-          <div></div>
-        </SimpleInputLayout>
-    );
-}
+  children,
+  type,
+  name,
+  state,
+  setState,
+  placeholder
+}: SimpleInputType) => {
+
+
+  const inputChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
+    setState((prev) => ({ ...prev, [name]: value }));
+  };
+
+  return (
+    <SimpleInputLayout>
+      <label>
+        <span>{children}</span>
+        <input
+          type={type}
+          name={name}
+          value={state[name]}
+          onChange={inputChangeHandler}
+          placeholder={placeholder}
+        />
+        <div>
+        </div>
+      </label>
+    </SimpleInputLayout>
+  );
+};
 
 /********* 기본 input 마지막 라인 *********/
