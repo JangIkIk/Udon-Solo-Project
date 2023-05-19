@@ -3,7 +3,7 @@ import { HomePage, LodingPage, MyPage, LoginPage, SignUpPage, NewsPage, GroupDet
 import {Footer, Header} from "@components"
 import "@styles/index.css"
 
-const CommonFooter = () => {
+const HeaderandFooter = () => {
   return (
     <>
       <Header />
@@ -14,21 +14,34 @@ const CommonFooter = () => {
     </>
   );
 };
+const HeaderOnly = () => {
+  return (
+    <>
+      <Header />
+      <div className="layout-space">
+        <Outlet />
+      </div>
+    </>
+  );
+};
 
 function App() {
   return (
     <BrowserRouter>
       <div className="App">
         <Routes>
-          <Route element={<CommonFooter />}>
+          <Route element={<HeaderandFooter/>}>
             <Route path="/" element={<HomePage />} />
             <Route path="/mypage" element={<MyPage />} />            
             <Route path="/news" element={<NewsPage />} />
             <Route path="/groupsetting" element={<GroupSettingPage />} />
           </Route>
+          <Route element={<HeaderOnly/>}>
+          <Route path="/signup" element={<SignUpPage />}></Route>
+          </Route>
           <Route path="/group" element={<GroupDetailPage />} />
           <Route path="loding" element={<LodingPage />}></Route>
-          <Route path="/signup" element={<SignUpPage />}></Route>
+          
           <Route path="/login" element={<LoginPage />}></Route>
         </Routes>
       </div>
