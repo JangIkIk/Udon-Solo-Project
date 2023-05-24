@@ -1,21 +1,23 @@
 #root{
   display: flex;
+  justify-content: center;
   min-height: 100%;
-  background-color: red;
+  
 }
 
 .App{
   flex: 1;
-  background-color: blue;
   display: flex;
   flex-direction: column;
   min-width: 320px;
   max-width: 1080px;
+  
 }
 
 .layout-space{
   flex: 1;
-  padding-top: 10rem ;
+  padding-top: 8rem ;
   padding-bottom: 4.5rem;
+  
+  
 }
-

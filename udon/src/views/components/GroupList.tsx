@@ -78,8 +78,6 @@ const Layout = styled.div`
 export const GroupList = ( { item } : GroupListTypeProps ) => {
   const navigate = useNavigate();
 
-  // console.log(item);
-
   const clickGroup = ()=>{
     navigate("/group", {state: item})
   }
