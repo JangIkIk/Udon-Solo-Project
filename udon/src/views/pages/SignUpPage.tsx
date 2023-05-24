@@ -1,4 +1,7 @@
+import { useState } from "react";
+import { useNavigate } from "react-router-dom"
 import styled from "styled-components";
+import axios from "axios";
 import {
   BaseLayout,
   RegexInput,
@@ -8,10 +11,9 @@ import {
   SimpleInputDataType,
   PasswordInputDataType,
   SimpleInput,
-  colors
+  colors,
 } from "@components/AllComponent";
-import { useState } from "react";
-
+import { Modal } from "@components/Modal"
 const Layout = styled(BaseLayout)`
   ${flex_column_all_cneter};
   gap: 1rem;
@@ -27,6 +29,7 @@ const Layout = styled(BaseLayout)`
       text-align: center;
 
       & > span {
+        text-align: left;
         font-size: 1.1rem;
         flex-basis: 6rem;
       }
@@ -53,6 +56,8 @@ const Layout = styled(BaseLayout)`
 `;
 
 function SignUpPage() {
+  const navigate = useNavigate();
+
   const [regexData, setRegexData] = useState<RegexInputDataType>({
     userId: "",
     userName: "",
@@ -71,17 +76,42 @@ function SignUpPage() {
     userPasswordCheck: "",
   });
 
+  const [isModal, setIsModal] = useState<boolean | undefined>(undefined);
+
   const handleGender = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     setSimpleData({ ...simpleData, [name]: value });
   };
 
-  const handleSubmit = () => {
-    console.log("서브밋버튼");
+  const handleSubmit = ( event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    axios.post<boolean>(`${process.env.REACT_APP_API_ROOT}/signup`,{
+      userId: regexData.userId,
+      userName: regexData.userName,
+      userPhone: regexData.userPhone,
+      userGender: simpleData.userGender,
+      userYears: simpleData.userYears,
+      userActivity: simpleData.userActivity,
+      userIntroduce: simpleData.userIntroduce,
+      userPassword: formPassword.userPassword,
+      userPasswordCheck: formPassword.userPasswordCheck
+    })
+    .then( () => navigate("/login"))
+    .catch( error => console.log(error))
+    
   };
+
+  const findId = ( event : string )=>{
+    axios.get(`${process.env.REACT_APP_API_ROOT}/signup/${event}`)
+    .then( res => setIsModal(res.data))
+    .catch( error => console.log("에러" + error))
+  }
+
+  
 
   return (
     <Layout>
+      {isModal === undefined ? null : <Modal check={setIsModal} children={isModal ? "사용중인 아이디입니다" : "사용가능한 아이디입니다"}/>}
       <h1>회원가입</h1>
       <form onSubmit={handleSubmit}>
         <RegexInput
@@ -93,8 +123,9 @@ function SignUpPage() {
           regex={/^(?=.*[a-zA-Z])[a-zA-Z0-9]{6,12}$/}
           buttons="중복확인"
           placeholder="ex: happy3"
+          dataHandler={findId}
         >
-          아이디
+          아이디 *
         </RegexInput>
 
         <PasswordInput
@@ -111,7 +142,7 @@ function SignUpPage() {
           regex={/^[가-힣]{2,6}$/}
           placeholder="ex: 홍길동"
         >
-          이름
+          이름 *
         </RegexInput>
 
         <RegexInput
@@ -124,7 +155,7 @@ function SignUpPage() {
           buttons="인증하기"
           placeholder="ex: 01034344444"
         >
-          휴대폰
+          휴대폰 *
         </RegexInput>
 
         <SimpleInput
@@ -133,11 +164,11 @@ function SignUpPage() {
           state={simpleData}
           setState={setSimpleData}
         >
-          생년월일
+          생년월일 *
         </SimpleInput>
 
         <div className="signuppage-gender">
-          <span>성별</span>
+          <span>성별 *</span>
           <div className="signuppage-gender-input">
             <span>남</span>
             <input
@@ -175,7 +206,6 @@ function SignUpPage() {
         >
           간단소개
         </SimpleInput>
-
         <button className="form-submit-button" type="submit"> 가입하기</button>
       </form>
     </Layout>
