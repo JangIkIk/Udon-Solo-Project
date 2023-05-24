@@ -71,7 +71,7 @@ function Header() {
     <Layout>
       <header>
         <div className="title-search">
-          <h1 className="title">우 동</h1>
+          <a href="/" className="title">우 동</a>
           <div className="searach">
             <input placeholder="원하는 그룹을 검색하세요" id="searach-value" />
             <label htmlFor="searach-value">
