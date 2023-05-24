@@ -56,20 +56,16 @@ function Footer() {
             <SpanFlex>알림</SpanFlex>
         </a>
       </div>
-      {/* <div className="in-box">
+      <div className="in-box">
         <a href="/login" className="icons">
-          <span>
-            <BiKey />
-          </span>
-          <span>로그인</span>
+          <SpanFlex><BiKey /></SpanFlex>
+          <SpanFlex>로그인</SpanFlex>
         </a>
         <a href="/signup" className="icons">
-          <span>
-            <BiPencil />
-          </span>
-          <span>회원가입</span>
+          <SpanFlex><BiPencil /></SpanFlex>
+          <SpanFlex>회원가입</SpanFlex>
         </a>
-      </div> */}
+      </div>
     </Layout>
   );
 }
