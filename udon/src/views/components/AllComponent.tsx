@@ -89,6 +89,7 @@ const CommonInputLayout = styled.div`
     gap: 0.5rem;
 
     & > span {
+      text-align: left;
       font-size: 1.1rem;
       flex-basis: 10rem;
     }
@@ -176,6 +177,7 @@ interface RegexInputType {
   text: string;
   buttons?: string;
   placeholder?:string;
+  dataHandler?: ( parameter :string) => void;
 }
 
 /********* 비밀번호 컴포넌트 시작 라인 *********/
@@ -226,10 +228,9 @@ export const PasswordInput = ({
   return (
     <PasswordInputLayout styles={passwordRegex}>
       <label className="passwordinput-original">
-        <span>비밀번호</span>
+        <span>비밀번호 *</span>
         <input
-          type={"password"}
-          id="formPassword"
+          type="password"
           name="userPassword"
           value={formPassword.userPassword}
           onChange={passwordHandler}
@@ -244,8 +245,7 @@ export const PasswordInput = ({
       <label className="passwordinput-check">
         <span>비밀번호확인</span>
         <input
-          type={"password"}
-          id="formPassword"
+          type="password"
           name="userPasswordCheck"
           value={formPassword.userPasswordCheck}
           onChange={checkHandler}
@@ -262,10 +262,10 @@ export const PasswordInput = ({
 
 /********* regex input 시작 라인 *********/
 
-const RegexInputLayout = styled(CommonInputLayout)<{ styles: boolean }>`
+const RegexInputLayout = styled(CommonInputLayout)<{ styles: boolean, exist: string}>`
   label {
     input {
-      border-color: ${(props) => (props.styles ? "black" : "red")};
+      border-color: ${(props) => (props.exist === "" ? "black" : props.styles ? "black" : "red")};
     }
     & > div {
       & > button {
@@ -285,9 +285,11 @@ export const RegexInput = ({
   state,
   setState,
   buttons,
-  placeholder
+  placeholder,
+  dataHandler,
 }: RegexInputType) => {
-  const [isRegex, setIsRegex] = useState<boolean>(true);
+  const [isRegex, setIsRegex] = useState<boolean>(false);
+  const exist = state[name];
 
   const inputChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -301,7 +303,7 @@ export const RegexInput = ({
   };
 
   return (
-    <RegexInputLayout styles={isRegex}>
+    <RegexInputLayout styles={isRegex} exist={exist} >
       <label>
         <span>{children}</span>
         <input
@@ -313,11 +315,19 @@ export const RegexInput = ({
         />
         <div>
           {buttons !== undefined ? (
-            <button disabled={!isRegex}>{buttons}</button>
+            <button
+            type="button"
+            disabled={!isRegex}
+            onClick={()=> {
+              if (dataHandler) {
+                dataHandler(state[name]);
+              }
+            }}
+            >{buttons}</button>
           ) : null}
         </div>
       </label>
-      {isRegex ? null : <p>{text}</p>}
+      {state[name] === "" ? null : isRegex ? null :<p>{text}</p>}
     </RegexInputLayout>
   );
 };
