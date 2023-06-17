@@ -1,6 +1,6 @@
 const sqlite = require("sqlite3").verbose();
 const path = require("path");
-const dbPath = path.join(__dirname, "test.db");
+const dbPath = path.join(__dirname, "sqlite.db");
 
 const db = new sqlite.Database(dbPath, sqlite.OPEN_READWRITE, (err) => {
   if (err) return console.error("DB연결에러:", err.message);
@@ -9,46 +9,146 @@ const db = new sqlite.Database(dbPath, sqlite.OPEN_READWRITE, (err) => {
 
 const createTablesQuery = `
     CREATE TABLE IF NOT EXISTS users(
-    id INTEGER PRIMARY KEY,
-    userId TEXT,
-    userPassword TEXT,
-    userName TEXT,
-    userPhone TEXT,
-    userYears TEXT,
-    userGender TEXT,
-    userActivity TEXT DEFAULT NULL,
-    userIntroduce TEXT DEFAULT NULL
+      id INTEGER PRIMARY KEY,
+      userId TEXT,
+      userPassword TEXT,
+      userName TEXT,
+      userPhone TEXT,
+      userYears TEXT,
+      userGender TEXT,
+      userActivity TEXT DEFAULT NULL,
+      userIntroduce TEXT DEFAULT NULL,
+      userKeepList TEXT DEFAULT NULL,
+      userImage TEXT DEFAULT NULL
     );
 `;
 
 
-//테이블 생성
+// 테이블 생성
 db.exec(createTablesQuery, (err) => {
   if (err) return console.log("테이블을 생성못함:", err.message);
   console.log("테이블 생성");
 });
 
+/*
+관계키?
+    CREATE TABLE IF NOT EXISTS userKeepList(
+      id INTEGER PRIMARY KEY,
+      keepItemId INTEGER,
+      userId INTEGER,
+      FOREIGN KEY (userId) REFERENCES users (id)
+    );
 
-//  모든테이블확인
+*/
+// const createTriggerQuery = `
+//     CREATE TRIGGER IF NOT EXISTS create_usersProfile_trigger AFTER INSERT ON users 
+//     BEGIN 
+//     INSERT INTO usersProfile (userId , userName, userYears, userGender, userActivity)
+//     SELECT NEW.userId, NEW.userName, NEW.userYears, NEW.userGender, NEW.userActivity
+//     WHERE NOT EXISTS (SELECT 1 FROM usersProfile WHERE userId = NEW.userId);
+//     END;
+// `;
+/*
+
+    CREATE TABLE IF NOT EXISTS usersProfile(
+      id INTEGER PRIMARY KEY,
+      userId TEXT,
+      userName TEXT,
+      userGender TEXT,
+      userYears TEXT,
+      userActivity TEXT,
+      userKeepList TEXT DEFAULT NULL
+    )
+*/
+// 트리거 생성
+// db.exec(createTriggerQuery, function (err) {
+//   if (err) return console.log("트리거 생성못함", err.message);
+//     console.log("트리거생성");
+// });
+
+// db.run("DELETE FROM users"); 
+// db.run("DROP TABLE token");
+
+//  모든테이블확인 --- 비기능
 db.all(" SELECT name FROM sqlite_master WHERE type='table' ", (err, rows) => {
-    if (err) {
-      console.error(err);
-      return;
-    }
-    rows.forEach((row) => {
-      console.log("현재 테이블:",row.name);
-    });
+  if (err) {
+    console.error(err);
+    return;
+  }
+  rows.forEach((row) => {
+    console.log("현재 테이블:", row.name);
   });
-
-  
-// user 테이블 데이터 전체 데이터 조회
-  db.all(`SELECT * FROM users`, [], (err,rows)=>{
-    if(err) return console.error(err.message);
-    console.log("users:",rows);
 });
 
+// user 테이블 데이터확인
+db.all(`SELECT * FROM users`, [], (err, rows) => {
+  if (err) return console.error(err.message);
+  console.log("users:", rows);
+});
 
-// 아이디 중복확인
+// token 테이블 데이터확인
+// db.all(`SELECT * FROM token`, [], (err, rows) => {
+//   if (err) return console.error(err.message);
+//   console.log("token:", rows);
+// });
+
+// usersProfile 테이블 데이터 전체 데이터 조회 --- 비기능
+// db.all(`SELECT * FROM usersProfile`, [], (err, rows) => {
+//   if (err) return console.error(err.message);
+//   console.log("usersProfile:", rows);
+// });
+
+// 유저정보 조회 - 대기
+// const myProfile = ({ userId }) => {
+//   return new Promise((resolve, reject) => {
+//     db.get(
+//       `SELECT DISTINCT userId FROM users WHERE userId = ?`,
+//       [userId],
+//       (err, row) => {
+//         if (err) {
+//           reject(err);
+//         } else {
+//           resolve(row);
+//         }
+//       }
+//     );
+//   });
+// };
+// 유저정보수정(마이페이지) --- 기능
+const myProfileSetting = ( data )=>{
+  return console.log("db데이터:",data)
+  // return new Promise((resolve , reject) => {
+  //   db.run(`UPDATE users SET userImage = ? ,userName = ?, userGender = ? , userYears = ?, userActivity = ?, userIntroduce = ? WHERE userId = ?`, data , ( err, row)=>{
+  //     if(err){
+  //       reject(err);
+  //     }else{
+  //       resolve(row);
+  //     }
+  //   })
+  // })
+
+}
+
+
+// 유저조회(마이페이지) --- 기능
+const myProfile = ( userId ) => {
+  return new Promise((resolve, reject) => {
+    db.get(
+      `SELECT * FROM users WHERE userId = ?`,
+      [userId],
+      (err, row) => {
+        if (err) {
+          reject(err);
+        } else {
+          console.log(row)
+          resolve(row);
+        }
+      }
+    );
+  });
+};
+
+// 아이디 중복확인 --- 기능
 const findId = (userid) => {
   return new Promise((resolve, reject) => {
     db.all(
@@ -65,7 +165,7 @@ const findId = (userid) => {
   });
 };
 
-// 회원가입
+// 회원가입 --- 기능
 const signupAdd = ({
   userId,
   userPassword,
@@ -75,10 +175,13 @@ const signupAdd = ({
   userGender,
   userActivity,
   userIntroduce,
+  userKeepList,
+  userImage
 }) => {
+
   return new Promise((resolve, reject) => {
     db.run(
-      `INSERT INTO users (userId, userPassword, userName, userPhone, userYears, userGender, userActivity, userIntroduce) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+      `INSERT INTO users (userId, userPassword, userName, userPhone, userYears, userGender, userActivity, userIntroduce, userKeepList, userImage) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [
         userId,
         userPassword,
@@ -88,6 +191,8 @@ const signupAdd = ({
         userGender,
         userActivity,
         userIntroduce,
+        userKeepList,
+        userImage
       ],
       (err) => {
         if (err) {
@@ -100,39 +205,82 @@ const signupAdd = ({
   });
 };
 
-// 아이디,패스워드 조회
-
-const login = ({ userId, userPassword }) => {
-
+// 로그인(아이디,패스워드) --- 기능
+const login = ( userId, userPassword ) => {
   return new Promise((resolve, reject) => {
-    db.get(`SELECT * FROM users WHERE userId = ? AND userPassword = ? `, [
-      userId,
-      userPassword,
-    ], (err, row)=>{
-        if(err){
-            reject(err);
-            return;
+    db.get(
+      `SELECT * FROM users WHERE userId = ? AND userPassword = ? `, 
+      [userId, userPassword],
+      (err, row) => {
+        if (err) {
+          reject(err);
+          return;
         }
-        if(row){
-            resolve(true);
-        } else{
-            resolve(false);
+        if (row) {
+          resolve(true);
+        } else {
+          resolve(false);
         }
-    });
+      }
+    );
   });
 };
+
+// 리프레시 토큰저장
+// const saveToken = ( userId, userToken )=>{
+//   return new Promise( (resolve, reject) => {
+//     db.run(`INSERT INTO token (userId, userToken) VALUES (? ,?)`, [userId, userToken], (err, row)=>{
+//       if(err){
+//         reject(err);
+//         return;
+//       } else{
+//         resolve("성공");
+//       }
+//     })
+//   })
+// }
 
 module.exports = {
   findId,
   signupAdd,
-  login
+  login,
+  myProfile,
+  myProfileSetting,
+  // saveToken
 };
+
+
+
+// db.run(`DROP TABLE myProfile`);
+// db.run(`DROP TABLE myProfile`);
+
+/*
+ CREATE TABLE IF NOT EXISTS myProfile(
+      id INTEGER PRIMARY KEY,
+      userName TEXT,
+      userYears TEXT,
+      userGender TEXT,
+      userActivity TEXT,
+      userKeeplList TEXT DEFAULT NUll,
+    );
+*/
+
+
+/*
+CREATE TABLE IF NOT EXISTS group(
+      id INTEGER PRIMARY KEY,
+      groupRegion: TEXT,
+      groupTitle: TEXT,
+      groupPeople: TEXT,
+      groupDetailedArea: TEXT,
+      groupKeep: TEXT,
+    );
+*/
 
 // 실행되는 쿼리문 확인
 // db.on("trace", (sql) => {
 //     console.log("SQL:", sql);
 //   });
-
 
 // 특정 테이블 전체 데이터조회
 // db.all(`SELECT * FROM users`, [], (err,rows)=>{
