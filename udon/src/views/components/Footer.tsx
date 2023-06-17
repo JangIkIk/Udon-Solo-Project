@@ -1,12 +1,19 @@
 import styled from "styled-components";
-import { BiHomeAlt, BiUser, BiConversation, BiBell, BiPencil, BiKey } from "react-icons/bi";
-import { 
-  flex_column, 
+import {
+  BiHomeAlt,
+  BiUser,
+  BiConversation,
+  BiBell,
+  BiPencil,
+  BiKey,
+} from "react-icons/bi";
+import {
+  flex_column,
   SpanFlex,
   baseHover,
   fixedBase,
-
- } from "@components/AllComponent"
+} from "@components/AllComponent";
+import { useEffect, useState} from "react";
 
 const Layout = styled.div`
   display: flex;
@@ -21,51 +28,85 @@ const Layout = styled.div`
     display: flex;
     justify-content: space-around;
     gap: 1rem;
-    
+
     .icons {
       flex: 1;
       ${flex_column}
       border-radius:0.5rem;
 
       ${baseHover}
-      &> span{
-        flex:1;
+      &> span {
+        flex: 1;
       }
     }
   }
 `;
 
 function Footer() {
+  const [accessToken, setAccessToken] = useState<boolean>(false);
+  useEffect(()=>{
+    (()=>{
+      const storge = !!sessionStorage.getItem("accessToken");
+      const cookie = document.cookie.includes("accessToken=");
+      setAccessToken(storge || cookie)
+    })();
+  },[accessToken]);
+
   return (
     <Layout>
-      <div className="in-box">
-        <a href="/" className="icons">
-            <SpanFlex><BiHomeAlt/></SpanFlex>
+      { accessToken ? (
+        <div className="in-box">
+          <a href="/" className="icons">
+            <SpanFlex>
+              <BiHomeAlt />
+            </SpanFlex>
             <SpanFlex>홈</SpanFlex>
-        </a> 
-        <a href="/mypage" className="icons">
-            <SpanFlex><BiUser/></SpanFlex>
+          </a>
+          <a href="/mypage" className="icons">
+            <SpanFlex>
+              <BiUser />
+            </SpanFlex>
             <SpanFlex>프로필</SpanFlex>
-        </a>
-        <a href="/groupsetting" className="icons">
-            <SpanFlex><BiConversation/></SpanFlex>
+          </a>
+          <a href="/groupsetting" className="icons">
+            <SpanFlex>
+              <BiConversation />
+            </SpanFlex>
             <SpanFlex>그룹</SpanFlex>
-        </a>
-        <a href="/news" className="icons">
-            <SpanFlex><BiBell/></SpanFlex>
+          </a>
+          <a href="/news" className="icons">
+            <SpanFlex>
+              <BiBell />
+            </SpanFlex>
             <SpanFlex>알림</SpanFlex>
-        </a>
-      </div>
-      <div className="in-box">
-        <a href="/login" className="icons">
-          <SpanFlex><BiKey /></SpanFlex>
-          <SpanFlex>로그인</SpanFlex>
-        </a>
-        <a href="/signup" className="icons">
-          <SpanFlex><BiPencil /></SpanFlex>
-          <SpanFlex>회원가입</SpanFlex>
-        </a>
-      </div>
+          </a>
+          <a href="/login" className="icons" onClick={()=> {
+            sessionStorage.clear();
+            document.cookie = "accessToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+            document.cookie = "refreshToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+          }}>
+            <SpanFlex>
+              <BiBell />
+            </SpanFlex>
+            <SpanFlex>로그아웃</SpanFlex>
+          </a>
+        </div>
+      ) : (
+        <div className="in-box">
+          <a href="/login" className="icons">
+            <SpanFlex>
+              <BiKey />
+            </SpanFlex>
+            <SpanFlex>로그인</SpanFlex>
+          </a>
+          <a href="/signup" className="icons">
+            <SpanFlex>
+              <BiPencil />
+            </SpanFlex>
+            <SpanFlex>회원가입</SpanFlex>
+          </a>
+        </div>
+      )}
     </Layout>
   );
 }

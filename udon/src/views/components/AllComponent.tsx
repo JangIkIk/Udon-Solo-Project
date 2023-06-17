@@ -122,9 +122,11 @@ const CommonInputLayout = styled.div`
 
 // 스타일 태그
 
-export const ImgBase = styled.img<{ fit?: string }>`
+export const ImgBase = styled.img<{ fit?: string , borderRadius?: string}>`
   width: 100%;
   height: 100%;
+  
+  border-radius: ${ props => props.borderRadius ?? "none" };
   object-fit: ${(props) => props.fit ?? "cover"};
 `;
 
@@ -344,15 +346,24 @@ export type SimpleInputDataType = {
 };
 
 interface SimpleInputType {
-  placeholder?: string
+  placeholder?: string;
   children: string;
   type: string;
+  regex?: RegExp;
+  text?: string;
   name: keyof SimpleInputDataType;
   state: SimpleInputDataType;
   setState: React.Dispatch<SetStateAction<SimpleInputDataType>>;
 }
 
-const SimpleInputLayout = styled(CommonInputLayout)`
+const SimpleInputLayout = styled(CommonInputLayout)<{isRegex: boolean | undefined}>`
+
+ & > label{
+  input{
+    ${ props => props.isRegex === undefined ? "border-color: black" : props.isRegex ? "border-color: black" : "border-color: red"}
+  }
+ }
+  
 
 `;
 
@@ -362,17 +373,32 @@ export const SimpleInput = ({
   name,
   state,
   setState,
-  placeholder
+  placeholder,
+  regex,
+  text
 }: SimpleInputType) => {
+  const [isRegex, setIsRegex] = useState<boolean | undefined>(undefined);
 
+  
+  
 
   const inputChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     setState((prev) => ({ ...prev, [name]: value }));
+
+    if(regex !== undefined){
+      if(regex.test(value)){
+        setIsRegex(true);
+      }else{
+        setIsRegex(false);
+        console.log("else실행?")
+      }
+    }
   };
 
+
   return (
-    <SimpleInputLayout>
+    <SimpleInputLayout isRegex={isRegex}>
       <label>
         <span>{children}</span>
         <input
@@ -385,6 +411,7 @@ export const SimpleInput = ({
         <div>
         </div>
       </label>
+      {isRegex !== undefined && isRegex === false ? <p>{text}</p> : null}
     </SimpleInputLayout>
   );
 };
