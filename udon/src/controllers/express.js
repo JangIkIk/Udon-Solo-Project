@@ -1,14 +1,24 @@
 const express = require('express');
 const app = express();
 const port = 4000;
+//  cors 모듈
 const cors = require('cors');
+// JWT 모듈
+const jwt = require(`jsonwebtoken`);
+// 토큰서명키
+const access = "access"
+const refresh = "refres"
+// json타입 파싱을위한 미들웨어
 app.use(express.json());
-app.use(cors());
-const { findId, signupAdd, login } = require('../models/sqlite');
-
-// app.use(cors({
-//     origin: 'http://localhost:3000'
-//   }));
+//  CORS 설정
+app.use(cors(
+  {
+    origin: "http://localhost:3000",
+    credentials: true,
+  }
+))
+// DB탐색 함수
+const { findId, signupAdd, login, myProfile, myProfileSetting } = require('../models/sqlite');
 
   const GroupList = [
       {
@@ -185,6 +195,7 @@ const UserGroup = {
       title: "[정자역] 클라이밍 초자분들 환영 나이제한없음X [정자역] 클라이밍 초자분들 환영 나이제한없음X",
       people: "85",
       detailedArea: "정자역 5번출구",
+      
     },
     {
       id: 2,
@@ -232,17 +243,85 @@ const GroupNews = [
 //   res.status(200).send("테스트")
 // })
 
+
+// ---임시보류 -> 토큰확인
+// app.get(`/istoken`, (req, res)=>{
+//     const accessToken = req.headers.authorization.split(" ")[1];
+//     jwt.verify(accessToken, secretKey, (err, decoded)=>{
+//       if(err){
+//         res.status(401).send(err);
+//       }else{
+//         res.status(200).send(decoded);
+//       }
+//     })
+    
+// })
+
+
+// 그룹리스트정보 - 대기
 app.get(`/groupList`, (req, res)=>{
     res.status(200).send(GroupList);
 })
 
-app.get(`/mypage/:userid`, ( req, res)=>{
-  const id = req.params.userid;
-  res.status(200).send(UserGroup);
-})
-
+//알림 - 대기
 app.get(`/news`, (req, res) =>{
   res.status(200).send(GroupNews);
+})
+
+
+const multer = require('multer');
+const upload = multer({ dest: 'uploads/'})
+
+// 마이페이지 정보수정
+app.patch(`/mypage`, upload.single('userImage'),(req, res)=>{
+  const token = req.headers.authorization.split(" ")[1];
+  const {userName, userGender, userYears,  userActivity, userIntroduce} = req.body;
+  const userImage = req.file
+  // console.log("body:",req.body);
+  // console.log("userImage:",userImage);
+  res.status(200).send("통신")
+  
+  // jwt.verify(token, secretKey, (err, decode) =>{
+  //   if(err){
+  //     res.status(400).send(err);
+  //   } else{
+  //     myProfileSetting( decode.userId)
+  //     .then( data => res.status(200).send("성공"))
+  //   }
+  // })
+})
+
+
+
+
+// 마이페이지
+app.get(`/mypage`, ( req, res)=>{
+  const token = req.headers.authorization.split(" ")[1];
+  jwt.verify(token, access, (err, decode) => {
+    if(err){
+      if(err instanceof jwt.TokenExpiredError){
+        res.status(401).send(err);
+      } else{
+        res.status(400).send(err);
+      }
+    }
+    else{
+      myProfile( decode.userId ).then( data => {
+        const userData = {
+          userName: data.userName,
+          userYears: data.userYears,
+          userGender: data.userGender,
+          userActivity: data.userActivity,
+          userKeepList: data.userKeepList,
+        }
+        if(data){
+          res.status(200).send(userData);
+        } else {
+          res.status(400).send("데이터를 찾을수가없습니다.");
+        }
+      })
+    }
+  })
 })
 
 
@@ -257,13 +336,48 @@ app.get(`/signup/:userid`, (req, res) =>{
   
 })
 
+
+const cookieParser = require('cookie-parser');
+app.use(cookieParser());
+
+// 액세스토큰 재발급
+app.get('/token', (req, res)=>{
+  const refreshToken = req.cookies.refreshToken;
+  console.log("refreshToken:",refreshToken)
+  jwt.verify(refreshToken, refresh,  (err, decode) => {
+    const userId = decode.userId;
+    if(err){
+      res.status(401).send("유효하지 않은 리프레시토큰");
+    } else{
+      const accessToken = jwt.sign( {userId}, access, {expiresIn: "10s"});
+      res.set('Access-Control-Expose-Headers', 'Authorization');
+      res.set('Authorization', accessToken);
+      res.status(200).send()    
+    }
+
+  })  
+})
+
 // 로그인
 app.post(`/login`, (req, res) => {
-  const {userId, userPassword,keepCheck} = req.body;
-  console.log("expresData:",req.body)
-  login({userId, userPassword})
+  const {userId, userPassword} = req.body;
+  
+  login( userId, userPassword )
   .then( data => {
-    res.status(200).send(data);
+    if(data){
+    const accessToken = jwt.sign( {userId}, access, {expiresIn: "10s"});
+    const refreshToken = jwt.sign( {userId}, refresh, {expiresIn: "24h"});
+      res.set('Access-Control-Expose-Headers', 'Authorization');
+      res.set('Authorization', accessToken);    
+      res.cookie('refreshToken', refreshToken,{
+        maxAge: 24 * 60 * 60 * 1000,
+      });
+      res.status(200).send(data);
+    }else {
+      console.log("일치하지 않습니다");
+      res.status(200).send(data);
+    }
+    
   })
   .catch( err => {
     res.status(400).send(err);
@@ -274,7 +388,7 @@ app.post(`/login`, (req, res) => {
 
 //회원가입
 app.post(`/signup`, (req, res) => {
-  const {userId, userPassword, userPasswordCheck, userName, userPhone, userYears, userGender, userActivity, userIntroduce} = req.body;
+  const {userId, userPassword, userPasswordCheck, userName, userPhone, userYears, userGender, userActivity, userIntroduce, userKeepList, userImage} = req.body;
   const idRegex = /^(?=.*[a-zA-Z])[a-zA-Z0-9]{6,12}$/;
   const passwordRegex = /^(?=.*[a-zA-Z])(?=.*[!@#$%^&*])(?=.*[0-9])[a-zA-Z0-9!@#$%^&*]{8,16}$/;
   const nameRegex = /^[가-힣]{2,6}$/;
@@ -282,8 +396,6 @@ app.post(`/signup`, (req, res) => {
   const yearsRegex = /^[0-9]{4,4}[-][0-9]{2,2}[-][0-9]{2,2}$/;
   const genderRegex = /^[남|여]{1,1}$/;
   
-  
-
   findId(userId)
   .then( (idCheck) => {
     if(!idRegex.test(userId)){
@@ -303,24 +415,25 @@ app.post(`/signup`, (req, res) => {
     }else if(idCheck){
       res.status(400).send("중복된 아이디");
     } 
-    else {
+    
+    else {      
       const userActivityValue = userActivity.trim() !== "" ? userActivity : null;
       const userIntroduceValue = userIntroduce.trim() !== "" ? userIntroduce : null;
 
-      signupAdd({userId, userPassword, userName, userPhone, userYears, userGender, userActivity: userActivityValue, userIntroduce: userIntroduceValue})
-      .then(( data ) => { res.status(200).send(data);
-      })
-      .catch( (err) => { res.status(500).send("Error:" + err);
-    })
+      signupAdd({userId, userPassword, userName, userPhone, userYears, userGender, userActivity: userActivityValue, userIntroduce: userIntroduceValue, userKeepList, userImage})
+      .then(( data ) => res.status(200).send(data))
+      .catch( (err) => res.status(500).send("Error:" + err))
     }
   })
   .catch( err => {
     res.status(500).send("회원가입 오류:" + err);
   }) 
+
 })
 
 
 
+// 서버실행
 app.listen(port, ()=>{
     console.log(`server port${port}`);
 })
