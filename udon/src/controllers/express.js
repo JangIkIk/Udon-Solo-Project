@@ -5,21 +5,33 @@ const port = 4000;
 const cors = require('cors');
 // JWT 모듈
 const jwt = require(`jsonwebtoken`);
+// 쿠키로 받은값을 파싱하기위한 미들웨어
+const cookieParser = require('cookie-parser');
 // 토큰서명키
 const access = "access"
 const refresh = "refres"
+// 이미지 파일데이터를 읽기위한 미들웨어
+const multer = require('multer');
+// 이미지 파일 저장경로
+const upload = multer({ dest: 'uploads/'})
+
+
+
 // json타입 파싱을위한 미들웨어
 app.use(express.json());
+
 //  CORS 설정
 app.use(cors(
   {
     origin: "http://localhost:3000",
     credentials: true,
   }
-))
+));
+app.use(cookieParser());
+
+
 // DB탐색 함수
 const { findId, signupAdd, login, myProfile, myProfileSetting } = require('../models/sqlite');
-
   const GroupList = [
       {
         id: 1,
@@ -268,27 +280,44 @@ app.get(`/news`, (req, res) =>{
   res.status(200).send(GroupNews);
 })
 
+const path = require('path');
+const uploadsDir = path.join(__dirname, 'uploads');
+app.use(express.static(uploadsDir));
 
-const multer = require('multer');
-const upload = multer({ dest: 'uploads/'})
 
 // 마이페이지 정보수정
 app.patch(`/mypage`, upload.single('userImage'),(req, res)=>{
   const token = req.headers.authorization.split(" ")[1];
-  const {userName, userGender, userYears,  userActivity, userIntroduce} = req.body;
-  const userImage = req.file
-  // console.log("body:",req.body);
-  // console.log("userImage:",userImage);
-  res.status(200).send("통신")
-  
-  // jwt.verify(token, secretKey, (err, decode) =>{
-  //   if(err){
-  //     res.status(400).send(err);
-  //   } else{
-  //     myProfileSetting( decode.userId)
-  //     .then( data => res.status(200).send("성공"))
-  //   }
-  // })
+  const {userName, userGender, userYears, userActivity, userIntroduce} = req.body;
+  const userImage = req.file;
+
+  /*
+  이미지가 업로드되지않았던 문제는 사용자가 input태그에 이미지를 업로드하였을때
+  미리보기 기능과, 전송할때의 객체가 타입이 틀리기때문에 오류가났었다.
+  미리보기는 인코딩된데이터를 onloadend를 통하여 원하는데이터만 읽어들여 브라우저에 보여주는 반면에
+  서버에 파일을 보낼때는 인코딩된 데이터를 그대로 보내기때문에 서버측에서는 문자열로된 데이터를 그대로 저장을한다.
+  이러한이유로 서버에서는 파일을 저장하였을때 이미지파일의 대한 객체가아닌 문자열데이터로 저장하기때문에 클라이언트측에서
+  이미를 그릴수가 없던것이였다. 하지만 문제해결은 미리보기 state와 서버전소용 state를 따로 관리하여 인코딩이 되기전의 데이터를 전송하였더니
+  클라이언트측에서 url경로로 접근이 가능하였다.
+  */
+  console.log(userImage)
+  jwt.verify(token, access, (err, decode) =>{
+    if(err){
+      res.status(401).send("인증에러:",err);
+    } else{
+      const data = [
+        userImage.filename,
+        userName,
+        userGender,
+        userYears,
+        userActivity,
+        userIntroduce,
+        decode.userId,
+      ];
+      myProfileSetting( data )
+      .then( data => res.status(200).send("성공"))
+    }
+  })
 })
 
 
@@ -300,7 +329,7 @@ app.get(`/mypage`, ( req, res)=>{
   jwt.verify(token, access, (err, decode) => {
     if(err){
       if(err instanceof jwt.TokenExpiredError){
-        res.status(401).send(err);
+        res.status(401).send("TokenExpiredError");
       } else{
         res.status(400).send(err);
       }
@@ -313,12 +342,9 @@ app.get(`/mypage`, ( req, res)=>{
           userGender: data.userGender,
           userActivity: data.userActivity,
           userKeepList: data.userKeepList,
+          userImage: data.userImage
         }
-        if(data){
-          res.status(200).send(userData);
-        } else {
-          res.status(400).send("데이터를 찾을수가없습니다.");
-        }
+        res.status(200).send(userData);
       })
     }
   })
@@ -337,19 +363,15 @@ app.get(`/signup/:userid`, (req, res) =>{
 })
 
 
-const cookieParser = require('cookie-parser');
-app.use(cookieParser());
-
 // 액세스토큰 재발급
 app.get('/token', (req, res)=>{
   const refreshToken = req.cookies.refreshToken;
-  console.log("refreshToken:",refreshToken)
   jwt.verify(refreshToken, refresh,  (err, decode) => {
     const userId = decode.userId;
     if(err){
       res.status(401).send("유효하지 않은 리프레시토큰");
     } else{
-      const accessToken = jwt.sign( {userId}, access, {expiresIn: "10s"});
+      const accessToken = jwt.sign( {userId}, access, {expiresIn: "1h"});
       res.set('Access-Control-Expose-Headers', 'Authorization');
       res.set('Authorization', accessToken);
       res.status(200).send()    
@@ -365,7 +387,7 @@ app.post(`/login`, (req, res) => {
   login( userId, userPassword )
   .then( data => {
     if(data){
-    const accessToken = jwt.sign( {userId}, access, {expiresIn: "10s"});
+    const accessToken = jwt.sign( {userId}, access, {expiresIn: "1h"});
     const refreshToken = jwt.sign( {userId}, refresh, {expiresIn: "24h"});
       res.set('Access-Control-Expose-Headers', 'Authorization');
       res.set('Authorization', accessToken);    
@@ -374,7 +396,6 @@ app.post(`/login`, (req, res) => {
       });
       res.status(200).send(data);
     }else {
-      console.log("일치하지 않습니다");
       res.status(200).send(data);
     }
     
