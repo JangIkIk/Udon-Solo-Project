@@ -3,7 +3,8 @@ import { BaseLayout, colors } from "@components/AllComponent";
 import { useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import axios from "axios";
-import { Modal } from "@components/Modal"
+import { Modal } from "@components/Modal";
+
 
 const Layout = styled(BaseLayout)`
 background-color: slategrey;
@@ -61,22 +62,26 @@ function LoginPage() {
   });
 
   const handleLogin = ()=> {
-
-    axios.post(`${process.env.REACT_APP_API_ROOT}/login`,{
+    axios.post(`/login`,{
       userId: loginData.loginId,
       userPassword: loginData.loginPassword,
       keepCheck: loginData.keepCheck
-    })
+    },{withCredentials: true})
     .then( res => {
-      console.log(res);
       if(res.data){
-        navigate("/")
+        if(loginData.keepCheck){
+          const expires = new Date();
+          expires.setTime(expires.getTime() + (3600 * 1000))
+          document.cookie = `accessToken=${res.headers.authorization}; expires=${expires.toUTCString()}; path=/;`;
+        } else{
+          sessionStorage.setItem("accessToken",res.headers.authorization);
+        }
+        navigate("/");
       }else{
-        console.log(res);
         setIsModal(res.data);
       }
     })
-    .catch( err => console.log(err))
+    .catch( err => console.log("err:",err))
   }
   
   return (
