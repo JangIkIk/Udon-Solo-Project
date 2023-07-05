@@ -18,9 +18,6 @@ import {
 import { Footer, Header } from "@components";
 import "@styles/index.css";
 
-// --- 임시보류
-// import axios from "axios";
-// import { useEffect, useState } from "react";
 const PrivateRoute = () => {
   const storge = sessionStorage.getItem('accessToken');
   const cookie = document.cookie.includes('accessToken');
@@ -30,35 +27,7 @@ const PrivateRoute = () => {
   } else{
     return <Outlet/>
   }
-  
-  
-  // --- 임시보류
-  // const [isToken, setIsToken] = useState<boolean | null>(null);
-  // useEffect(()=>{
-  //   axios.get(`${process.env.REACT_APP_API_ROOT}/istoken`,{
-  //     headers: {
-  //       Authorization: `Bearer ${accessToken}`
-  //     }
-  //   })
-  //   .then( () => setIsToken(true))
-  //   .catch( () => setIsToken(false))
-  // },[accessToken,isToken])
-
-  // if(isToken === null){
-  //   return <Navigate to="/login" replace />;
-  // } else if(!!sessionStorage.getItem('accessToken') === isToken){
-  //   return <Outlet/>;
-  // } else{
-  //   return (
-  //     <>
-  //     <Navigate to="/login" replace />
-  //     </>
-  //   );
-  // }
-
 };
-
-
 
 
 const HeaderandFooter = () => {
