@@ -94,7 +94,7 @@ function SignUpPage() {
       userActivity: simpleData.userActivity,
       userIntroduce: simpleData.userIntroduce,
       userPassword: formPassword.userPassword,
-      userPasswordCheck: formPassword.userPasswordCheck
+      userPasswordCheck: formPassword.userPasswordCheck,
     })
     .then( () => navigate("/login"))
     .catch( error => console.log(error))
@@ -193,6 +193,8 @@ function SignUpPage() {
           state={simpleData}
           setState={setSimpleData}
           placeholder="10자이내로 작성하세요"
+          regex={/^[가-힣\s]{0,10}$/}
+          text="10자이내 한글로만작성해주세요"
         >
           활동지역
         </SimpleInput>
@@ -202,7 +204,9 @@ function SignUpPage() {
           name="userIntroduce"
           state={simpleData}
           setState={setSimpleData}
-          placeholder="100자이내로 작성하세요"
+          placeholder="20자이내로 작성하세요"
+          regex={/^[가-힣\s]{0,20}$/}
+          text="20자이내 한글로만작성해주세요"
         >
           간단소개
         </SimpleInput>
