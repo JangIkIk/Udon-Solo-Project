@@ -4,11 +4,29 @@ import { BaseLayout, flex_column } from '@components/AllComponent'
 import { useEffect, useState } from "react";
 import axios from "axios";
 
+// --- 임시보류
+// import {useAppDispatch, useAppSelector} from "../store/store";
+// import { plus } from "../slice/counter-slice"
+
+// function Test(){
+//   const value = useAppSelector((state)=> state.counter.value );
+//   const dispatch = useAppDispatch();
+  
+//   console.log(value)
+//   function handleToken(){
+//     dispatch(plus())
+//   }
+  
+// }
+
+
+
 const Layout = styled(BaseLayout)`
   
     ul{
        ${flex_column}
         gap:10px;
+        background-color: gray;
     }
 `;
 
@@ -17,12 +35,12 @@ const Layout = styled(BaseLayout)`
 const HomePage = () => {
   const [groupList, setGroupList] = useState<GroupListType[]>([]);
 
-  useEffect(()=>{
-    axios.get<GroupListType[]>(`${process.env.REACT_APP_API_ROOT}/groupList`)
-    .then( res => setGroupList(res.data))
-    
-  },[])
 
+  useEffect(()=>{
+    axios.get<GroupListType[]>(`groupList`)
+    .then( res => setGroupList(res.data))
+
+  },[])
 
   return (
     <Layout>
