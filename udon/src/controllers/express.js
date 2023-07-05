@@ -27,6 +27,12 @@ app.use(cors(
     credentials: true,
   }
 ));
+// app.use(cors(
+//   {
+//     origin: "http://192.168.219.103:3000",
+//     credentials: true,
+//   }
+// ));
 app.use(cookieParser());
 
 
@@ -289,33 +295,43 @@ app.use(express.static(uploadsDir));
 app.patch(`/mypage`, upload.single('userImage'),(req, res)=>{
   const token = req.headers.authorization.split(" ")[1];
   const {userName, userGender, userYears, userActivity, userIntroduce} = req.body;
-  const userImage = req.file;
+  let userImage = req.file;
+  console.log("userImage:",userImage);
+  
 
-  /*
-  이미지가 업로드되지않았던 문제는 사용자가 input태그에 이미지를 업로드하였을때
-  미리보기 기능과, 전송할때의 객체가 타입이 틀리기때문에 오류가났었다.
-  미리보기는 인코딩된데이터를 onloadend를 통하여 원하는데이터만 읽어들여 브라우저에 보여주는 반면에
-  서버에 파일을 보낼때는 인코딩된 데이터를 그대로 보내기때문에 서버측에서는 문자열로된 데이터를 그대로 저장을한다.
-  이러한이유로 서버에서는 파일을 저장하였을때 이미지파일의 대한 객체가아닌 문자열데이터로 저장하기때문에 클라이언트측에서
-  이미를 그릴수가 없던것이였다. 하지만 문제해결은 미리보기 state와 서버전소용 state를 따로 관리하여 인코딩이 되기전의 데이터를 전송하였더니
-  클라이언트측에서 url경로로 접근이 가능하였다.
-  */
-  console.log(userImage)
   jwt.verify(token, access, (err, decode) =>{
+    console.log(decode)
     if(err){
       res.status(401).send("인증에러:",err);
     } else{
+      if(userImage){
+        userImage = userImage.filename
+      } else{
+        userImage = null
+      }
       const data = [
-        userImage.filename,
+        userImage,
         userName,
         userGender,
         userYears,
         userActivity,
         userIntroduce,
-        decode.userId,
+        decode.userId
       ];
-      myProfileSetting( data )
-      .then( data => res.status(200).send("성공"))
+      myProfileSetting(data)
+      .then( () => {
+        myProfile( decode.userId ).then( data => {
+          const userData = {
+            userName: data.userName,
+            userYears: data.userYears,
+            userGender: data.userGender,
+            userActivity: data.userActivity,
+            userKeepList: data.userKeepList,
+            userImage: data.userImage
+          }
+          res.status(200).send(userData);
+        })
+      })
     }
   })
 })
@@ -342,7 +358,8 @@ app.get(`/mypage`, ( req, res)=>{
           userGender: data.userGender,
           userActivity: data.userActivity,
           userKeepList: data.userKeepList,
-          userImage: data.userImage
+          userImage: data.userImage,
+          userIntroduce: data.userIntroduce
         }
         res.status(200).send(userData);
       })
