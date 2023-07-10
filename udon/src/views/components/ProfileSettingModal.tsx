@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { flex_row_all_cneter, ImgBase, colors } from "@components/AllComponent"
 import React, { SetStateAction, useState } from "react";
 import axios from "axios";
-import { OptionUserDataType } from "@pages/MyPage"
+import { userDataType } from "@pages/MyPage"
 
 const Layout = styled.div`
     background-color: rgba(0, 0, 0, 0.5);
@@ -117,26 +117,26 @@ const Layout = styled.div`
     }
 `
 interface ProfileSettingModalType{
-    userData: OptionUserDataType,
-    setUserData: React.Dispatch<React.SetStateAction<OptionUserDataType>>,
+    userData: userDataType | null,
+    setUserData: React.Dispatch<React.SetStateAction<userDataType | null>>,
     setState: React.Dispatch<SetStateAction<boolean>>,
 }
 
+type SN = string | null
+
 export const ProfileSettingModal = ({ setState, userData, setUserData } : ProfileSettingModalType)=>{
-    const [userName, setUserName] = useState<string>(`${userData.userName}`);
-    const [userYears, setUserYears] = useState<string>(`${userData.userYears}`);
-    const [userGender, setUserGender] = useState<string>(`${userData.userGender}`);
-    const [userActivity, setUserActivity] = useState<string>(`${userData.userActivity}`);
-    const [userIntroduce, setUserIntroduce] = useState<string>(`${userData.userIntroduce}`);
+    const [userName, setUserName] = useState<SN>(userData && userData.userName);
+    const [userYears, setUserYears] = useState<SN>( userData && userData.userYears);
+    const [userGender, setUserGender] = useState<SN>( userData && userData.userGender);
+    const [userActivity, setUserActivity] = useState<SN>( userData && userData.userActivity);
+    const [userIntroduce, setUserIntroduce] = useState<SN>( userData && userData.userIntroduce);
     const [userImage, setUserImage] = useState<File | undefined >(undefined);
     const [userImagePreview, setUserImagePreview] = useState<string | null >(null);
-    // console.log(userData.userImage);
+
     // 사진 미리보기
     const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
         setUserImage(file);
-        
-        // console.log("file:",file);
         //  input 태그의 type = "file" 에입력된 파일정보를 files객체에 접근하여 이미지데이터를가지고온다
         if (file) {
             const imageUrl = URL.createObjectURL(file);
@@ -152,11 +152,12 @@ export const ProfileSettingModal = ({ setState, userData, setUserData } : Profil
         */
         const formData = new FormData();
         
-        formData.set("userName",userName)
-        formData.set("userYears",userYears)
-        formData.set("userGender",userGender)
-        formData.set("userActivity",userActivity)
-        formData.set("userIntroduce",userIntroduce)
+        // 해당 수정사항에도 유효성검사를 진행해야함
+        formData.set("userName",userName || `${userData && userData.userName}`);
+        formData.set("userYears",userYears || `${userData && userData.userYears}`);
+        formData.set("userGender",userGender || `${userData && userData.userGender}`);
+        formData.set("userActivity",userActivity || `${userData && userData.userActivity}`);
+        formData.set("userIntroduce",userIntroduce || `${userData && userData.userIntroduce}`);
     
         if (userImage) {
             /*
@@ -164,6 +165,11 @@ export const ProfileSettingModal = ({ setState, userData, setUserData } : Profil
                 그래야 서버에서 클라이언트가 업로드한 파일데이터를 직접 사용할수가 있다.
             */
             formData.set("userImage", userImage);
+          } 
+          if(userImage === undefined){
+            if(typeof userData?.userImage === "string"){
+                formData.set("userImage", userData.userImage);
+            }
           }
         axios.patch(`${process.env.REACT_APP_API_ROOT}/mypage`,formData,{
             headers: {
@@ -180,30 +186,35 @@ export const ProfileSettingModal = ({ setState, userData, setUserData } : Profil
             console.log("수정에러:",err);
         }) 
       }
-
+    
     return(
         <Layout>
             <div className="profile-setting">
                 <div className="setting-photo">
-                    <ImgBase src={userImagePreview !== null ? userImagePreview : userData.userImage !== null ? `http://localhost:4000/${userData.userImage}` : `${process.env.PUBLIC_URL}/images/simple.png`} alt="#" borderRadius={"50%"}/>
+                    <ImgBase src={userImagePreview !== null ? userImagePreview : userData?.userImage ? userData.userImage : `${process.env.PUBLIC_URL}/images/simple.png`} alt="#" borderRadius={"50%"}/>
                     <label htmlFor="file">
                         <span>+</span>
                     </label> 
                     <input type="file" id="file" accept=".jpg, .png, .jpeg" onChange={handleImageChange}/>
                 </div>
                 <div className="setting-first">
-                    <div><input value={userName} onChange={ ({target}) => setUserName(target.value)} placeholder="이름입력"/></div>
+                    <div><input value={userName ?? ""} onChange={ ({target}) => setUserName(target.value)} placeholder="이름입력"/></div>
                     <div>
                         <button onClick={ () => setUserGender("남")} >남</button>
                         <button onClick={ () => setUserGender("여")} >여</button>
                     </div>
                 </div>
                 <div className="setting-second">
-                    <input type="date" value={userYears} onChange={ ({target}) => setUserYears(target.value)} />
-                    <input type="text" value={userActivity} onChange={ ({target}) => setUserActivity(target.value)} placeholder="활동지역"/>
+                    <input type="date" value={userYears  ?? ""} onChange={ ({target}) => setUserYears(target.value)} />
+                    {/* 새로고침후에 내용이 표시됨 */}
+                    <input type="text" value={ userActivity  === null ? "" : userActivity} onChange={ ({target}) => setUserActivity(target.value)} placeholder="활동지역"/>
                 </div>
                 <div className="setting-last">
-                    <textarea value={userIntroduce} onChange={ ({target}) => setUserIntroduce(target.value)} placeholder="간단한 자기소개글"/>
+                    {/* 새로고침후에 내용이 표시됨 */}
+                    <textarea 
+                    value={ userIntroduce === null ? "" : userIntroduce} 
+                    onChange={ ({target}) => setUserIntroduce(target.value)} 
+                    placeholder="간단한 소개를 해주세요!"/>
                 </div>
                 <div className="setting-submit">
                     <button onClick={profileChangeHandler}>수정</button>

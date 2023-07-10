@@ -13,7 +13,7 @@ import {
 import { refreshToken, isToken } from "@components/Customhooks";
 import { ProfileSettingModal } from "@components/ProfileSettingModal";
 
-interface userDataType{
+export interface userDataType{
   userName: string,
   userYears: string,
   userGender: string,
@@ -22,10 +22,6 @@ interface userDataType{
   userImage: string | null,
   userIntroduce: string
 }
-
-
-export type OptionUserDataType = Partial<userDataType>
-
 const Layout = styled(BaseLayout)`
     .mypage-info {
       display: flex;
@@ -71,19 +67,16 @@ const Layout = styled(BaseLayout)`
   }
 `;
 function MyPage() {
-  const [userData, setUserData] = useState<OptionUserDataType>({});
+  const [userData, setUserData] = useState<userDataType | null>(null);
   const [isModal, setIsModal] = useState<boolean>(false);
-  let a ;
-  // console.log(a)
   useEffect(() => {
-      axios.get<OptionUserDataType>(`/mypage`,{
+      axios.get<userDataType>(`/mypage`,{
           headers:{
               Authorization: `Bearer ${isToken()}`
           }
       })
       .then( res => setUserData(res.data))
       .catch( err => {
-        console.log("오류")
         if(err.response.status === 401){
           return refreshToken();
         } else{
@@ -92,21 +85,23 @@ function MyPage() {
       })
   },[]);
 
+  console.log("userData:",userData)
   return (
     <Layout>
       {isModal ? <ProfileSettingModal userData={userData} setUserData={setUserData} setState={setIsModal}/> : null}
       <div className="mypage-info">
         <div className="mypage-photo">
-          <ImgBase src={ userData.userImage && userData.userImage !== null ? `http://localhost:4000/${userData.userImage}`: "https://cdn-icons-png.flaticon.com/512/3135/3135715.png"} alt="#" fit="contain" borderRadius={"50%"}/>
+          <ImgBase src={ userData && userData.userImage !== null ? userData.userImage : `${process.env.PUBLIC_URL}/images/simple.png`} alt="#" fit="contain" borderRadius={"50%"}/>
         </div>
         <div className="mypage-content">
           <div>
-            <SpanFlex>{userData.userName}</SpanFlex>
-            <SpanFlex><BiMaleFemale />{userData.userGender}</SpanFlex>
+            <SpanFlex>{ userData && userData.userName }</SpanFlex>
+            <SpanFlex><BiMaleFemale />{ userData && userData.userGender}</SpanFlex>
           </div>
           <div>
-          <SpanFlex>{userData.userYears?.replaceAll("-", ".")}</SpanFlex>
-          <SpanFlex><BiBeenHere /> {userData.userActivity ?? "활동지역 없음"}</SpanFlex>
+          <SpanFlex>{ userData && userData.userYears?.replaceAll("-", ".")}</SpanFlex>
+          <SpanFlex><BiBeenHere /> { userData && userData.userActivity !== null ? userData.userActivity : "활동지역 없음"
+ }</SpanFlex>
           </div>
         </div>
         <div className="mypage-modify" onClick={() => setIsModal((prev) => !prev)}>
@@ -121,7 +116,7 @@ function MyPage() {
         </h3>
         <div className="mypage-keep-content">
         <ul>
-          {userData.userKeepList !== null ? userData.userKeepList?.map((item)=>{
+          { userData && userData.userKeepList !== null ? userData.userKeepList?.map((item)=>{
                 return(
                   <li key={item.id}><GroupList item={item}/></li> 
                 );
