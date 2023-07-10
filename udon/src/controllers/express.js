@@ -294,23 +294,21 @@ app.use(express.static(uploadsDir));
 // 마이페이지 정보수정
 app.patch(`/mypage`, upload.single('userImage'),(req, res)=>{
   const token = req.headers.authorization.split(" ")[1];
-  const {userName, userGender, userYears, userActivity, userIntroduce} = req.body;
-  let userImage = req.file;
-  console.log("userImage:",userImage);
-  
+  const {userName, userGender, userYears, userActivity, userIntroduce, userImage} = req.body;
+  let imageFile = req.file;
 
   jwt.verify(token, access, (err, decode) =>{
-    console.log(decode)
     if(err){
       res.status(401).send("인증에러:",err);
     } else{
-      if(userImage){
-        userImage = userImage.filename
-      } else{
-        userImage = null
+      let imageName;
+      if(imageFile){
+        imageName = `http://localhost:4000/${imageFile.filename}`;
+      }else if(imageFile === undefined){
+          imageName = userImage;
       }
       const data = [
-        userImage,
+        imageName,
         userName,
         userGender,
         userYears,
@@ -327,7 +325,8 @@ app.patch(`/mypage`, upload.single('userImage'),(req, res)=>{
             userGender: data.userGender,
             userActivity: data.userActivity,
             userKeepList: data.userKeepList,
-            userImage: data.userImage
+            userImage: data.userImage,
+            userIntroduce: data.userIntroduce
           }
           res.status(200).send(userData);
         })
