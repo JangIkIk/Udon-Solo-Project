@@ -23,13 +23,11 @@ const createTablesQuery = `
     );
 `;
 
-
 // 테이블 생성 --- 비기능
 db.exec(createTablesQuery, (err) => {
   if (err) return console.log("테이블을 생성못함:", err.message);
   console.log("테이블 생성");
 });
-
 
 //  모든테이블확인 --- 비기능
 db.all(" SELECT name FROM sqlite_master WHERE type='table' ", (err, rows) => {
@@ -48,6 +46,9 @@ db.all(`SELECT * FROM users`, [], (err, rows) => {
   console.log("users:", rows);
 });
 
+// 테이블 삭제
+// db.run(`DROP TABLE users`);
+
 // token 테이블 데이터확인 --- 비기능
 // db.all(`SELECT * FROM token`, [], (err, rows) => {
 //   if (err) return console.error(err.message);
@@ -61,39 +62,66 @@ db.all(`SELECT * FROM users`, [], (err, rows) => {
 // });
 
 
-// 유저정보수정(마이페이지) --- 기능
-const myProfileSetting = ( data )=>{
-  return new Promise((resolve , reject) => {
-    db.run(`UPDATE users SET userImage = ? ,userName = ?, userGender = ? , userYears = ?, userActivity = ?, userIntroduce = ? WHERE userId = ?`, data , ( err )=>{
+// 찜리스트 조회 --- 비기능
+const myKeepList = ( userId) => {
+
+  return new Promise( (resolve, reject) => {
+    db.get("SELECT userKeepList FROM users WHERE userId = ?",[userId], (err, row)=>{
       if(err){
         reject(err);
       }else{
+        resolve(row);
+      }
+    })
+  })
+  
+}
+
+// 찜리스트 추가 --- 기능
+const myKeepListAdd = ( list, userId) => {
+  return new Promise ( (resolve, reject) => {
+    db.run("UPDATE users SET userKeepList = ? WHERE userId = ?", [list, userId], (err) => {
+      if(err){
+        reject(err);
+      } else{
         resolve(true);
       }
     })
   })
 }
 
-
-// 유저조회(마이페이지) --- 기능
-const myProfile = ( userId ) => {
+// 내정보수정(마이페이지) --- 기능
+const myProfileSetting = (data) => {
   return new Promise((resolve, reject) => {
-    db.get(
-      `SELECT * FROM users WHERE userId = ?`,
-      [userId],
-      (err, row) => {
+    db.run(
+      `UPDATE users SET userImage = ? ,userName = ?, userGender = ? , userYears = ?, userActivity = ?, userIntroduce = ? WHERE userId = ?`,
+      data,
+      (err) => {
         if (err) {
           reject(err);
         } else {
-          resolve(row);
+          resolve(true);
         }
       }
     );
   });
 };
 
+// 내정보조회(마이페이지) --- 기능
+const myProfile = (userId) => {
+  return new Promise((resolve, reject) => {
+    db.get(`SELECT * FROM users WHERE userId = ?`, [userId], (err, row) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(row);
+      }
+    });
+  });
+};
+
 // 아이디 중복확인 --- 기능
-const findId = (userid) => {
+const idCheck = (userid) => {
   return new Promise((resolve, reject) => {
     db.all(
       `SELECT EXISTS (SELECT 1 FROM users WHERE userId = ?) AS data`,
@@ -120,9 +148,8 @@ const signupAdd = ({
   userActivity,
   userIntroduce,
   userKeepList,
-  userImage
+  userImage,
 }) => {
-
   return new Promise((resolve, reject) => {
     db.run(
       `INSERT INTO users (userId, userPassword, userName, userPhone, userYears, userGender, userActivity, userIntroduce, userKeepList, userImage) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
@@ -136,7 +163,7 @@ const signupAdd = ({
         userActivity,
         userIntroduce,
         userKeepList,
-        userImage
+        userImage,
       ],
       (err) => {
         if (err) {
@@ -150,10 +177,10 @@ const signupAdd = ({
 };
 
 // 로그인(아이디,패스워드) --- 기능
-const login = ( userId, userPassword ) => {
+const login = (userId, userPassword) => {
   return new Promise((resolve, reject) => {
     db.get(
-      `SELECT * FROM users WHERE userId = ? AND userPassword = ? `, 
+      `SELECT * FROM users WHERE userId = ? AND userPassword = ? `,
       [userId, userPassword],
       (err, row) => {
         if (err) {
@@ -171,15 +198,14 @@ const login = ( userId, userPassword ) => {
 };
 
 module.exports = {
-  findId,
+  idCheck,
   signupAdd,
   login,
   myProfile,
   myProfileSetting,
-  // saveToken
+  myKeepListAdd,
+  myKeepList,
 };
-
-
 
 // db.run(`DROP TABLE myProfile`);
 // db.run(`DROP TABLE myProfile`);
@@ -194,7 +220,6 @@ module.exports = {
       userKeeplList TEXT DEFAULT NUll,
     );
 */
-
 
 /*
 CREATE TABLE IF NOT EXISTS group(
@@ -246,11 +271,6 @@ CREATE TABLE IF NOT EXISTS group(
 // db.run(`DELETE FROM ${tablename} WHERE id = ?`, [1], (err)=>{
 //      if(err) return console.error(err.message);
 //  })
-
-// 특정조건 데이터 조회
-// function findId( id ){
-
-// }
 
 // db.all(`SELECT userID FROM ${tablename} WHERE  userID = ?`, ["testID"], (err,rows)=>{
 //      if(err) return console.error(err.message);
