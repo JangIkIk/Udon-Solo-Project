@@ -14,6 +14,10 @@ const refresh = "refres"
 const multer = require('multer');
 // 이미지 파일 저장경로
 const upload = multer({ dest: 'uploads/'})
+const path = require('path');
+const uploadsDir = path.join(__dirname, 'uploads');
+app.use(express.static(uploadsDir));
+
 
 
 
@@ -37,7 +41,7 @@ app.use(cookieParser());
 
 
 // DB탐색 함수
-const { findId, signupAdd, login, myProfile, myProfileSetting } = require('../models/sqlite');
+const { idCheck, signupAdd, login, myProfile, myProfileSetting, myKeepList, myKeepListAdd } = require('../models/sqlite');
   const GroupList = [
       {
         id: 1,
@@ -255,27 +259,6 @@ const GroupNews = [
   }
 ]
 
-
-// app.get(`/group/:data`, (req, res) =>{
-//   console.log(req);
-//   res.status(200).send("테스트")
-// })
-
-
-// ---임시보류 -> 토큰확인
-// app.get(`/istoken`, (req, res)=>{
-//     const accessToken = req.headers.authorization.split(" ")[1];
-//     jwt.verify(accessToken, secretKey, (err, decoded)=>{
-//       if(err){
-//         res.status(401).send(err);
-//       }else{
-//         res.status(200).send(decoded);
-//       }
-//     })
-    
-// })
-
-
 // 그룹리스트정보 - 대기
 app.get(`/groupList`, (req, res)=>{
     res.status(200).send(GroupList);
@@ -286,10 +269,38 @@ app.get(`/news`, (req, res) =>{
   res.status(200).send(GroupNews);
 })
 
-const path = require('path');
-const uploadsDir = path.join(__dirname, 'uploads');
-app.use(express.static(uploadsDir));
 
+
+// 리스트 찜
+app.post('/keep', (req, res)=>{
+  const token = req.headers.authorization.split(" ")[1];
+
+  jwt.verify(token, access, (err, decode) =>{
+    if(err){
+      if(err instanceof jwt.TokenExpiredError){
+        res.status(401).send("TokenExpiredError");
+      } else{
+        res.status(400).send(err);
+      }
+    }else {
+      myKeepList(decode.userId)
+      .then( data => {
+        const currentList = JSON.parse(data.userKeepList);
+        const listCheck = currentList.some( list => list.id === req.body.id);
+        if(!listCheck){
+          currentList.push(req.body);
+          const saveList = JSON.stringify(currentList)
+          myKeepListAdd(saveList, decode.userId)
+          .then( () => res.status(200).send("추가성공"))
+          .catch( () => res.status(400).send("추가오류"))
+        }
+
+      })
+      .catch( err => res.status(400).send("찜리스트조회 오류:" + err))
+    }
+  })
+  
+})
 
 // 마이페이지 정보수정
 app.patch(`/mypage`, upload.single('userImage'),(req, res)=>{
@@ -299,7 +310,11 @@ app.patch(`/mypage`, upload.single('userImage'),(req, res)=>{
 
   jwt.verify(token, access, (err, decode) =>{
     if(err){
-      res.status(401).send("인증에러:",err);
+      if(err instanceof jwt.TokenExpiredError){
+        res.status(401).send("TokenExpiredError");
+      } else{
+        res.status(400).send(err);
+      }
     } else{
       let imageName;
       if(imageFile){
@@ -330,6 +345,9 @@ app.patch(`/mypage`, upload.single('userImage'),(req, res)=>{
           }
           res.status(200).send(userData);
         })
+      })
+      .catch( err => {
+        res.status(400).send("마이페이지정보 수정오류" + err)
       })
     }
   })
@@ -362,6 +380,9 @@ app.get(`/mypage`, ( req, res)=>{
         }
         res.status(200).send(userData);
       })
+      .catch( err => {
+        res.status(400).send("마이페이지 정보 오류:" + err)
+      })
     }
   })
 })
@@ -370,10 +391,10 @@ app.get(`/mypage`, ( req, res)=>{
 // 아이디 중복확인
 app.get(`/signup/:userid`, (req, res) =>{
   const userid = req.params.userid;
-  findId(userid).then( data => {
+  idCheck(userid).then( data => {
     res.status(200).send(data);
   }).catch( err => {
-    res.status(500).send("Error:" + err);
+    res.status(500).send("아이디중복확인오류:" + err);
   })
   
 })
@@ -390,7 +411,7 @@ app.get('/token', (req, res)=>{
       const accessToken = jwt.sign( {userId}, access, {expiresIn: "1h"});
       res.set('Access-Control-Expose-Headers', 'Authorization');
       res.set('Authorization', accessToken);
-      res.status(200).send()    
+      res.status(200).send("토큰재발급");   
     }
 
   })  
@@ -417,7 +438,7 @@ app.post(`/login`, (req, res) => {
     
   })
   .catch( err => {
-    res.status(400).send(err);
+    res.status(400).send("로그인오류:" + err);
   })
 })
 
@@ -433,7 +454,7 @@ app.post(`/signup`, (req, res) => {
   const yearsRegex = /^[0-9]{4,4}[-][0-9]{2,2}[-][0-9]{2,2}$/;
   const genderRegex = /^[남|여]{1,1}$/;
   
-  findId(userId)
+  idCheck(userId)
   .then( (idCheck) => {
     if(!idRegex.test(userId)){
       res.status(400).json("아이디 형식오류");
