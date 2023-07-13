@@ -1,8 +1,7 @@
-import styled from "styled-components"; 
 import { useNavigate } from "react-router-dom";
+import styled from "styled-components"; 
 import "@styles/index.css"
 import { BiInfoCircle, BiStreetView, BiBeenHere} from "react-icons/bi";
-import { AiFillHeart } from "react-icons/ai";
 import { 
   ImgBase, 
   SpanFlex, 
@@ -16,12 +15,11 @@ import {
 
 export interface GroupListType{
   id: number,
-  region: string,
-  img: string,
-  title: string,
-  people: string,
-  detailedArea: string,
-  iskeep: boolean,
+  groupRegion: string,
+  groupImg: string,
+  groupTitle: string,
+  groupPeople: string,
+  groupDetailedArea: string,
 }
 
 type GroupListTypeProps = {
@@ -76,49 +74,41 @@ const Layout = styled.div`
 `;
 
 export const GroupList = ( { item } : GroupListTypeProps ) => {
+  
   const navigate = useNavigate();
-
   const clickGroup = ()=>{
     navigate("/group", {state: item})
   }
 
-
   return (
     <Layout onClick={clickGroup}>
-      {item.img === undefined ? null :
+      {item.groupImg === undefined ? null :
        <div className="group-list-img">
-        <ImgBase src={item.img} alt="그룹사진"/>
+        <ImgBase src={item.groupImg} alt="그룹사진"/>
       </div>}
       
       <div className="group-list-content">
         <DivFlexAlign>
             <SpanFlex><BiInfoCircle /></SpanFlex>
-          <span>{item.region}</span>
+          <span>{item.groupRegion}</span>
         </DivFlexAlign>
         <div className="group-list-title">
-          <span>{item.title}</span>
+          <span>{item.groupTitle}</span>
         </div>
         <div className="group-list-info">
           <div>
             <span>
               <BiStreetView />
             </span>
-            <span>{`${item.people}명`}</span>
+            <span>{`${item.groupPeople}명`}</span>
           </div>
 
           <div>
             <span>
               <BiBeenHere />
             </span>
-            <span>{item.detailedArea}</span>
-          </div>
-          {item.iskeep === undefined ? null : <div>
-            <span >
-              <AiFillHeart color={item.iskeep ? "red" : "black"}/>
-            </span>
-            <span>{"찜하기"}</span>
-          </div>}
-          
+            <span>{item.groupDetailedArea}</span>
+          </div>          
         </div>
       </div>
     </Layout>
