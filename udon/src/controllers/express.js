@@ -18,9 +18,6 @@ const path = require('path');
 const uploadsDir = path.join(__dirname, 'uploads');
 app.use(express.static(uploadsDir));
 
-
-
-
 // json타입 파싱을위한 미들웨어
 app.use(express.json());
 
@@ -31,222 +28,11 @@ app.use(cors(
     credentials: true,
   }
 ));
-// app.use(cors(
-//   {
-//     origin: "http://192.168.219.103:3000",
-//     credentials: true,
-//   }
-// ));
+
 app.use(cookieParser());
 
-
 // DB탐색 함수
-const { idCheck, signupAdd, login, myProfile, myProfileSetting, myKeepList, myKeepListAdd } = require('../models/sqlite');
-  const GroupList = [
-      {
-        id: 1,
-        region: "성남시",
-        img:"https://mblogthumb-phinf.pstatic.net/MjAyMDA0MjhfMjAz/MDAxNTg4MDQwOTA5MjE0.i6ARBaBdi_HYODiTR0f1ma8OvblzSh01bJGL8U5gDZUg.1oPlzYogIg8H_TAk5iZvUMYOLsZkZM1ITTVrfUsIHHog.JPEG.mijung011040/20200424_192926.jpg?type=w800",
-        title: "[정자역] 클라이밍 초자분들 환영 나이제한없음X",
-        people: "85",
-        detailedArea: "정자역 5번출구",
-        iskeep: false,
-        content: `안녕하세요 정자역 클라이밍입니다.
-        클라이밍을 재밌게하실분들을 모집합니다!!
-    
-        since 22.10.16
-        ♈️가입조건
-        > 활발한 활동 가능!!
-        > 나이 : 민증만있으면가능!!
-        > 왕초보 모두가능!!
-        since 22.10.16
-        ♈️가입조건
-        since 22.10.16
-        ♈️가입조건
-        > 활발한 활동 가능!!
-        > 나이 : 민증만있으면가능!!
-        > 왕초보 모두가능!!
-        since 22.10.16
-        ♈️가입조건
-        since 22.10.16
-        아무나아무나 나무나 아무나 들어오세요 ~ 
-        테스트중입니다.`,
-        groupSchedule:[
-          {
-            id: 1,
-            day: "11월 06일 (일)",
-            time: "오전 11:30분",
-            detailedArea: "안국역 원서레인즈",
-            money: 18000,
-            user: [
-              {
-                id:1,
-                img: "https://w7.pngwing.com/pngs/949/863/png-transparent-disney-characters-disney-cartoon-character.png",
-                years: "2000-11-09",
-                name : "루피"
-              },
-              {
-                id:2,
-                img: "https://w7.pngwing.com/pngs/940/463/png-transparent-disney-characters-disney-cartoon-character.png",
-                years: "1000-11-09",
-                name : "크몽"
-              },
-              {
-                id:3,
-                img: "https://e7.pngegg.com/pngimages/604/28/png-clipart-disney-characters-disney-cartoon.png",
-                years: "3000-11-09",
-                name : "뽀로로"
-              },
-              {
-                id:4,
-                img: "https://w7.pngwing.com/pngs/567/205/png-transparent-monster-funny-character-food-leaf-hand-thumbnail.png",
-                years: "4000-11-09",
-                name : "여우"
-              },
-              {
-                id:5,
-                img: "https://w7.pngwing.com/pngs/567/205/png-transparent-monster-funny-character-food-leaf-hand-thumbnail.png",
-                years: "4000-11-09",
-                name : "여우"
-              },
-              {
-                id:6,
-                img: "https://w7.pngwing.com/pngs/567/205/png-transparent-monster-funny-character-food-leaf-hand-thumbnail.png",
-                years: "4000-11-09",
-                name : "여우"
-              },
-              {
-                id:7,
-                img: "https://w7.pngwing.com/pngs/567/205/png-transparent-monster-funny-character-food-leaf-hand-thumbnail.png",
-                years: "4000-11-09",
-                name : "여우"
-              },
-              {
-                id:8,
-                img: "https://w7.pngwing.com/pngs/567/205/png-transparent-monster-funny-character-food-leaf-hand-thumbnail.png",
-                years: "4000-11-09",
-                name : "여우"
-              },
-              {
-                id:9,
-                img: "https://w7.pngwing.com/pngs/567/205/png-transparent-monster-funny-character-food-leaf-hand-thumbnail.png",
-                years: "4000-11-09",
-                name : "여우"
-              },
-              {
-                id:10,
-                img: "https://w7.pngwing.com/pngs/949/863/png-transparent-disney-characters-disney-cartoon-character.png",
-                years: "4000-11-09",
-                name : "여우"
-              },
-              {
-                id:11,
-                img: "https://w7.pngwing.com/pngs/949/863/png-transparent-disney-characters-disney-cartoon-character.png",
-                years: "4000-11-09",
-                name : "여우"
-              },
-            ]
-          },
-          {
-            id: 2,
-            day: "11월 07일 (수)",
-            time: "오후 14:00분",
-            detailedArea: "미국",
-            money: 10000000,
-            user: [
-              {
-                id:1,
-                img: "https://w7.pngwing.com/pngs/949/863/png-transparent-disney-characters-disney-cartoon-character.png",
-                years: "2000-11-09",
-                name : "루피"
-              },
-              {
-                id:2,
-                img: "https://w7.pngwing.com/pngs/940/463/png-transparent-disney-characters-disney-cartoon-character.png",
-                years: "1000-11-09",
-                name : "크몽"
-              },
-              {
-                id:3,
-                img: "https://e7.pngegg.com/pngimages/604/28/png-clipart-disney-characters-disney-cartoon.png",
-                years: "3000-11-09",
-                name : "뽀로로"
-              },
-            ]
-          },
-        ]
-      },
-  
-      {
-        id: 2,
-        region: "서울시",
-        img:"https://img.lovepik.com/free-png/20220127/lovepik-badminton-png-image_401948661_wh1200.png",
-        title: "[서울역] 배드민턴 초자분들 환영 나이제한없음X",
-        people: "50",
-        detailedArea: "서울역 5번출구",
-        iskeep: false,
-        content: `안녕하세요 서울역 배드민턴모입입니다..
-        배드민턴을 재밌게하실분들을 모집합니다!!
-        텃세가없어요 ! 아무나와서 이용하시면됩니다
-        돈들어가는일없이 그냥 참여하세요!`,
-       groupSchedule: [],
-      },
-      {
-        id: 3,
-        region: "부산시",
-        img:"https://www.hanbit.co.kr/data/editor/20191015091554_afbeoaea.png",
-        title: "[부산역] 서핑 초자분들 환영 나이제한없음X",
-        people: "100",
-        detailedArea: "부산역 5번출구",
-        iskeep: true,
-        content: `안녕하세요 부산 서핑하실분들 모집합니다.
-        서핑하면서 태닝도해요! 재밌게하실분들을 모집합니다!!
-        장비가 없으면 빌려드립니다.! 초보자분들 체험도 가능합니다!`,
-       groupSchedule: [],
-      },
-]
-
-
-
-const UserGroup = {
-
-  myJoinGroup : [
-    {
-      id: 1,
-      region: "성남시",
-      title: "[정자역] 클라이밍 초자분들 환영 나이제한없음X [정자역] 클라이밍 초자분들 환영 나이제한없음X",
-      people: "85",
-      detailedArea: "정자역 5번출구",
-      
-    },
-    {
-      id: 2,
-      region: "서울시",
-      title: "[서울역] 배드민턴 초자분들 환영 나이제한없음X",
-      people: "50",
-      detailedArea: "서울역 5번출구",
-    }
-  ],
-
-  myGroup : [
-    {
-        id: 1,
-        img:"https://www.hanbit.co.kr/data/editor/20191015091554_afbeoaea.png",
-        region: "부산시",
-        title: "[부산역] 서핑 초자분들 환영 나이제한없음X",
-        people: "100",
-        detailedArea: "부산역 5번출구",
-    },
-    {
-        id: 2,
-        img:"https://www.hanbit.co.kr/data/editor/20191015091554_afbeoaea.png",
-        region: "부산시",
-        title: "[부산역] 서핑 초자분들 환영 나이제한없음X",
-        people: "100",
-        detailedArea: "부산역 5번출구",
-    }
-  ]
-}
+const { idCheck, signupAdd, login, myProfile, myProfileSetting, myKeepList, myKeepListAdd, simpleGroupList, groupDetailInfo } = require('../models/sqlite');
  
 
 const GroupNews = [
@@ -259,21 +45,46 @@ const GroupNews = [
   }
 ]
 
-// 그룹리스트정보 - 대기
-app.get(`/groupList`, (req, res)=>{
-    res.status(200).send(GroupList);
-})
-
 //알림 - 대기
 app.get(`/news`, (req, res) =>{
   res.status(200).send(GroupNews);
 })
 
 
+// 그룹 상세정보 조회
+app.get("/groupInfo/:id", (req,res) => {
+  const groupId = req.params.id;
+
+  groupDetailInfo(groupId)
+  .then( data => {
+    res.status(200).send(data)
+  })
+  .catch( err => {
+    res.status(400).send("상세정보 조회오류" + err)
+  })
+  
+
+})
+
+// 그룹 게시판 조회
+// 그룹 사진첩 조회
+// 그룹 채팅조회
+
+
+// 전체그룹리스트 조회
+app.get(`/groupList`, (req, res)=>{
+  simpleGroupList().then( data => {
+    res.status(200).send(data);
+  })
+  .catch( err => res.status(400).send("그룹조회오류:" + err))
+})
+
 
 // 리스트 찜
 app.post('/keep', (req, res)=>{
   const token = req.headers.authorization.split(" ")[1];
+
+  
 
   jwt.verify(token, access, (err, decode) =>{
     if(err){
@@ -285,14 +96,21 @@ app.post('/keep', (req, res)=>{
     }else {
       myKeepList(decode.userId)
       .then( data => {
-        const currentList = JSON.parse(data.userKeepList);
+        const currentList = data.userKeepList ?  JSON.parse(data.userKeepList) : [];
         const listCheck = currentList.some( list => list.id === req.body.id);
+
         if(!listCheck){
           currentList.push(req.body);
           const saveList = JSON.stringify(currentList)
           myKeepListAdd(saveList, decode.userId)
           .then( () => res.status(200).send("추가성공"))
           .catch( () => res.status(400).send("추가오류"))
+        }else{
+          const deleteList = currentList.filter( list => list.id !== req.body.id);
+          const txet = JSON.stringify(deleteList)
+          myKeepListAdd(txet, decode.userId)
+          .then( () => res.status(200).send("삭제성공"))
+          .catch( () => res.status(400).send("삭제오류"))
         }
 
       })
@@ -374,7 +192,7 @@ app.get(`/mypage`, ( req, res)=>{
           userYears: data.userYears,
           userGender: data.userGender,
           userActivity: data.userActivity,
-          userKeepList: data.userKeepList,
+          userKeepList: JSON.parse(data.userKeepList),
           userImage: data.userImage,
           userIntroduce: data.userIntroduce
         }
