@@ -1,7 +1,7 @@
-import { useNavigate } from "react-router-dom";
 import styled from "styled-components"; 
-import "@styles/index.css"
-import { BiInfoCircle, BiStreetView, BiBeenHere} from "react-icons/bi";
+import { useNavigate } from "react-router-dom";
+import "@styles/index.css";
+import { BiInfoCircle, BiStreetView} from "react-icons/bi";
 import { 
   ImgBase, 
   SpanFlex, 
@@ -19,7 +19,7 @@ export interface GroupListType{
   groupImg: string,
   groupTitle: string,
   groupPeople: string,
-  groupDetailedArea: string,
+  groupContent: string
 }
 
 type GroupListTypeProps = {
@@ -80,37 +80,40 @@ export const GroupList = ( { item } : GroupListTypeProps ) => {
     navigate("/group", {state: item})
   }
 
+  //  현재 그룹리스트를 다시설정해야함/ 전체리스트와 마이페이지에서 보이는 리스트를 다시
   return (
     <Layout onClick={clickGroup}>
-      {item.groupImg === undefined ? null :
+      <div>
+        <div><ImgBase src={item.groupImg} alt="#"/></div>
+      </div>
+      <div>
+        <span>{item.groupTitle}</span>
+        <span>{item.groupContent}</span>
+        <span>{item.groupRegion}</span>
+        <span>{item.groupPeople}</span>
+      </div>
+      {/* {item.groupImg === undefined ? null :
        <div className="group-list-img">
         <ImgBase src={item.groupImg} alt="그룹사진"/>
       </div>}
       
       <div className="group-list-content">
+        <div className="group-list-title">
+          <span>{item.groupTitle}</span>
+        </div>
         <DivFlexAlign>
             <SpanFlex><BiInfoCircle /></SpanFlex>
           <span>{item.groupRegion}</span>
         </DivFlexAlign>
-        <div className="group-list-title">
-          <span>{item.groupTitle}</span>
-        </div>
         <div className="group-list-info">
           <div>
             <span>
               <BiStreetView />
             </span>
             <span>{`${item.groupPeople}명`}</span>
-          </div>
-
-          <div>
-            <span>
-              <BiBeenHere />
-            </span>
-            <span>{item.groupDetailedArea}</span>
-          </div>          
+          </div>    
         </div>
-      </div>
+      </div> */}
     </Layout>
   );
 };
