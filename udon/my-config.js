@@ -7,7 +7,8 @@ module.exports = {
       '@groupdetail': path.resolve(__dirname, 'src/views/components/groupdetail/'),
       '@pages': path.resolve(__dirname, 'src/views/pages/'),
       '@styles': path.resolve(__dirname, 'src/views/styles/'),
-      
+      '@store': path.resolve(__dirname, 'src/views/store/'),
+      '@slice': path.resolve(__dirname, 'src/views/slice/')
     },
   },
 };
