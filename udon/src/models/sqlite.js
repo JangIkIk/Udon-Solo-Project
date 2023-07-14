@@ -19,6 +19,7 @@ const createTablesQuery = `
       userActivity TEXT DEFAULT NULL,
       userIntroduce TEXT DEFAULT NULL,
       userKeepList TEXT DEFAULT NULL,
+      userJoinList TEXT DEFAULT NULL,
       userImage TEXT DEFAULT NULL
     );
 
@@ -33,6 +34,7 @@ const createTablesQuery = `
     );
 `;
 
+// userJoinList TEXT DEFAULT NULL 가입한리스트 추가 예정 ?
 // 테이블 생성 --- 비기능
 db.exec(createTablesQuery, (err) => {
   if (err) return console.log("테이블을 생성못함:", err.message);
@@ -165,10 +167,9 @@ const groupDetailInfo = ( groupId )=>{
   return new Promise( (resolve, reject)=>{
     db.get("SELECT * FROM groupInfo WHERE id = ?", [groupId], (err, row) => {
       if(err){
-        reject(err)
+        reject(err);
       }else{
-        
-        resolve(row)
+        resolve(row);
       }
     })
   })
@@ -293,7 +294,7 @@ const signupAdd = ({
 const login = (userId, userPassword) => {
   return new Promise((resolve, reject) => {
     db.get(
-      `SELECT * FROM users WHERE userId = ? AND userPassword = ? `,
+      `SELECT userId, userKeepList FROM users WHERE userId = ? AND userPassword = ? `,
       [userId, userPassword],
       (err, row) => {
         if (err) {
@@ -301,9 +302,9 @@ const login = (userId, userPassword) => {
           return;
         }
         if (row) {
-          resolve(true);
+          resolve(row);
         } else {
-          resolve(false);
+          reject();
         }
       }
     );
