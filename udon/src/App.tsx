@@ -13,8 +13,7 @@ import {
   SignUpPage,
   NewsPage,
   GroupDetailPage,
-  GroupSettingPage,
-} from "@pages";
+} from "@pages/index";
 import { Footer, Header } from "@components";
 import "@styles/index.css";
 
@@ -61,7 +60,6 @@ function App() {
             <Route element={<PrivateRoute/>}>
               <Route path="/mypage" element={<MyPage />} />
               <Route path="/news" element={<NewsPage />} />
-              <Route path="/groupsetting" element={<GroupSettingPage />} />
             </Route>
             <Route path="/" element={<HomePage />} />
           </Route>

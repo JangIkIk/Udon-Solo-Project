@@ -68,18 +68,6 @@ function Footer() {
             </SpanFlex>
             <SpanFlex>프로필</SpanFlex>
           </a>
-          <a href="/groupsetting" className="icons">
-            <SpanFlex>
-              <BiConversation />
-            </SpanFlex>
-            <SpanFlex>그룹</SpanFlex>
-          </a>
-          <a href="/news" className="icons">
-            <SpanFlex>
-              <BiBell />
-            </SpanFlex>
-            <SpanFlex>알림</SpanFlex>
-          </a>
           <a href="/login" className="icons" onClick={()=> {
             sessionStorage.clear();
             document.cookie = "accessToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";

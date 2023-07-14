@@ -1,5 +1,4 @@
 import GroupDetailPage from './GroupDetailPage';
-import GroupSettingPage from './GroupSettingPage';
 import HomePage from './HomePage';
 import LodingPage from './LodingPage';
 import LoginPage from './LoginPage';
@@ -15,5 +14,4 @@ export {
   LoginPage,
   SignUpPage,
   NewsPage,
-  GroupSettingPage,
 };
