@@ -16,6 +16,10 @@ type GroupListTypeProps = {
 };
 
 const Layout = styled.div`
+  &:hover{
+    background-color: rgba(128, 128, 128, 0.497);
+    cursor:pointer;
+  }
   display: flex;
   border-radius: 10px;
   padding: 1rem;
@@ -31,8 +35,8 @@ const Layout = styled.div`
 
     & > img{
       object-fit: cover;
-      width: 100%;
-      height: 100%;
+      width: 80%;
+      height: 80%;
       border-radius: 35px;
     }
   }
