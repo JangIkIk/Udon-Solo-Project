@@ -18,6 +18,9 @@ const Layout = styled(BaseLayout)`
   ${flex_column_all_cneter};
   gap: 1rem;
   & > form {
+    background-color: slategrey;
+    padding: 1rem;
+    border-radius: 1rem;
     display: flex;
     flex-direction: column;
 
@@ -125,7 +128,7 @@ function SignUpPage() {
           placeholder="ex: happy3"
           dataHandler={findId}
         >
-          아이디 *
+          아이디 ✅
         </RegexInput>
 
         <PasswordInput
@@ -142,7 +145,7 @@ function SignUpPage() {
           regex={/^[가-힣]{2,6}$/}
           placeholder="ex: 홍길동"
         >
-          이름 *
+          이름 ✅
         </RegexInput>
 
         <RegexInput
@@ -155,7 +158,7 @@ function SignUpPage() {
           buttons="인증하기"
           placeholder="ex: 01034344444"
         >
-          휴대폰 *
+          휴대폰 ✅
         </RegexInput>
 
         <SimpleInput
@@ -164,11 +167,11 @@ function SignUpPage() {
           state={simpleData}
           setState={setSimpleData}
         >
-          생년월일 *
+          생년월일 ✅
         </SimpleInput>
 
         <div className="signuppage-gender">
-          <span>성별 *</span>
+          <span>성별 ✅</span>
           <div className="signuppage-gender-input">
             <span>남</span>
             <input
@@ -211,6 +214,8 @@ function SignUpPage() {
           간단소개
         </SimpleInput>
         <button className="form-submit-button" type="submit"> 가입하기</button>
+        <button style={{ "backgroundColor":"darkslategray"}} className="form-submit-button" type="button" onClick={()=> navigate("/login")}> 로그인</button>
+        <button style={{ "backgroundColor":"darkslategray"}} className="form-submit-button" type="button" onClick={()=> navigate("/")}> 홈으로가기</button>
       </form>
     </Layout>
   );
