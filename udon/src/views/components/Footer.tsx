@@ -2,7 +2,6 @@ import styled from "styled-components";
 import {
   BiHomeAlt,
   BiUser,
-  BiConversation,
   BiBell,
   BiPencil,
   BiKey,
@@ -66,7 +65,7 @@ function Footer() {
             <SpanFlex>
               <BiUser />
             </SpanFlex>
-            <SpanFlex>프로필</SpanFlex>
+            <SpanFlex>마이페이지</SpanFlex>
           </a>
           <a href="/login" className="icons" onClick={()=> {
             sessionStorage.clear();
