@@ -1,119 +1,100 @@
-import styled from "styled-components"; 
-import { useNavigate } from "react-router-dom";
+import styled from "styled-components";
 import "@styles/index.css";
-import { BiInfoCircle, BiStreetView} from "react-icons/bi";
-import { 
-  ImgBase, 
-  SpanFlex, 
-  DivFlexAlign,
-  flex_column,
-  flex_row_align_center,
-  baseHover,
-  baseBorder,
-} from "@components/AllComponent";
+import { useNavigate } from "react-router-dom";
 
-
-export interface GroupListType{
+export interface GroupListType {
   id: number,
   groupRegion: string,
   groupImg: string,
   groupTitle: string,
   groupPeople: string,
-  groupContent: string
+  groupContent: string,
 }
 
 type GroupListTypeProps = {
-  item: GroupListType;
-}
+  item: GroupListType,
+};
 
 const Layout = styled.div`
   display: flex;
-  ${baseBorder}
   border-radius: 10px;
   padding: 1rem;
-  gap:10px;
-  
-  
-  ${baseHover}
-  .group-list-img {
-    width: 8rem;
-    height: 8rem;
+  gap: 10px;
+  height: 10rem;
+
+  .list-img {
     overflow: hidden;
-    border-radius: 50%;
-  }
+    width: 30%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
 
-  .group-list-content {
-    font-size:1.1rem;
-    flex: 1;
-    ${flex_column}
-    overflow: hidden;
-    gap:2px;
-
-    .group-list-title{
-        font-size: 1.2rem;
-        ${flex_row_align_center}
-        flex:1;
-        span{
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-    }
-
-    .group-list-info{
-        ${flex_row_align_center}
-        gap: 1rem;
-        font-size: 0.9rem;
-        & > div{
-          display:flex;
-        }
-        
+    & > img{
+      object-fit: cover;
+      width: 100%;
+      height: 100%;
+      border-radius: 35px;
     }
   }
-  
+
+  .list-info {
+    flex:1;
+    width: 70%;
+    display: flex;
+    align-self: center;
+    flex-direction: column;
+    gap: 10px;
+
+    & > div{
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    .list-title {
+      font-size: 1.2rem;
+    }
+
+    .list-content1 {
+      padding: 0 1rem;
+      & > span{
+        font-size: 1rem;
+        color: gray;
+     }
+    }
+
+    .list-content2{
+      font-size: 1rem;
+      text-align: right;
+    }
+    
+  }
 `;
 
-export const GroupList = ( { item } : GroupListTypeProps ) => {
-  
+export const GroupList = ({ item }: GroupListTypeProps) => {
   const navigate = useNavigate();
-  const clickGroup = ()=>{
-    navigate("/group", {state: item})
-  }
+  const clickGroup = () => {
+    navigate("/group", { state: item });
+  };
 
-  //  현재 그룹리스트를 다시설정해야함/ 전체리스트와 마이페이지에서 보이는 리스트를 다시
   return (
     <Layout onClick={clickGroup}>
-      <div>
-        <div><ImgBase src={item.groupImg} alt="#"/></div>
+      <div className="list-img">
+        <img src={item.groupImg} alt="#"/>
       </div>
-      <div>
-        <span>{item.groupTitle}</span>
-        <span>{item.groupContent}</span>
-        <span>{item.groupRegion}</span>
-        <span>{item.groupPeople}</span>
-      </div>
-      {/* {item.groupImg === undefined ? null :
-       <div className="group-list-img">
-        <ImgBase src={item.groupImg} alt="그룹사진"/>
-      </div>}
-      
-      <div className="group-list-content">
-        <div className="group-list-title">
+      <div className="list-info">
+        <div className="list-title">
           <span>{item.groupTitle}</span>
         </div>
-        <DivFlexAlign>
-            <SpanFlex><BiInfoCircle /></SpanFlex>
-          <span>{item.groupRegion}</span>
-        </DivFlexAlign>
-        <div className="group-list-info">
-          <div>
-            <span>
-              <BiStreetView />
-            </span>
-            <span>{`${item.groupPeople}명`}</span>
-          </div>    
+        <div className="list-content1">
+          <span>{item.groupContent}</span>
         </div>
-      </div> */}
+        <div className="list-content2">
+          <span>{item.groupRegion}</span>
+          <span> | </span>
+          <span>{`인원 ${item.groupPeople}`}</span>
+        </div>
+      </div>
     </Layout>
   );
 };
