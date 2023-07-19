@@ -1,9 +1,13 @@
 import styled from "styled-components";
+import axios from "axios";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { BiLeftArrowAlt } from "react-icons/bi";
+import { useNavigate, useLocation } from "react-router-dom";
+import { useAppSelector } from "@store/store.ts";
 import { DetailChat, DetailInfo, DetailNotice, DetailPhoto } from "@groupdetail";
-import { BaseLayout, fixedBase, flex_row_align_center, flex_row_all_cneter} from "@components/AllComponent"
+import { BaseLayout, fixedBase, flex_row_align_center, flex_row_all_cneter} from "@components/AllComponent";
+import { refreshToken, isToken } from "@components/Customhooks";
+import { BiLeftArrowAlt } from "react-icons/bi";
+import { AiFillHeart } from "react-icons/ai";
 
 
 type styleProps = {
@@ -65,8 +69,14 @@ const Layout = styled(BaseLayout)<styleProps>`
 
 function GroupDetailPage() {
   const [groupTap, setGroupTap] = useState<number>(0);
+  const selector = useAppSelector( state => state.userGroupKeepList);
+  const location = useLocation();
   const navigate = useNavigate();
   const tapText = ["정보", "게시판", "사진첩", "채팅"];
+
+  
+  
+  
 
   const tapcontent = () => {
     switch (groupTap) {
@@ -83,6 +93,33 @@ function GroupDetailPage() {
     }
   };
 
+  const userKeepList = ()=>{
+  
+    const keepData = {
+      id: location.state.id,
+      groupRegion: location.state.groupRegion,
+      groupImg: location.state.groupImg,
+      groupTitle: location.state.groupTitle,
+      groupPeople: location.state.groupPeople,
+    }
+
+    
+    axios.post("/groupkeep",keepData,{
+      headers:{
+        Authorization: `Bearer ${isToken()}`
+      }
+    })
+    .then( (res) => console.log(res) )
+    .catch( err => {
+      if(err.response.status === 401){
+        return refreshToken();
+      } else{
+        console.log(err);
+      }
+    })
+    
+  }
+
   return (
     <Layout groupTap={groupTap}>
       <div className="grouppage-header">
@@ -90,7 +127,8 @@ function GroupDetailPage() {
           <div onClick={() => navigate(-1)} className="group-page-icon">
             <BiLeftArrowAlt />
           </div>
-          <h2>{"[정자역] 클라이밍 초자분들 환영 나이제한없음X"}</h2>
+          <h2>{location.state.groupTitle}</h2>
+          <AiFillHeart size={"80px"} onClick={userKeepList} color={ selector.userKeepList?.includes(location.state.id) ? "red" : "black"}/>
         </header>
         <main>
           <ul className="group-tap">
