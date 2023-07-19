@@ -40,11 +40,10 @@ const HeaderandFooter = () => {
     </>
   );
 };
-const HeaderOnly = () => {
+const SinglePage = () => {
   return (
     <>
-      <Header />
-      <div className="layout-space">
+      <div className="layout-space1">
         <Outlet />
       </div>
     </>
@@ -63,7 +62,7 @@ function App() {
             </Route>
             <Route path="/" element={<HomePage />} />
           </Route>
-          <Route element={<HeaderOnly />}>
+          <Route element={<SinglePage />}>
             <Route path="/signup" element={<SignUpPage />}></Route>
           </Route>
           <Route path="/group" element={<GroupDetailPage />} />
