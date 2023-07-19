@@ -8,6 +8,8 @@
         "@components/*": ["views/components/*"],
         "@groupdetail": ["views/components/groupdetail/index.ts"],
         "@groupdetail/*": ["views/components/groupdetail/*"],
+        "@store/*":["views/store/store.ts"],
+        "@slice/*":["views/slice/*"],
         "@styles/*": ["views/styles/*"],
       },
       
