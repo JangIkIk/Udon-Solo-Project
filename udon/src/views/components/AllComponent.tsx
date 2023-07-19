@@ -122,7 +122,7 @@ const CommonInputLayout = styled.div`
 
 // 스타일 태그
 
-export const ImgBase = styled.img<{ fit?: string , borderRadius?: string}>`
+export const ImgBase = styled.img<{fit?: string , borderRadius?: string}>`
   width: 100%;
   height: 100%;
   
@@ -230,7 +230,7 @@ export const PasswordInput = ({
   return (
     <PasswordInputLayout styles={passwordRegex}>
       <label className="passwordinput-original">
-        <span>비밀번호 *</span>
+        <span>비밀번호 ✅</span>
         <input
           type="password"
           name="userPassword"
@@ -245,7 +245,7 @@ export const PasswordInput = ({
       )}
 
       <label className="passwordinput-check">
-        <span>비밀번호확인</span>
+        <span>비밀번호확인 </span>
         <input
           type="password"
           name="userPasswordCheck"
