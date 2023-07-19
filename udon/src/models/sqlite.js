@@ -29,12 +29,15 @@ const createTablesQuery = `
       groupImg TEXT,
       groupTitle TEXT,
       groupPeople TEXT,
-      groupDetailedArea TEXT,
       groupContent TEXT
     );
 `;
 
-// userJoinList TEXT DEFAULT NULL 가입한리스트 추가 예정 ?
+
+// 테이블 삭제
+// db.run(`DROP TABLE users`)
+
+
 // 테이블 생성 --- 비기능
 db.exec(createTablesQuery, (err) => {
   if (err) return console.log("테이블을 생성못함:", err.message);
@@ -83,7 +86,6 @@ const test1 = [
   "https://mblogthumb-phinf.pstatic.net/MjAyMDA0MjhfMjAz/MDAxNTg4MDQwOTA5MjE0.i6ARBaBdi_HYODiTR0f1ma8OvblzSh01bJGL8U5gDZUg.1oPlzYogIg8H_TAk5iZvUMYOLsZkZM1ITTVrfUsIHHog.JPEG.mijung011040/20200424_192926.jpg?type=w800",
   "[정자역] 클라이밍 초자분들 환영 나이제한없음X",
   "85",
-  "정자역 5번출구",
   `안녕하세요 정자역 클라이밍입니다.
         클라이밍을 재밌게하실분들을 모집합니다!!
     
@@ -110,7 +112,6 @@ const test2 = [
   "https://img.lovepik.com/free-png/20220127/lovepik-badminton-png-image_401948661_wh1200.png",
   "[서울역] 배드민턴 초자분들 환영 나이제한없음X",
   "50",
-  "서울역 5번출구",
   `안녕하세요 서울역 배드민턴모입입니다..
         배드민턴을 재밌게하실분들을 모집합니다!!
         텃세가없어요 ! 아무나와서 이용하시면됩니다
@@ -121,39 +122,84 @@ const test3 = [
   "https://www.hanbit.co.kr/data/editor/20191015091554_afbeoaea.png",
   "[부산역] 서핑 초자분들 환영 나이제한없음X",
   "100",
-  "부산역 5번출구",
   `안녕하세요 부산 서핑하실분들 모집합니다.
         서핑하면서 태닝도해요! 재밌게하실분들을 모집합니다!!
         장비가 없으면 빌려드립니다.! 초보자분들 체험도 가능합니다!`,
   
 ]
+const test4 = [
+  "수원시",
+  "https://cdn.pixabay.com/photo/2021/01/12/11/48/runner-5911232_1280.png",
+  "오운완헬스!",
+  "90",
+  `안녕하세요 헬스 하실분들 모집합니다.
+        그냥다합니다`,
+  
+]
+const test5 = [
+  "화성시",
+  "https://www.nhis.or.kr/static/alim/paper/oldpaper/202203/assets/images/sub/sub01_01.png",
+  "뱀처럼유연하게",
+  "100",
+  `테스트중입니다.`,
+  
+]
+const test6 = [
+  "전국구",
+  "https://cdn-icons-png.flaticon.com/512/2949/2949874.png",
+  "게임잘하시는분들!!",
+  "100",
+  `게임을 잘하시는분들!! 움직이지말고 온라인으로 소통해요!`,
+  
+]
+const test7 = [
+  "테스트1",
+  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ7CNgQtndJyjWnaUnQMqCLyA1VEcRhspgQRw&usqp=CAU",
+  "테스트그룹!!",
+  "100",
+  `-----------`,
+  
+]
+const test8 = [
+  "테스트2",
+  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ7CNgQtndJyjWnaUnQMqCLyA1VEcRhspgQRw&usqp=CAU",
+  "테스트그룹1",
+  "100",
+  `-----------`,
+  
+]
+const test9 = [
+  "테스트3",
+  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ7CNgQtndJyjWnaUnQMqCLyA1VEcRhspgQRw&usqp=CAU",
+  "테스트그룹2",
+  "100",
+  `-----------`,
+  
+]
+const test10 = [
+  "라스트",
+  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ7CNgQtndJyjWnaUnQMqCLyA1VEcRhspgQRw&usqp=CAU",
+  "라스트그룹00",
+  "100",
+  `-----------`,
+  
+]
 
 // 테이블에 데이터 추가
-// db.run(`INSERT INTO groupInfo (groupRegion, groupImg, groupTitle, groupPeople, groupDetailedArea, groupContent) VALUES (?, ?, ?, ?, ?, ?)`, test3, (err) => {
+// db.run(`INSERT INTO groupInfo (groupRegion, groupImg, groupTitle, groupPeople, groupContent) VALUES (?, ?, ?, ?, ?)`, test10, (err) => {
 //     if(err) return console.error(err.message);
 //     console.log("데이터 추가");
 // });
 
-// 테이블 삭제
-// db.run(`DROP TABLE users`);
 
-// token 테이블 데이터확인 --- 비기능
-// db.all(`SELECT * FROM token`, [], (err, rows) => {
-//   if (err) return console.error(err.message);
-//   console.log("token:", rows);
-// });
 
-// usersProfile 테이블 데이터 전체 데이터 조회 --- 비기능
-// db.all(`SELECT * FROM usersProfile`, [], (err, rows) => {
-//   if (err) return console.error(err.message);
-//   console.log("usersProfile:", rows);
-// });
+
 
 
 // 그룹리스트 조회 --- 기능
 const simpleGroupList = () =>{
   return new Promise ( (resolve, reject) => {
-    db.all("SELECT id, groupRegion, groupImg, groupTitle, groupPeople, groupDetailedArea FROM groupInfo", [], (err, row)=>{
+    db.all("SELECT id, groupRegion, groupImg, groupTitle, groupPeople, groupContent FROM groupInfo", [], (err, row)=>{
       if(err){
         reject(err);
       }else{
@@ -175,6 +221,38 @@ const groupDetailInfo = ( groupId )=>{
   })
 }
 
+
+// 가입리스트 조회 --- 비기능
+const myJoinList = (userId) => {
+
+  return new Promise( (resolve, reject) => {
+    db.get("SELECT userJoinList FROM users WHERE userId = ?",[userId], (err, row)=>{
+      if(err){
+        reject(err);
+      }else{
+        resolve(row);
+      }
+    })
+  })
+
+}
+
+// 가입리스트 추가 --- 기능
+const myJoinListAdd = (list, userId) =>{
+
+  return new Promise ( (resolve, reject) => {
+    db.run("UPDATE users SET userJoinList = ? WHERE userId = ?", [list, userId], (err) => {
+      if(err){
+        reject(err);
+      } else{
+        resolve(true);
+      }
+    })
+  })
+
+}
+
+
 // 찜리스트 조회 --- 비기능
 const myKeepList = ( userId) => {
 
@@ -189,7 +267,6 @@ const myKeepList = ( userId) => {
   })
   
 }
-
 
 // 찜리스트 추가 --- 기능
 const myKeepListAdd = ( list, userId) => {
@@ -321,6 +398,8 @@ module.exports = {
   myKeepList,
   simpleGroupList,
   groupDetailInfo,
+  myJoinList,
+  myJoinListAdd
 };
 
 // db.run(`DROP TABLE myProfile`);
