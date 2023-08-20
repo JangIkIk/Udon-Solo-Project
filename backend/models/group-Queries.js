@@ -3,7 +3,7 @@ const { db } = require('./table-Queries');
 // 그룹 전체 조회
 const simpleGroupList = () =>{
     return new Promise ( (resolve, reject) => {
-      db.all("SELECT * FROM groupInfo", [], (err, row)=>{
+      db.all('SELECT * FROM groupInfo', [], (err, row)=>{
         if(err){
           reject(err);
         }else{
@@ -16,7 +16,7 @@ const simpleGroupList = () =>{
   // 그룹별 상세정보조회 --- 기능
 const groupDetailInfo = ( groupId )=>{
   return new Promise( (resolve, reject)=>{
-    db.get("SELECT * FROM groupInfo WHERE id = ?", [groupId], (err, row) => {
+    db.get('SELECT * FROM groupInfo WHERE id = ?', [groupId], (err, row) => {
       if(err){
         reject(err);
       }else{
@@ -29,7 +29,7 @@ const groupDetailInfo = ( groupId )=>{
 // 그룹 모임정보조회 --- 기능
 const groupDetaiMeet = ( groupId )=>{
   return new Promise ((resolve, reject)=>{
-    db.all("SELECT * FROM groupDetailMeet WHERE groupId =?", [groupId], (err, row)=>{
+    db.all('SELECT * FROM groupDetailMeet WHERE groupId =?', [groupId], (err, row)=>{
       if(err){
         reject(err);
       }else{
@@ -46,7 +46,7 @@ const groupDetaiMeet = ( groupId )=>{
 const myJoinList = (userId) => {
 
   return new Promise( (resolve, reject) => {
-    db.get("SELECT userJoinList FROM users WHERE userId = ?",[userId], (err, row)=>{
+    db.get('SELECT userJoinList FROM users WHERE userId = ?',[userId], (err, row)=>{
       if(err){
         reject(err);
       }else{
@@ -61,7 +61,7 @@ const myJoinList = (userId) => {
 const myJoinListAdd = (list, userId) =>{
 
   return new Promise ( (resolve, reject) => {
-    db.run("UPDATE users SET userJoinList = ? WHERE userId = ?", [list, userId], (err) => {
+    db.run('UPDATE users SET userJoinList = ? WHERE userId = ?', [list, userId], (err) => {
       if(err){
         reject(err);
       } else{
@@ -76,7 +76,7 @@ const myJoinListAdd = (list, userId) =>{
 const myKeepList = ( userId) => {
 
   return new Promise( (resolve, reject) => {
-    db.get("SELECT userKeepList FROM users WHERE userId = ?",[userId], (err, row)=>{
+    db.get('SELECT userKeepList FROM users WHERE userId = ?',[userId], (err, row)=>{
       if(err){
         reject(err);
       }else{
@@ -90,7 +90,7 @@ const myKeepList = ( userId) => {
 // 찜리스트 추가 --- 기능
 const myKeepListAdd = ( list, userId) => {
   return new Promise ( (resolve, reject) => {
-    db.run("UPDATE users SET userKeepList = ? WHERE userId = ?", [list, userId], (err) => {
+    db.run('UPDATE users SET userKeepList = ? WHERE userId = ?', [list, userId], (err) => {
       if(err){
         reject(err);
       } else{

@@ -63,8 +63,8 @@ CREATE TABLE IF NOT EXISTS groupDetailMeet(
 
 // 테이블 생성
 db.exec(createTablesQuery, (err) => {
-  if (err) return console.log("테이블을 생성못함:", err.message);
-  console.log("테이블 생성");
+  if (err) return console.log('테이블을 생성못함:', err.message);
+  console.log('테이블 생성');
 });
 
 
@@ -75,7 +75,7 @@ db.all(" SELECT name FROM sqlite_master WHERE type='table' ", (err, rows) => {
     return;
   }
   rows.forEach((row) => {
-    console.log("현재 테이블:", row.name);
+    console.log('현재 테이블:', row.name);
   });
 });
 
@@ -101,9 +101,9 @@ module.exports = { db };
 // // 테이블 삭제
 // db.run(`DROP TABLE users`)
 // users 테이블 데이터확인 --- 비기능
-db.all(`SELECT * FROM users`, [], (err, rows) => {
+db.all('SELECT * FROM users', [], (err, rows) => {
   if (err) return console.error(err.message);
-  console.log("users:", rows);
+  console.log('users:', rows);
 });
 
 
@@ -125,9 +125,9 @@ db.all(`SELECT * FROM users`, [], (err, rows) => {
 // db.run(`DROP TABLE groupInfo`)
 
 // groupInfo 테이블 데이터확인 --- 비기능
-db.all(`SELECT * FROM groupInfo`, [], (err, rows) => {
+db.all('SELECT * FROM groupInfo', [], (err, rows) => {
   if (err) return console.error(err.message);
-  console.log("groupInfo:", rows);
+  console.log('groupInfo:', rows);
 });
 
 
@@ -153,9 +153,9 @@ db.all(`SELECT * FROM groupInfo`, [], (err, rows) => {
 // db.run(`DROP TABLE groupDetailMeet`)
 
 // groupDetailMeet 테이블 데이터확인 --- 비기능
-db.all(`SELECT * FROM groupDetailMeet`, [], (err, rows) => {
+db.all('SELECT * FROM groupDetailMeet', [], (err, rows) => {
   if (err) return console.error(err.message);
-  console.log("groupDetailMeet:", rows);
+  console.log('groupDetailMeet:', rows);
 });
 
 // const groupDetailMeet = [
@@ -183,20 +183,6 @@ db.all(`SELECT * FROM groupDetailMeet`, [], (err, rows) => {
 //     if(err) return console.error(err.message);
 //     console.log("데이터 추가");
 // });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 // db.run(`DELETE FROM users WHERE userId = ?`, [1], (err)=>{

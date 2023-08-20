@@ -4,7 +4,7 @@ const { db } = require('./table-Queries');
 const idCheck = (userid) => {
     return new Promise((resolve, reject) => {
       db.all(
-        `SELECT EXISTS (SELECT 1 FROM users WHERE userId = ?) AS data`,
+        'SELECT EXISTS (SELECT 1 FROM users WHERE userId = ?) AS data',
         [userid],
         (err, row) => {
           if (err) {
@@ -33,7 +33,7 @@ const signupAdd = ({
   }) => {
     return new Promise((resolve, reject) => {
       db.run(
-        `INSERT INTO users (userId, userPassword, userName, userPhone, userYears, userGender, userActivity, userIntroduce, userKeepList, userImage) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        'INSERT INTO users (userId, userPassword, userName, userPhone, userYears, userGender, userActivity, userIntroduce, userKeepList, userImage) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
         [
           userId,
           userPassword,
@@ -61,7 +61,7 @@ const signupAdd = ({
 const login = (userId, userPassword) => {
     return new Promise((resolve, reject) => {
       db.get(
-        `SELECT userId, userKeepList, userJoinList FROM users WHERE userId = ? AND userPassword = ? `,
+        'SELECT userId, userKeepList, userJoinList FROM users WHERE userId = ? AND userPassword = ? ',
         [userId, userPassword],
         (err, row) => {
           if (err) {
