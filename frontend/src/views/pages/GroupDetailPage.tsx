@@ -1,8 +1,7 @@
 import styled from "styled-components";
 import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { useAppSelector } from "@store/store.ts";
-import { DetailChat, DetailInfo, DetailNotice, DetailPhoto } from "@groupdetail";
+import { DetailInfo} from "@groupdetail";
 import { BaseLayout, fixedBase, flex_row_align_center, flex_row_all_cneter} from "@components/AllComponent";
 import { BiLeftArrowAlt } from "react-icons/bi";
 
@@ -70,23 +69,11 @@ function GroupDetailPage() {
   const location = useLocation();
   const navigate = useNavigate();
   const tapText = ["정보"];
-  // const tapText = ["정보", "게시판", "사진첩", "채팅"];
-
-
-  
-  
-  
 
   const tapcontent = () => {
     switch (groupTap) {
       case 0:
         return <DetailInfo />;
-      case 1:
-        return <DetailNotice />;
-      case 2:
-        return <DetailPhoto />;
-      case 3:
-        return <DetailChat />;
       default:
         return null;
     }
