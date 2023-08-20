@@ -1,8 +1,20 @@
+// env.파일 읽기위함
+require('dotenv').config();
 const express = require('express');
 const router = express.Router();
 // JWT 모듈
-const jwt = require(`jsonwebtoken`);
-const access = "access";
+const jwt = require('jsonwebtoken');
+const access = process.env.SECRET_ACCESSTOKEN;
+
+const { 
+  simpleGroupList,
+  groupDetailInfo,
+  groupDetaiMeet,
+  myJoinList,
+  myJoinListAdd,
+  myKeepList,
+  myKeepListAdd
+} = require('../models/group-Queries');
 
 // 그룹 전체 조회
 router.get('/list', (req, res) => {
@@ -10,11 +22,11 @@ router.get('/list', (req, res) => {
       .then((data) => {
         res.status(200).send(data);
       })
-      .catch((err) => res.status(400).send("그룹조회오류:" + err));
+      .catch((err) => res.status(400).send('그룹조회오류:' + err));
   });
 
   // 그룹 상세정보 조회
-router.get("/list/:id", async(req, res) => {
+router.get('/list/:id', async(req, res) => {
 
     const groupId = req.params.id;
   
@@ -28,7 +40,7 @@ router.get("/list/:id", async(req, res) => {
       res.status(200).send(newList);
     }
     catch(err){
-      res.status(400).send("조회오류" + err);
+      res.status(400).send('그룹 상세정보 조회오류:' + err);
     }
     
   });
@@ -49,16 +61,16 @@ router.get("/list/:id", async(req, res) => {
       
       if (checkList) {
           await myJoinListAdd(newJoinList, decode.userId);
-          res.status(200).send("그룹가입 탈퇴완료");
+          res.status(200).send('그룹가입 탈퇴완료');
         } else {
-        throw new Error("409");
+        throw new Error('409');
       } 
     }
     catch(err){
       if(err instanceof jwt.TokenExpiredError){
-        res.status(401).send("TokenExpiredError");
-      } else if(err.message === "409"){
-        res.status(409).send("탈퇴할 그룹이 존재하지않음")
+        res.status(401).send('TokenExpiredError');
+      } else if(err.message === '409'){
+        res.status(409).send('탈퇴할 그룹이 존재하지않음')
       } else{
         res.status(400).send(err);
       }
@@ -77,18 +89,18 @@ router.post('/join', async (req, res) => {
       const checkList = currentList.some((list) => list.id === req.body.id);
   
       if (checkList) {
-        throw new Error("409");
+        throw new Error('409');
       } else {
         currentList.push(req.body);
         const newJoinList = JSON.stringify(currentList);
         await myJoinListAdd(newJoinList, decode.userId);
-        res.status(200).send("그룹가입 완료");
+        res.status(200).send('그룹가입 완료');
       }
     } catch (err){
       if(err instanceof jwt.TokenExpiredError){
-        res.status(401).send("TokenExpiredError");
-      }else if(err.message === "409"){
-        res.status(409).send("중복된 데이터")
+        res.status(401).send('TokenExpiredError');
+      }else if(err.message === '409'){
+        res.status(409).send('중복된 데이터')
       }
       else{
         res.status(400).send(err);
@@ -98,13 +110,12 @@ router.post('/join', async (req, res) => {
 
   // 그룹 찜하기
   router.post('/keep', (req, res) => {
-    // console.log("실행")
     const token = req.headers.authorization.split(" ")[1];
   
     jwt.verify(token, access, (err, decode) => {
       if (err) {
         if (err instanceof jwt.TokenExpiredError) {
-          res.status(401).send("TokenExpiredError");
+          res.status(401).send('TokenExpiredError');
         } else {
           res.status(400).send(err);
         }
@@ -129,26 +140,18 @@ router.post('/join', async (req, res) => {
   
               myKeepListAdd(deleteList, decode.userId)
                 .then(() => res.status(200).send(false))
-                .catch(() => res.status(400).send("삭제오류"));
+                .catch(() => res.status(400).send('삭제오류'));
             } else {
               currentList.push(req.body);
               myKeepListAdd(JSON.stringify(currentList), decode.userId)
                 .then(() => res.status(200).send(true))
-                .catch(() => res.status(400).send("추가오류"));
+                .catch(() => res.status(400).send('추가오류'));
             }
           })
-          .catch((err) => res.status(400).send("찜리스트조회 오류:" + err));
+          .catch((err) => res.status(400).send('찜리스트조회 오류:' + err));
       }
     });
   });
 
  module.exports = router;
- const { 
-    simpleGroupList,
-    groupDetailInfo,
-    groupDetaiMeet,
-    myJoinList,
-    myJoinListAdd,
-    myKeepList,
-    myKeepListAdd
- } = require('../models/group-Queries')
+ 

@@ -1,17 +1,25 @@
+// env.파일 읽기위함
+require('dotenv').config();
 const express = require('express');
 const router = express.Router();
 // JWT 모듈
-const jwt = require(`jsonwebtoken`);
+const jwt = require('jsonwebtoken');
 // 토큰서명키
-const access = "access";
-const refresh = "refres";
+const access = process.env.SECRET_ACCESSTOKEN;
+const refresh = process.env.SECRET_REFRESH;
 // 쿠키로 받은값을 파싱하기위한 미들웨어
-const cookieParser = require("cookie-parser");
+const cookieParser = require('cookie-parser');
 // cookie 인식을 위한 미들웨어
 router.use(cookieParser());
 
+const { 
+  idCheck,
+  login,
+  signupAdd,
+} = require('../models/users-Queries');
+
 // 아이디 중복확인
-router.get(`/signup/:userid`, (req, res) => {
+router.get('/signup/:userid', (req, res) => {
   const userid = req.params.userid;
 
     idCheck(userid)
@@ -19,40 +27,40 @@ router.get(`/signup/:userid`, (req, res) => {
         res.status(200).send(data);
       })
       .catch((err) => {
-        res.status(500).send("아이디중복확인오류:" + err);
+        res.status(500).send('아이디중복확인오류:' + err);
       });
   });
 
   // 액세스토큰 재발급
-  router.get("/token", (req, res) => {
+  router.get('/token', (req, res) => {
     const refreshToken = req.cookies.refreshToken;
     jwt.verify(refreshToken, refresh, (err, decode) => {
       const userId = decode.userId;
       if (err) {
-        res.status(401).send("유효하지 않은 리프레시토큰");
+        res.status(401).send('유효하지 않은 리프레시토큰');
       } else {
-        const accessToken = jwt.sign({ userId }, access, { expiresIn: "1h" });
-        res.set("Access-Control-Expose-Headers", "Authorization");
-        res.set("Authorization", accessToken);
-        res.status(200).send("토큰재발급");
+        const accessToken = jwt.sign({ userId }, access, { expiresIn: '1h' });
+        res.set('Access-Control-Expose-Headers', 'Authorization');
+        res.set('Authorization', accessToken);
+        res.status(200).send('토큰재발급');
       }
     });
   });
 
   // 로그인
-  router.post(`/login`, (req, res) => {
+  router.post('/login', (req, res) => {
     const { userId, userPassword } = req.body;
 
     login(userId, userPassword)
       .then((data) => {
         if (data) {
-          const accessToken = jwt.sign({ userId }, access, { expiresIn: "1h" });
+          const accessToken = jwt.sign({ userId }, access, { expiresIn: '1h' });
           const refreshToken = jwt.sign({ userId }, refresh, {
-            expiresIn: "24h",
+            expiresIn: '24h',
           });
-          res.set("Access-Control-Expose-Headers", "Authorization");
-          res.set("Authorization", accessToken);
-          res.cookie("refreshToken", refreshToken, {
+          res.set('Access-Control-Expose-Headers', 'Authorization');
+          res.set('Authorization', accessToken);
+          res.cookie('refreshToken', refreshToken, {
             maxAge: 24 * 60 * 60 * 1000,
           });
           res.status(200).send(data);
@@ -64,7 +72,7 @@ router.get(`/signup/:userid`, (req, res) => {
   });
 
   //회원가입
-router.post(`/signup`, (req, res) => {
+router.post('/signup', (req, res) => {
     const {
       userId,
       userPassword,
@@ -89,21 +97,21 @@ router.post(`/signup`, (req, res) => {
     idCheck(userId)
       .then((idCheck) => {
         if (!idRegex.test(userId)) {
-          res.status(400).json("아이디 형식오류");
+          res.status(400).json('아이디 형식오류');
         } else if (!passwordRegex.test(userPassword)) {
-          res.status(400).json("비밀번호 형식오류");
+          res.status(400).json('비밀번호 형식오류');
         } else if (userPassword !== userPasswordCheck) {
-          res.status(400).json("비밀번호가 일치하지않음");
+          res.status(400).json('비밀번호가 일치하지않음');
         } else if (!nameRegex.test(userName)) {
-          res.status(400).json("이름 형식오류");
+          res.status(400).json('이름 형식오류');
         } else if (!phoneRegex.test(userPhone)) {
-          res.status(400).json("핸드폰 형식오류");
+          res.status(400).json('핸드폰 형식오류');
         } else if (!yearsRegex.test(userYears)) {
-          res.status(400).json("생년월일 형식오류");
+          res.status(400).json('생년월일 형식오류');
         } else if (!genderRegex.test(userGender)) {
-          res.status(400).json("성별 형식오류");
+          res.status(400).json('성별 형식오류');
         } else if (idCheck) {
-          res.status(400).send("중복된 아이디");
+          res.status(400).send('중복된 아이디');
         } else {
           const userActivityValue =
             userActivity.trim() !== "" ? userActivity : null;
@@ -123,19 +131,14 @@ router.post(`/signup`, (req, res) => {
             userImage,
           })
             .then((data) => res.status(200).send(data))
-            .catch((err) => res.status(500).send("Error:" + err));
+            .catch((err) => res.status(500).send('Error:' + err));
         }
       })
       .catch((err) => {
-        res.status(500).send("회원가입 오류:" + err);
+        res.status(500).send('회원가입 오류:' + err);
       });
   });
 
 
 
 module.exports = router;
-const { 
-    idCheck,
-    login,
-    signupAdd,
- } = require('../models/users-Queries')
