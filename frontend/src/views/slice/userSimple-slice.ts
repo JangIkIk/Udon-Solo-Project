@@ -36,8 +36,13 @@ const userInfo = createSlice({
             const {groupType, groupId} = action.payload;
             const newGroup: number[] | null = state.user[groupType]?.filter(( user ) => user !== groupId) || null;
             state.user[groupType] = newGroup;
+        },
+        userGroupAllDelete: (state, action: PayloadAction<{groupType: "userDayGroup"}>) => {
+            const {groupType} = action.payload;
+            state.user[groupType] = [];
         }
+
     }
 })
-export const { userId, userGroup, userGroupAdd, userGroupDelete, userImage } = userInfo.actions;
+export const { userId, userGroup, userGroupAdd, userGroupDelete, userImage, userGroupAllDelete } = userInfo.actions;
 export default userInfo.reducer;
