@@ -12,12 +12,9 @@ import { GroupListType } from "@components/GroupList";
 import { refreshToken, isToken } from "@components/Customhooks";
 import { AiFillHeart } from "react-icons/ai";
 import { useAppSelector, useAppDispatch } from "@store/store.ts";
-import {
-  userGroupAdd,
-  userGroupDelete,
-} from "@slice/userSimple-slice";
+import { userGroupAdd, userGroupDelete, userGroupAllDelete } from "@slice/userSimple-slice";
 
-const Layout = styled.div<{ keepText: boolean, joinListCheck: boolean }>`
+const Layout = styled.div<{ keepText: boolean; joinListCheck: boolean }>`
   height: 100%;
   padding-bottom: 4.5rem;
 
@@ -69,9 +66,9 @@ const Layout = styled.div<{ keepText: boolean, joinListCheck: boolean }>`
     }
 
     .group-info-keep {
-      display:flex;
-      justify-content:center;
-      align-items:center;
+      display: flex;
+      justify-content: center;
+      align-items: center;
       & > p {
         padding: 1rem;
         font-size: 1.2rem;
@@ -127,16 +124,16 @@ type groupDetailMeetType = {
   detailMeetTime: string;
   detailMeetArea: string;
   detailMeetMoney: string;
-  detailMeetUser: string | null
-}
+  detailMeetUser: string | null;
+};
 
 interface groubDetailInfoType extends GroupListType {
   groupDetailMeet?: groupDetailMeetType[] | null;
 }
 
-
 export const DetailInfo = () => {
-  const [groubDetailInfo, setGroubDetailInfo] = useState<groubDetailInfoType | null>(null);
+  const [groubDetailInfo, setGroubDetailInfo] =
+    useState<groubDetailInfoType | null>(null);
   const [keepText, setKeepText] = useState<boolean>(false);
   const location = useLocation();
   const selector = useAppSelector((state) => state.userInfo);
@@ -145,9 +142,6 @@ export const DetailInfo = () => {
   const navite = useNavigate();
   const dispatch = useAppDispatch();
 
-
-
-  
   useEffect(() => {
     axios
       .get<GroupListType>(`/api/group/list/${location.state.id}`)
@@ -156,119 +150,128 @@ export const DetailInfo = () => {
   }, []);
 
   const userKeepList = () => {
-    if(isToken()){
+    if (isToken()) {
       setKeepText(true);
-    axios
-      .post<boolean>(
-        '/api/group/keep',
-        {
-          id: location.state.id,
-          groupImg: location.state.groupImg,
-          groupTitle: location.state.groupTitle,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${isToken()}`,
+      axios
+        .post<boolean>(
+          "/api/group/keep",
+          {
+            id: location.state.id,
+            groupImg: location.state.groupImg,
+            groupTitle: location.state.groupTitle,
           },
-        }
-      )
-      .then((res) => {
-        if (res.data) {
-          dispatch(
-            userGroupAdd({
-              groupType: "userKeepGroup",
-              groupId: location.state.id,
-            })
-          );
-        } else {
-          dispatch(
-            userGroupDelete({
-              groupType: "userKeepGroup",
-              groupId: location.state.id,
-            })
-          );
-        }
-        setTimeout(() => {
-          setKeepText(false);
-        }, 5000);
-      })
-      .catch((err) => {
-        if (err.response.status === 401) {
-          return refreshToken();
-        } else {
-          console.log("찜하기 오류")
-        }
-      });
-    }else{
-      const confirmReload = window.confirm("회원만 가능합니다. 로그인창으로 이동하시겠습니까?");
-        if(confirmReload){
-          navite("/login");
-        }
+          {
+            headers: {
+              Authorization: `Bearer ${isToken()}`,
+            },
+          }
+        )
+        .then((res) => {
+          if (res.data) {
+            dispatch(
+              userGroupAdd({
+                groupType: "userKeepGroup",
+                groupId: location.state.id,
+              })
+            );
+          } else {
+            dispatch(
+              userGroupDelete({
+                groupType: "userKeepGroup",
+                groupId: location.state.id,
+              })
+            );
+          }
+          setTimeout(() => {
+            setKeepText(false);
+          }, 5000);
+        })
+        .catch((err) => {
+          if (err.response.status === 401) {
+            return refreshToken();
+          } else {
+            console.log("찜하기 오류");
+          }
+        });
+    } else {
+      const confirmReload = window.confirm(
+        "회원만 가능합니다. 로그인창으로 이동하시겠습니까?"
+      );
+      if (confirmReload) {
+        navite("/login");
+      }
     }
-    
   };
 
   const userJoinListDelete = () => {
-
-    axios
-      .delete<boolean>(`/api/group/join/${location.state.id}`, {
-        headers: {
-          Authorization: `Bearer ${isToken()}`,
-        },
-      })
-      .then(() => {
-        dispatch(
-          userGroupDelete({
-            groupType: "userJoinGroup",
-            groupId: location.state.id,
+    if (isToken()) {
+      const confirmReload = window.confirm("그룹에서 탈퇴하시겠습니까?");
+      if (confirmReload) {
+        axios
+          .delete<boolean>(`/api/group/join/${location.state.id}`, {
+            headers: {
+              Authorization: `Bearer ${isToken()}`,
+            },
           })
-        );
-      });
+          .then(() => {
+            dispatch(
+              userGroupDelete({
+                groupType: "userJoinGroup",
+                groupId: location.state.id,
+              })
+            );
+            dispatch(userGroupAllDelete({groupType: "userDayGroup"}));
+            window.location.reload();
+          });
+      }
+    }
   };
 
   const userJoinListAdd = () => {
-
-    if(isToken()){
-      axios
-      .post<boolean>(
-        'api/group/join',
-        {
-          id: location.state.id,
-          groupImg: location.state.groupImg,
-          groupTitle: location.state.groupTitle,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${isToken()}`,
-          },
-        }
-      )
-      .then(() =>
-        dispatch(
-          userGroupAdd({
-            groupType: "userJoinGroup",
-            groupId: location.state.id,
-          })
-        )
-      )
-      .catch((err) => {
-        if (err.response.status === 401) {
-          return refreshToken();
-        } else if (err.response.status === 409) {
-          console.log(err);
-        } else {
-          navite("/login");
-        }
-      });
-    } else{
-      const confirmReload = window.confirm("회원만 가능합니다. 로그인창으로 이동하시겠습니까?");
-        if(confirmReload){
-          navite("/login");
-        }
+    if (isToken()) {
+      const confirmReload = window.confirm("그룹에 가입하시겠습니까?");
+      if (confirmReload) {
+        axios
+          .post<boolean>(
+            "api/group/join",
+            {
+              id: location.state.id,
+              groupImg: location.state.groupImg,
+              groupTitle: location.state.groupTitle,
+            },
+            {
+              headers: {
+                Authorization: `Bearer ${isToken()}`,
+              },
+            }
+          )
+          .then(() =>
+            dispatch(
+              userGroupAdd({
+                groupType: "userJoinGroup",
+                groupId: location.state.id,
+              })
+            )
+          )
+          .catch((err) => {
+            if (err.response.status === 401) {
+              return refreshToken();
+            } else if (err.response.status === 409) {
+              console.log(err);
+            } else {
+              navite("/login");
+            }
+          });
+      }
+    } else {
+      const confirmReload = window.confirm(
+        "회원만 가능합니다. 로그인창으로 이동하시겠습니까?"
+      );
+      if (confirmReload) {
+        navite("/login");
+      }
     }
-    
   };
-
 
   return (
     <Layout keepText={keepText} joinListCheck={joinListCheck}>
@@ -310,7 +313,10 @@ export const DetailInfo = () => {
             ) : null}
           </div>
           {joinListCheck ? (
-            <span className="group-info-footer-join" onClick={userJoinListDelete}>
+            <span
+              className="group-info-footer-join"
+              onClick={userJoinListDelete}
+            >
               탈퇴하기
             </span>
           ) : (
