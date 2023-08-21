@@ -16,6 +16,8 @@ const {
   myKeepListAdd,
   DetaiMeetAttendAdd,
   groupDetaiMeetAttend,
+  DetaiMeetAttendCancel,
+  DetaiMeetAttendDelete
 } = require("../models/group-Queries");
 
 const { groupDetaiMeetUser } = require("../models/users-Queries");
@@ -37,15 +39,15 @@ router.get("/list/:id", async (req, res) => {
     const groupInfo = await groupDetailInfo(groupId);
     const groupMeet = await groupDetaiMeet(groupId);
     const groupMeetUser = await groupDetaiMeetAttend();
-  
+
     if (groupMeet.length > 0) {
       const meetDataMap = {};
-      groupMeet.forEach(meet => {
+      groupMeet.forEach((meet) => {
         meet.detailMeetUser = null;
         meetDataMap[meet.id] = meet;
       });
 
-      groupMeetUser.forEach(user => {
+      groupMeetUser.forEach((user) => {
         if (meetDataMap[user.groupDetailMeetId]) {
           if (meetDataMap[user.groupDetailMeetId].detailMeetUser === null) {
             meetDataMap[user.groupDetailMeetId].detailMeetUser = [];
@@ -53,16 +55,15 @@ router.get("/list/:id", async (req, res) => {
           meetDataMap[user.groupDetailMeetId].detailMeetUser.push(user);
         }
       });
-        groupInfo.groupDetailMeet = Object.values(meetDataMap);
+      groupInfo.groupDetailMeet = Object.values(meetDataMap);
     } else {
       groupInfo.groupDetailMeet = null;
     }
-  
+
     res.status(200).send(groupInfo);
   } catch (err) {
     res.status(400).send("그룹 상세정보 조회오류:" + err);
   }
-  
 });
 
 // 그룹탈퇴
@@ -72,6 +73,7 @@ router.delete("/join/:id", async (req, res) => {
   try {
     const decode = jwt.verify(token, access);
     const joinList = await myJoinList(decode.userId);
+    DetaiMeetAttendDelete(decode.userId);
     let currentList = joinList.userJoinList
       ? JSON.parse(joinList.userJoinList)
       : [];
@@ -175,8 +177,7 @@ router.post("/keep", (req, res) => {
   });
 });
 
-
-// 그룹 모임참여
+// 그룹 모임일정 참여
 router.post("/attend", async (req, res) => {
   const token = req.headers.authorization.split(" ")[1];
   const { detailMeetId } = req.body;
@@ -184,9 +185,33 @@ router.post("/attend", async (req, res) => {
   try {
     const decode = jwt.verify(token, process.env.SECRET_ACCESSTOKEN);
     const userMeetData = await groupDetaiMeetUser(decode.userId);
-    await DetaiMeetAttendAdd(detailMeetId, userMeetData.userName, userMeetData.userImage)
+    await DetaiMeetAttendAdd(
+      detailMeetId,
+      userMeetData.userName,
+      userMeetData.userImage,
+      decode.userId
+    );
     res.status(200).send(true);
   } catch (err) {
+    if (err instanceof jwt.TokenExpiredError) {
+      res.status(401).send("TokenExpiredError");
+    } else {
+      res.status(400).send(err);
+    }
+  }
+});
+
+// 그룹 모임일정 취소
+router.delete("/attend/:id", async ( req, res)=>{
+  const token = req.headers.authorization.split(" ")[1];
+  const groupDetailMeetId = req.params.id;
+
+  try{
+    const decode = jwt.verify(token, process.env.SECRET_ACCESSTOKEN);
+    await DetaiMeetAttendCancel(decode.userId, groupDetailMeetId);
+    res.status(200).send("성공");
+
+  }catch(err){
     if (err instanceof jwt.TokenExpiredError) {
       res.status(401).send("TokenExpiredError");
     } else {
