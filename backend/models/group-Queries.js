@@ -29,13 +29,10 @@ const groupDetailInfo = ( groupId )=>{
 // 그룹 모임정보조회 --- 기능
 const groupDetaiMeet = ( groupId )=>{
   return new Promise ((resolve, reject)=>{
-    db.all('SELECT * FROM groupDetailMeet WHERE groupId =?', [groupId], (err, row)=>{
+    db.all('SELECT * FROM groupDetailMeet WHERE groupInfoId =?', [groupId], (err, row)=>{
       if(err){
         reject(err);
       }else{
-        if (!row) {
-          row = null;
-        }
         resolve(row);
       }
     })
@@ -100,6 +97,33 @@ const myKeepListAdd = ( list, userId) => {
   })
 }
 
+// 그룹모임참여 --- 기능
+const DetaiMeetAttendAdd = ( detailMeetId, userName, userImage )=>{
+  return new Promise( (resolve, reject)=>{
+    db.run('INSERT INTO detailMeetUser ( groupDetailMeetId, meetUserName, meetUserImg ) VALUES (?, ?, ?)', [detailMeetId, userName, userImage], (err)=>{
+      if(err){
+        reject(err);
+      }else{
+        resolve();
+      }
+    })
+  })
+}
+
+// 그룹모임 유저 조회 --- 비기능
+const groupDetaiMeetAttend = ()=>{
+    return new Promise( (resolve, reject) => {
+      db.all('SELECT * FROM detailMeetUser',[],(err, rows)=>{
+        if(err){
+          reject(err);
+        }else{
+          resolve(rows);
+        }
+      })
+    })
+}
+
+
   module.exports = {
     simpleGroupList,
     groupDetailInfo,
@@ -107,5 +131,7 @@ const myKeepListAdd = ( list, userId) => {
     myJoinList,
     myJoinListAdd,
     myKeepList,
-    myKeepListAdd
+    myKeepListAdd,
+    DetaiMeetAttendAdd,
+    groupDetaiMeetAttend,
   };
