@@ -61,7 +61,7 @@ const signupAdd = ({
 const login = (userId, userPassword) => {
     return new Promise((resolve, reject) => {
       db.get(
-        'SELECT userId, userKeepList, userJoinList FROM users WHERE userId = ? AND userPassword = ? ',
+        'SELECT userId, userKeepList, userJoinList, userImage FROM users WHERE userId = ? AND userPassword = ? ',
         [userId, userPassword],
         (err, row) => {
           if (err) {
