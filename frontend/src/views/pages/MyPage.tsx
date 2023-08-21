@@ -15,14 +15,14 @@ import { refreshToken, isToken } from "@components/Customhooks";
 import { ProfileSettingModal } from "@components/ProfileSettingModal";
 
 export interface userDataType {
-  userName: string,
-  userYears: string,
-  userGender: string,
-  userActivity: string,
-  userKeepList: GroupListType[],
-  userJoinList: GroupListType[],
-  userImage: string | null,
-  userIntroduce: string,
+  userName: string;
+  userYears: string;
+  userGender: string;
+  userActivity: string;
+  userKeepList: GroupListType[];
+  userJoinList: GroupListType[];
+  userImage: string | null;
+  userIntroduce: string;
 }
 const Layout = styled(BaseLayout)`
   .mypage-info {
