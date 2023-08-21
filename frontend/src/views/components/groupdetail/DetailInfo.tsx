@@ -107,8 +107,8 @@ const Layout = styled.div<{ keepText: boolean, joinListCheck: boolean }>`
 
 export type UserType = {
   id: number;
-  img: string;
-  name: string;
+  meetUserImg: string | null;
+  meetUserName: string;
 };
 
 export interface GroupScheduleType {
@@ -144,10 +144,10 @@ export const DetailInfo = () => {
   const joinListCheck = selector.user.userJoinGroup.includes(location.state.id);
   const navite = useNavigate();
   const dispatch = useAppDispatch();
-  // console.log(groubDetailInfo)
 
 
 
+  
   useEffect(() => {
     axios
       .get<GroupListType>(`/api/group/list/${location.state.id}`)
@@ -156,7 +156,8 @@ export const DetailInfo = () => {
   }, []);
 
   const userKeepList = () => {
-    setKeepText(true);
+    if(isToken()){
+      setKeepText(true);
     axios
       .post<boolean>(
         '/api/group/keep',
@@ -195,9 +196,16 @@ export const DetailInfo = () => {
         if (err.response.status === 401) {
           return refreshToken();
         } else {
-          navite("/login");
+          console.log("찜하기 오류")
         }
       });
+    }else{
+      const confirmReload = window.confirm("회원만 가능합니다. 로그인창으로 이동하시겠습니까?");
+        if(confirmReload){
+          navite("/login");
+        }
+    }
+    
   };
 
   const userJoinListDelete = () => {
@@ -219,7 +227,9 @@ export const DetailInfo = () => {
   };
 
   const userJoinListAdd = () => {
-    axios
+
+    if(isToken()){
+      axios
       .post<boolean>(
         'api/group/join',
         {
@@ -250,6 +260,13 @@ export const DetailInfo = () => {
           navite("/login");
         }
       });
+    } else{
+      const confirmReload = window.confirm("회원만 가능합니다. 로그인창으로 이동하시겠습니까?");
+        if(confirmReload){
+          navite("/login");
+        }
+    }
+    
   };
 
 
@@ -264,8 +281,8 @@ export const DetailInfo = () => {
         <div className="detailinfo-time">
           <h5>모임 정모</h5>
           <ul className="detailinfo-groupschedule">
-            {groubDetailInfo?.groupDetailMeet?.length !== 0 ? (
-              groubDetailInfo?.groupDetailMeet?.map((item: any) => {
+            {groubDetailInfo?.groupDetailMeet ? (
+              groubDetailInfo.groupDetailMeet.map((item: any) => {
                 return (
                   <li key={item.id}>
                     <Detailmeetimg item={item} />
