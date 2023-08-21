@@ -1,13 +1,14 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-interface groupKeepListType {
+interface userInfoType {
     user: {
     userId: string | null,
+    userImage: string,
     userKeepGroup: number[],
     userJoinGroup: number[]
     }
 }
-const initialState: groupKeepListType = {
-    user: { userId: null, userKeepGroup: [], userJoinGroup: []}
+const initialState: userInfoType = {
+    user: { userId: null, userImage: `${process.env.PUBLIC_URL}/images/simple.png`, userKeepGroup: [], userJoinGroup: []}
 }
 const userInfo = createSlice({
     name: "userInfo",
@@ -16,6 +17,10 @@ const userInfo = createSlice({
         userId: (state, action: PayloadAction<string>) => {
             state.user = { ...state.user, userId: action.payload };
         },
+        userImage: (state, action: PayloadAction<string>)=>{
+            state.user = { ...state.user, userImage: action.payload};
+        },
+        
         userGroup: (state, action: PayloadAction<{groupType: "userKeepGroup" | "userJoinGroup", groupId: number[]}>)=>{
             const {groupType, groupId} = action.payload;
             const newGroup = [...state.user[groupType], ...groupId];
@@ -33,5 +38,5 @@ const userInfo = createSlice({
         }
     }
 })
-export const { userId, userGroup, userGroupAdd, userGroupDelete } = userInfo.actions;
+export const { userId, userGroup, userGroupAdd, userGroupDelete, userImage } = userInfo.actions;
 export default userInfo.reducer;

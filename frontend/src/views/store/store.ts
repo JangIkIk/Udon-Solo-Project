@@ -1,6 +1,6 @@
-import {configureStore} from "@reduxjs/toolkit";
-import { TypedUseSelectorHook, useDispatch, useSelector} from "react-redux";
-import userInfo from "../slice/groupKeepList-slice";
+import { configureStore } from "@reduxjs/toolkit";
+import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
+import userInfo from "../slice/userSimple-slice";
 
 
 
@@ -22,9 +22,9 @@ import storage from 'redux-persist/lib/storage/session';
 
 // Redux Persist 설정
 const persistConfig = {
-    key: 'keepList', // 저장된 데이터의 키 이름
+    key: 'userLoginInfo', // 저장된 데이터의 키 이름
     storage, // 사용할 저장소 (로컬 스토리지, 세션 스토리지 등)
-  };
+};
 
 //   Redux Persist를 적용한 리듀서 생성
 const persistedReducer = persistReducer(persistConfig, userInfo);
@@ -32,13 +32,13 @@ const persistedReducer = persistReducer(persistConfig, userInfo);
 
 
 export const store = configureStore({
-    reducer:{
+    reducer: {
         userInfo: persistedReducer,
     },
     middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware({
-      serializableCheck: false,
-    }),
+        getDefaultMiddleware({
+            serializableCheck: false,
+        }),
 })
 
 
