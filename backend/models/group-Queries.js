@@ -98,9 +98,9 @@ const myKeepListAdd = ( list, userId) => {
 }
 
 // 그룹모임참여 --- 기능
-const DetaiMeetAttendAdd = ( detailMeetId, userName, userImage )=>{
+const DetaiMeetAttendAdd = ( detailMeetId, userName, userImage, userId )=>{
   return new Promise( (resolve, reject)=>{
-    db.run('INSERT INTO detailMeetUser ( groupDetailMeetId, meetUserName, meetUserImg ) VALUES (?, ?, ?)', [detailMeetId, userName, userImage], (err)=>{
+    db.run('INSERT INTO detailMeetUser ( groupDetailMeetId, meetUserName, meetUserImg, meetUserId ) VALUES (?, ?, ?, ?)', [detailMeetId, userName, userImage, userId], (err)=>{
       if(err){
         reject(err);
       }else{
@@ -109,6 +109,33 @@ const DetaiMeetAttendAdd = ( detailMeetId, userName, userImage )=>{
     })
   })
 }
+
+// 그룹모임 선택 삭제 --- 기능
+const DetaiMeetAttendCancel = (userId, groupDetailMeetId)=>{
+  return new Promise( (resolve, reject) => {
+    db.run('DELETE FROM detailMeetUser WHERE meetUserId = ? AND  groupDetailMeetId = ?', [userId, groupDetailMeetId], (err)=>{
+      if(err){
+        reject(err)
+      }else{
+        resolve(true)
+      }
+    })
+  })
+}
+
+// 그룹모임 전체 삭제 --- 기능
+const DetaiMeetAttendDelete = (userId) => {
+  return new Promise( (resolve, reject) => {
+    db.run('DELETE FROM detailMeetUser WHERE meetUserId = ?',[userId], (err)=>{
+      if(err){
+        reject(err)
+      }else{
+        resolve(true)
+      }
+    })
+  })
+}
+
 
 // 그룹모임 유저 조회 --- 비기능
 const groupDetaiMeetAttend = ()=>{
@@ -134,4 +161,6 @@ const groupDetaiMeetAttend = ()=>{
     myKeepListAdd,
     DetaiMeetAttendAdd,
     groupDetaiMeetAttend,
+    DetaiMeetAttendCancel,
+    DetaiMeetAttendDelete
   };
