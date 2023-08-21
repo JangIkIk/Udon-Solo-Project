@@ -61,6 +61,7 @@ CREATE TABLE IF NOT EXISTS groupDetailMeet(
 CREATE TABLE IF NOT EXISTS detailMeetUser(
   id INTEGER PRIMARY KEY,
   groupDetailMeetId INTEGER,
+  meetUserId TEXT,
   meetUserImg TEXT,
   meetUserName TEXT,
   FOREIGN KEY (groupDetailMeetId) REFERENCES groupDetailMeet(id)
@@ -201,8 +202,8 @@ db.all('SELECT * FROM detailMeetUser', [], (err, rows) => {
 
 
 // db.run(
-//   'INSERT INTO detailMeetUser (groupDetailMeetId, meetUserName, meetUserImg) VALUES (?, ?, ?)',
-//   [1, "홍길동", "img"],
+//   'INSERT INTO detailMeetUser (groupDetailMeetId, meetUserName, meetUserImg, meetUserId) VALUES (?, ?, ?, ?)',
+//   [1, "홍길동", "img", "강제아이디1"],
 //   (err) => {
 //     if (err) {
 //       return console.error(err.message);
@@ -212,8 +213,8 @@ db.all('SELECT * FROM detailMeetUser', [], (err, rows) => {
 // );
 
 // db.run(
-//   'INSERT INTO detailMeetUser (groupDetailMeetId, meetUserName, meetUserImg) VALUES (?, ?, ?)',
-//   [1, "세종대왕", "img"],
+//   'INSERT INTO detailMeetUser (groupDetailMeetId, meetUserName, meetUserImg, meetUserId) VALUES (?, ?, ?, ?)',
+//   [1, "세종대왕", "img", "강제아이디2"],
 //   (err) => {
 //     if (err) {
 //       return console.error(err.message);
