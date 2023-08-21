@@ -35,7 +35,8 @@ const createTablesQuery = `CREATE TABLE IF NOT EXISTS users(
   userIntroduce TEXT DEFAULT NULL,
   userKeepList TEXT DEFAULT NULL,
   userJoinList TEXT DEFAULT NULL,
-  userImage TEXT DEFAULT NULL
+  userImage TEXT DEFAULT NULL,
+  userDayGroup TEXT DEFAULT NULL
 );
 
 CREATE TABLE IF NOT EXISTS groupInfo(
@@ -49,16 +50,22 @@ CREATE TABLE IF NOT EXISTS groupInfo(
 
 CREATE TABLE IF NOT EXISTS groupDetailMeet(
   id INTEGER PRIMARY KEY,
-  groupId INTEGER,
+  groupInfoId INTEGER,
   detailMeetDay TEXT,
   detailMeetTime TEXT,
   detailMeetArea TEXT,
   detailMeetMoney TEXT,
-  detailMeetUser TEXT DEFAULT NULL,
-  FOREIGN KEY (groupId) REFERENCES groupInfo(id)
+  FOREIGN KEY (groupInfoId) REFERENCES groupInfo(id)
 );
-`;
 
+CREATE TABLE IF NOT EXISTS detailMeetUser(
+  id INTEGER PRIMARY KEY,
+  groupDetailMeetId INTEGER,
+  meetUserImg TEXT,
+  meetUserName TEXT,
+  FOREIGN KEY (groupDetailMeetId) REFERENCES groupDetailMeet(id)
+  );
+`;
 
 
 // 테이블 생성
@@ -79,38 +86,36 @@ db.all(" SELECT name FROM sqlite_master WHERE type='table' ", (err, rows) => {
   });
 });
 
+
 module.exports = { db };
 
 
 
-// const user = [
-//   {
-//     id: 1,
-//     img: "",
-//     name: "test"
-//   },
-//     {
-//     id: 2,
-//     img: "",
-//     name: "test"
-//   },
-// ]
+/*------------------------------------------------------------------------------*/
 
-
-
-// // 테이블 삭제
+// @@@@@@@@@@@@users 테이블 삭제
 // db.run(`DROP TABLE users`)
+
 // users 테이블 데이터확인 --- 비기능
 db.all('SELECT * FROM users', [], (err, rows) => {
   if (err) return console.error(err.message);
   console.log('users:', rows);
 });
 
-
-// const testUser = ["test123","test123!","테스트","0102333333","2023-08-09","남",null,null,null,null]
+// const testUser = ["test123","test123!","테스트","0102333333","2023-08-09","남",null,null,null,null,null]
 
 // db.run(
-//   `INSERT INTO users (userId, userPassword, userName, userPhone, userYears, userGender, userActivity, userIntroduce, userKeepList, userImage) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+//   `INSERT INTO users (userId, userPassword, userName, userPhone, userYears, userGender, userActivity, userIntroduce, userKeepList, userImage, userDayGroup) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+//   testUser,
+//   (err) => {
+//     if (err) return console.error(err.message);
+//   }
+// );
+
+// const testUser = ["test1234","test1234!","홍길동","0102333333","2023-08-09","남",null,null,null,null,null]
+
+// db.run(
+//   `INSERT INTO users (userId, userPassword, userName, userPhone, userYears, userGender, userActivity, userIntroduce, userKeepList, userImage, userDayGroup) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
 //   testUser,
 //   (err) => {
 //     if (err) return console.error(err.message);
@@ -119,9 +124,9 @@ db.all('SELECT * FROM users', [], (err, rows) => {
 
 
 
+/*------------------------------------------------------------------------------*/
 
-
-// 테이블 삭제
+// @@@@@@@@@@@@ groupInfo 테이블 삭제
 // db.run(`DROP TABLE groupInfo`)
 
 // groupInfo 테이블 데이터확인 --- 비기능
@@ -132,7 +137,6 @@ db.all('SELECT * FROM groupInfo', [], (err, rows) => {
 
 
 // const groupInfo = [
-//   1,
 //   "성남시",
 //   "https://mblogthumb-phinf.pstatic.net/MjAyMDA0MjhfMjAz/MDAxNTg4MDQwOTA5MjE0.i6ARBaBdi_HYODiTR0f1ma8OvblzSh01bJGL8U5gDZUg.1oPlzYogIg8H_TAk5iZvUMYOLsZkZM1ITTVrfUsIHHog.JPEG.mijung011040/20200424_192926.jpg?type=w800",
 //   "[정자역] 클라이밍 초자분들 환영 나이제한없음X",
@@ -141,15 +145,15 @@ db.all('SELECT * FROM groupInfo', [], (err, rows) => {
 // ]
 
 // // groupInfo 테이블에 데이터 추가
-// db.run(`INSERT INTO groupInfo (id, groupRegion, groupImg, groupTitle, groupPeople, groupContent) VALUES (?, ?, ?, ?, ?, ?)`, groupInfo, (err) => {
+// db.run(`INSERT INTO groupInfo (groupRegion, groupImg, groupTitle, groupPeople, groupContent) VALUES (?, ?, ?, ?, ?)`, groupInfo, (err) => {
 //     if(err) return console.error(err.message);
 //     console.log("데이터 추가");
 // });
 
 
 
-
-// 테이블 삭제
+/*------------------------------------------------------------------------------*/
+// @@@@@@@@@@@@ groupDetailMeet 테이블 삭제
 // db.run(`DROP TABLE groupDetailMeet`)
 
 // groupDetailMeet 테이블 데이터확인 --- 비기능
@@ -164,8 +168,8 @@ db.all('SELECT * FROM groupDetailMeet', [], (err, rows) => {
 //   "오후 4:00",
 //   "수내 락트리",
 //   "암장비",
-// ]
-// db.run(`INSERT INTO groupDetailMeet (groupId, detailMeetDay, detailMeetTime, detailMeetArea, detailMeetMoney, detailMeetUser) VALUES (?, ?, ?, ?, ?, ?)`, groupDetailMeet, (err) => {
+// ];
+// db.run(`INSERT INTO groupDetailMeet (groupInfoId, detailMeetDay, detailMeetTime, detailMeetArea, detailMeetMoney) VALUES (?, ?, ?, ?, ?)`, groupDetailMeet, (err) => {
 //     if(err) return console.error(err.message);
 //     console.log("데이터 추가");
 // });
@@ -179,10 +183,60 @@ db.all('SELECT * FROM groupDetailMeet', [], (err, rows) => {
 //   "20,000",
 // ]
 
-// db.run(`INSERT INTO groupDetailMeet (groupId, detailMeetDay, detailMeetTime, detailMeetArea, detailMeetMoney, detailMeetUser) VALUES (?, ?, ?, ?, ?, ?)`, groupDetailMeet1, (err) => {
+// db.run(`INSERT INTO groupDetailMeet (groupInfoId, detailMeetDay, detailMeetTime, detailMeetArea, detailMeetMoney) VALUES (?, ?, ?, ?, ?)`, groupDetailMeet1, (err) => {
 //     if(err) return console.error(err.message);
 //     console.log("데이터 추가");
 // });
+
+/*------------------------------------------------------------------------------*/
+
+// @@@@@@@@@@@@ detailMeetUser 테이블 삭제
+// db.run(`DROP TABLE detailMeetUser`)
+
+// detailMeetUser 테이블 데이터확인 --- 비기능
+db.all('SELECT * FROM detailMeetUser', [], (err, rows) => {
+  if (err) return console.error(err.message);
+  console.log('detailMeetUser:', rows);
+});
+
+
+// db.run(
+//   'INSERT INTO detailMeetUser (groupDetailMeetId, meetUserName, meetUserImg) VALUES (?, ?, ?)',
+//   [1, "홍길동", "img"],
+//   (err) => {
+//     if (err) {
+//       return console.error(err.message);
+//     }
+//     console.log("추가");
+//   }
+// );
+
+// db.run(
+//   'INSERT INTO detailMeetUser (groupDetailMeetId, meetUserName, meetUserImg) VALUES (?, ?, ?)',
+//   [1, "세종대왕", "img"],
+//   (err) => {
+//     if (err) {
+//       return console.error(err.message);
+//     }
+//     console.log("추가");
+//   }
+// );
+
+// db.run(
+//   'INSERT INTO detailMeetUser (groupDetailMeetId, meetUserName, meetUserImg) VALUES (?, ?, ?)',
+//   [2, "피카츄", "img"],
+//   (err) => {
+//     if (err) {
+//       return console.error(err.message);
+//     }
+//     console.log("추가");
+//   }
+// );
+
+
+
+
+
 
 
 // db.run(`DELETE FROM users WHERE userId = ?`, [1], (err)=>{
@@ -277,41 +331,3 @@ CREATE TABLE IF NOT EXISTS group(
 //      }
 //    });
 
-/*
-1. 회원가입
-2. 로그인
-3. 토큰생성 ?
-4. 내프로필
-5. 내프로필수정
-6. 찜기능
-7. 그룹가입기능
-8. 그룹접근권한 
-
-
-*/
-
-// 비회원 기능
-
-// 다크모드
-// 언어변경
-// 검색가능(필터기능)
-// 그룹리스트 확인가능
-// 그룹디테일 정복확인가능
-// 그룹 가입가능
-
-// 공통기능
-
-// 회원기능
-// 그룹디테일 게시판접근가능
-// 그룹디테일 사진첩접근가능
-// 그룹디테일 채팅가능
-// 나의프로필
-// 나의그룹
-// 나의알림
-// 그룹 찜가능
-
-// 회원가입시 데이터
-
-// const usersignUp = {
-//     id:
-// }
