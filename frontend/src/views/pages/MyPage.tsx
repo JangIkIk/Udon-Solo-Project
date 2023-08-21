@@ -122,7 +122,6 @@ function MyPage() {
       });
   }, []);
 
-  console.log(userData);
   return (
     <Layout>
       {userData !== null && isModal? (
@@ -134,7 +133,6 @@ function MyPage() {
       ) : null}
       <div className="mypage-info">
         <div className="mypage-photo">
-        {/* <img src="http://localhost:4000/uploads/2687e9f0bc8dd24d4e6bfb66da68eca7" alt="이미지 설명"/> */}
           <ImgBase
             src={
               userData && userData.userImage !== null

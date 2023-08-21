@@ -15,8 +15,6 @@ const Layout = styled(BaseLayout)`
 
 const HomePage = () => {
   const [groupList, setGroupList] = useState<GroupListType[]>([]);
-  const selector = useAppSelector( state => state.userInfo.user)
-
   useEffect(()=>{
     axios.get<GroupListType[]>('/api/group/list')
     .then( res => setGroupList(res.data))

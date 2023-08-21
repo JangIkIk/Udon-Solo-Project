@@ -15,9 +15,9 @@ import { useAppSelector, useAppDispatch } from "@store/store.ts";
 import {
   userGroupAdd,
   userGroupDelete,
-} from "@slice/groupKeepList-slice";
+} from "@slice/userSimple-slice";
 
-const Layout = styled.div<{ keepText: boolean, joinListCheck:boolean }>`
+const Layout = styled.div<{ keepText: boolean, joinListCheck: boolean }>`
   height: 100%;
   padding-bottom: 4.5rem;
 
@@ -69,6 +69,9 @@ const Layout = styled.div<{ keepText: boolean, joinListCheck:boolean }>`
     }
 
     .group-info-keep {
+      display:flex;
+      justify-content:center;
+      align-items:center;
       & > p {
         padding: 1rem;
         font-size: 1.2rem;
@@ -118,50 +121,19 @@ export interface GroupScheduleType {
 }
 
 type groupDetailMeetType = {
-    id: number;
-    groupId: number;
-    detailMeetDay: string;
-    detailMeetTime: string;
-    detailMeetArea: string;
-    detailMeetMoney: string;
-    detailMeetUser: string | null
+  id: number;
+  groupId: number;
+  detailMeetDay: string;
+  detailMeetTime: string;
+  detailMeetArea: string;
+  detailMeetMoney: string;
+  detailMeetUser: string | null
 }
 
-interface groubDetailInfoType extends GroupListType{
-    groupDetailMeet? : groupDetailMeetType[] | null ;
+interface groubDetailInfoType extends GroupListType {
+  groupDetailMeet?: groupDetailMeetType[] | null;
 }
 
-const obj = [{
-  id: 1,
-  day: "4월 1일 (금)",
-  time: "오후 4:00",
-  detailedArea: "수내 락트리",
-  money: "암장비",
-  user: [{
-    id: 1,
-    img: "",
-    name: "test"
-  },
-  {
-    id: 2,
-    img: "",
-    name: "test"
-  },
-  {
-    id: 3,
-    img: "",
-    name: "test"
-  }]
-},
-{
-  id: 2,
-  day: "2023-04-01",
-  time: "19:00",
-  detailedArea: "강남 손상원",
-  money: "20,000",
-  user: []
-}
-]
 
 export const DetailInfo = () => {
   const [groubDetailInfo, setGroubDetailInfo] = useState<groubDetailInfoType | null>(null);
@@ -172,7 +144,8 @@ export const DetailInfo = () => {
   const joinListCheck = selector.user.userJoinGroup.includes(location.state.id);
   const navite = useNavigate();
   const dispatch = useAppDispatch();
-  
+  // console.log(groubDetailInfo)
+
 
 
   useEffect(() => {
@@ -228,7 +201,7 @@ export const DetailInfo = () => {
   };
 
   const userJoinListDelete = () => {
-    
+
     axios
       .delete<boolean>(`/api/group/join/${location.state.id}`, {
         headers: {
@@ -279,7 +252,7 @@ export const DetailInfo = () => {
       });
   };
 
-  console.log(groubDetailInfo?.groupDetailMeet?.length === 0);
+
   return (
     <Layout keepText={keepText} joinListCheck={joinListCheck}>
       <div className="detailinfo-photo">
@@ -307,7 +280,7 @@ export const DetailInfo = () => {
         <div className="group-info-footer">
           <div className="group-info-keep">
             <AiFillHeart
-              size={"50px"}
+              size={"40px"}
               onClick={userKeepList}
               color={keepListCheck ? "red" : "gray"}
             />
