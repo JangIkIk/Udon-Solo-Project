@@ -1,14 +1,15 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 interface userInfoType {
     user: {
-    userId: string | null,
-    userImage: string,
-    userKeepGroup: number[],
-    userJoinGroup: number[]
+    userId: string | null;
+    userImage: string;
+    userKeepGroup: number[];
+    userJoinGroup: number[];
+    userDayGroup: number[];
     }
 }
 const initialState: userInfoType = {
-    user: { userId: null, userImage: `${process.env.PUBLIC_URL}/images/simple.png`, userKeepGroup: [], userJoinGroup: []}
+    user: { userId: null, userImage: `${process.env.PUBLIC_URL}/images/simple.png`, userKeepGroup: [], userJoinGroup: [], userDayGroup: []}
 }
 const userInfo = createSlice({
     name: "userInfo",
@@ -21,17 +22,17 @@ const userInfo = createSlice({
             state.user = { ...state.user, userImage: action.payload};
         },
         
-        userGroup: (state, action: PayloadAction<{groupType: "userKeepGroup" | "userJoinGroup", groupId: number[]}>)=>{
+        userGroup: (state, action: PayloadAction<{groupType: "userKeepGroup" | "userJoinGroup" | "userDayGroup", groupId: number[]}>)=>{
             const {groupType, groupId} = action.payload;
             const newGroup = [...state.user[groupType], ...groupId];
             state.user[groupType] = newGroup;
         },
-        userGroupAdd: (state, action: PayloadAction<{groupType: "userKeepGroup" | "userJoinGroup", groupId: number}>)=>{
+        userGroupAdd: (state, action: PayloadAction<{groupType: "userKeepGroup" | "userJoinGroup" | "userDayGroup", groupId: number}>)=>{
             const {groupType, groupId} = action.payload;
             const newGroup = [...state.user[groupType], groupId];
             state.user[groupType] = newGroup;
         },
-        userGroupDelete: (state, action: PayloadAction<{groupType: "userKeepGroup" | "userJoinGroup", groupId: number}>)=>{
+        userGroupDelete: (state, action: PayloadAction<{groupType: "userKeepGroup" | "userJoinGroup" | "userDayGroup", groupId: number}>)=>{
             const {groupType, groupId} = action.payload;
             const newGroup: number[] | null = state.user[groupType]?.filter(( user ) => user !== groupId) || null;
             state.user[groupType] = newGroup;
