@@ -11,7 +11,7 @@ import axios from "axios";
 import { useAppSelector } from "@store/store.ts";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch } from "@store/store";
-import { userGroup, userGroupAdd } from "@slice/userSimple-slice";
+import { userGroupAdd, userGroupDelete } from "@slice/userSimple-slice";
 
 interface DetailmeetimgPropsType extends GroupScheduleType {
   groupInfoId: number;
@@ -108,8 +108,23 @@ export const Detailmeetimg = ({ item }: DetailmeetimgProps) => {
   };
 
   const noAttending = (id: number)=>{
-    console.log(id)
-
+    
+    if(isToken()){
+      const confirmReload = window.confirm("참여일정을 취소하시겠습니까?")
+        if(confirmReload){
+          axios.delete(`/api/group/attend/${id}`,{
+            headers: {
+              Authorization: `Bearer ${isToken()}`
+            }
+          })
+          .then( () => {
+            dispatch(userGroupDelete( {groupType: "userDayGroup", groupId: id}));
+            window.location.reload();
+          })
+          .catch( err => console.log(err))
+        }
+    }
+    
   }
 
   return (
