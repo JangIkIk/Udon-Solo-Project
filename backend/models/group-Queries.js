@@ -152,6 +152,19 @@ const DetaiMeetAttendCancel = (userId, groupDetailMeetId)=>{
   })
 }
 
+// 그룹모임 탈퇴 삭제 --- 기능
+const DetaiMeetAttendDelete = (userId, groupMeetId) => {
+  const groupMeetIdLength = groupMeetId.map(()=> '?').join(', ')
+  return new Promise( (resolve, reject) => {
+    db.run(`DELETE FROM detailMeetUser WHERE meetUserId = ? AND groupDetailMeetId IN (${groupMeetIdLength})`,[userId,...groupMeetId], (err)=>{
+      if(err){
+        reject(err);
+      }else{
+        resolve(true);
+      }
+    })
+  })
+}
 
 
 // 그룹모임 유저 조회 --- 비기능
@@ -166,6 +179,15 @@ const groupDetaiMeetAttend = ()=>{
       })
     })
 }
+
+/*
+  현재문제점은 userKeepList 와 userJoinList는 값이 할당되면 users테이블의 각 프로퍼티에다가 문자열로
+  할당하였기때문에 바로 연동이 되고있다. 하지만 userDayGroup은 users테이블에 프로퍼티가 존재하지만,
+  유저가 각모임에대해서 참여했을경우 detailMeetUser테이블에 유저의 정보를 저장하고 
+  users테이블의 userDayGroup에 값을 저장하지 않아서 값이 없는걸로 인식되고있다.
+*/
+
+
   module.exports = {
     simpleGroupList,
     groupDetailInfo,
@@ -177,6 +199,7 @@ const groupDetaiMeetAttend = ()=>{
     DetaiMeetAttendAdd,
     groupDetaiMeetAttend,
     DetaiMeetAttendCancel,
+    DetaiMeetAttendDelete,
     MeetAttendAddIdAdd,
     userGroupDetaiMeetAttend
   };
