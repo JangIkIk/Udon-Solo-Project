@@ -12,7 +12,7 @@ import { GroupListType } from "@components/GroupList";
 import { refreshToken, isToken } from "@components/Customhooks";
 import { AiFillHeart } from "react-icons/ai";
 import { useAppSelector, useAppDispatch } from "@store/store.ts";
-import { userGroupAdd, userGroupDelete, userGroupAllDelete } from "@slice/userSimple-slice";
+import { userGroupAdd, userGroupDelete, userDayGroupAllDelete } from "@slice/userSimple-slice";
 
 const Layout = styled.div<{ keepText: boolean; joinListCheck: boolean }>`
   height: 100%;
@@ -142,6 +142,8 @@ export const DetailInfo = () => {
   const navite = useNavigate();
   const dispatch = useAppDispatch();
 
+  
+
   useEffect(() => {
     axios
       .get<GroupListType>(`/api/group/list/${location.state.id}`)
@@ -201,14 +203,15 @@ export const DetailInfo = () => {
         navite("/login");
       }
     }
-  };
+  };  
+
 
   const userJoinListDelete = () => {
     if (isToken()) {
       const confirmReload = window.confirm("그룹에서 탈퇴하시겠습니까?");
       if (confirmReload) {
         axios
-          .delete<boolean>(`/api/group/join/${location.state.id}`, {
+          .delete<boolean>(`/api/group/join/${location.state.id}`,{
             headers: {
               Authorization: `Bearer ${isToken()}`,
             },
@@ -220,7 +223,10 @@ export const DetailInfo = () => {
                 groupId: location.state.id,
               })
             );
-            dispatch(userGroupAllDelete({groupType: "userDayGroup"}));
+            if(groubDetailInfo?.groupDetailMeet){
+                const deleteList = groubDetailInfo.groupDetailMeet.map( list => list.id);
+              dispatch(userDayGroupAllDelete({groupType: "userDayGroup", list: deleteList}));
+            }
             window.location.reload();
           });
       }
