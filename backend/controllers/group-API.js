@@ -17,7 +17,8 @@ const {
   DetaiMeetAttendAdd,
   groupDetaiMeetAttend,
   DetaiMeetAttendCancel,
-  DetaiMeetAttendDelete
+  MeetAttendAddIdAdd,
+  userGroupDetaiMeetAttend
 } = require("../models/group-Queries");
 
 const { groupDetaiMeetUser } = require("../models/users-Queries");
@@ -73,14 +74,24 @@ router.delete("/join/:id", async (req, res) => {
   try {
     const decode = jwt.verify(token, access);
     const joinList = await myJoinList(decode.userId);
-    DetaiMeetAttendDelete(decode.userId);
-    let currentList = joinList.userJoinList
-      ? JSON.parse(joinList.userJoinList)
-      : [];
+    let currentList = joinList.userJoinList? JSON.parse(joinList.userJoinList): [];
     const checkList = currentList.some((list) => list.id === Number(groupId));
     const deleteJoinList = currentList.filter(
       (list) => list.id !== Number(groupId)
     );
+
+      const groupMeetIdArr = await groupDetaiMeet(groupId);
+      const groupMeetId = groupMeetIdArr.map( list => list.id);
+      
+      if(groupMeetIdArr.length > 0){
+        const cueerntUserDayGroup = await userGroupDetaiMeetAttend(decode.userId);
+        const parse = JSON.parse(cueerntUserDayGroup.userDayGroup);
+        const uniqueValues = parse.filter(value => !groupMeetId.includes(value));
+        await MeetAttendAddIdAdd(JSON.stringify(uniqueValues), decode.userId)
+      }
+
+
+
     const newJoinList =
       deleteJoinList.length === 0 ? null : JSON.stringify(deleteJoinList);
 
@@ -191,6 +202,14 @@ router.post("/attend", async (req, res) => {
       userMeetData.userImage,
       decode.userId
     );
+    const currentDayGroup = await userGroupDetaiMeetAttend(decode.userId);
+    let parseDayGroup = currentDayGroup.userDayGroup ? currentDayGroup.userDayGroup = JSON.parse(currentDayGroup.userDayGroup): [];
+    parseDayGroup.push(detailMeetId);
+    
+
+    await MeetAttendAddIdAdd(JSON.stringify(parseDayGroup), decode.userId);
+
+
     res.status(200).send(true);
   } catch (err) {
     if (err instanceof jwt.TokenExpiredError) {
@@ -206,9 +225,18 @@ router.delete("/attend/:id", async ( req, res)=>{
   const token = req.headers.authorization.split(" ")[1];
   const groupDetailMeetId = req.params.id;
 
+
   try{
     const decode = jwt.verify(token, process.env.SECRET_ACCESSTOKEN);
     await DetaiMeetAttendCancel(decode.userId, groupDetailMeetId);
+    const currentDayGroup = await userGroupDetaiMeetAttend(decode.userId);
+    let parseDayGroup = currentDayGroup.userDayGroup ? currentDayGroup.userDayGroup = JSON.parse(currentDayGroup.userDayGroup): [];
+    if(parseDayGroup.length === 0){
+      parseDayGroup = null;
+    }{
+      parseDayGroup = parseDayGroup.filter( id => id !== Number(groupDetailMeetId));
+    }
+    await MeetAttendAddIdAdd(JSON.stringify(parseDayGroup), decode.userId)
     res.status(200).send("성공");
 
   }catch(err){
