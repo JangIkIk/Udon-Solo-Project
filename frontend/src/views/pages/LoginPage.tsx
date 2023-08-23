@@ -86,8 +86,7 @@ function LoginPage() {
 
         if (res.data.userDayGroup) {
           const parse = JSON.parse(res.data.userDayGroup);
-          const listId = parse.map((list: { id: number }) => list.id);
-          dispatch(userGroup({ groupType: "userKeepGroup", groupId: listId }));
+          dispatch(userGroup({ groupType: "userDayGroup", groupId: parse }));
         }
 
         if (res.data.userKeepList) {
