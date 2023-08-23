@@ -140,6 +140,7 @@ export const ProfileSettingModal = ({ setIsModal, userData, setUserData } : Prof
     })
     const [userImagePreview, setUserImagePreview] = useState<string>(userData?.userImage || `${process.env.PUBLIC_URL}/images/simple.png`);
     const [userNewImage, setUserNewImage] = useState<File | null>(null);
+    const nameRegex = /^[a-zA-Zㄱ-ㅎㅏ-ㅣ가-힣]{0,5}$/;
 
     const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
@@ -151,12 +152,16 @@ export const ProfileSettingModal = ({ setIsModal, userData, setUserData } : Prof
           }
       };
 
-
     //  유저프로필 수정
-      const profileChangeHandler = ()=>{
+    
+        const profileChangeHandler = ()=>{
         const formData = new FormData();
 
-        formData.set("userName", userState.userName);
+        if(userState.userName === ""){
+            formData.set("userName", userData.userName);
+        } else if(nameRegex.test(userState.userName)){
+            formData.set("userName", userState.userName);
+        }
         formData.set("userYears",userState.userYears);
         formData.set("userGender",userState.userGender);
     
@@ -198,7 +203,7 @@ export const ProfileSettingModal = ({ setIsModal, userData, setUserData } : Prof
           }) 
       }
     
-
+    
 
     return(
         <Layout gender={userState.userGender}>
@@ -212,9 +217,13 @@ export const ProfileSettingModal = ({ setIsModal, userData, setUserData } : Prof
                 </div>
                 <div className="setting-first">
                     <div>
-                        <input value={userState.userName} onChange={ ( {target} ) => setUserState( prev => ({
-                            ...prev, userName: target.value
-                        }))} placeholder="이름입력"/>
+                        <input value={userState.userName} onChange={ ( {target} ) => {
+                            if(nameRegex.test(target.value)){
+                                setUserState( prev => ({
+                                    ...prev, userName: target.value
+                                }))
+                            }
+                        }} placeholder="이름입력"/>
                     </div>
                     <div>
                         <button className="gender-man" onClick={ ()=> setUserState( prev => ({
