@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+
 interface userInfoType {
     user: {
     userId: string | null;
@@ -37,12 +38,13 @@ const userInfo = createSlice({
             const newGroup: number[] | null = state.user[groupType]?.filter(( user ) => user !== groupId) || null;
             state.user[groupType] = newGroup;
         },
-        userGroupAllDelete: (state, action: PayloadAction<{groupType: "userDayGroup"}>) => {
-            const {groupType} = action.payload;
-            state.user[groupType] = [];
+        userDayGroupAllDelete: (state, action: PayloadAction<{groupType: "userDayGroup", list: number[]}>) => {
+            const {groupType, list} = action.payload;
+            const newList = state.user[groupType].filter(value => !list.includes(value));
+            state.user[groupType] = newList;
         }
 
     }
 })
-export const { userId, userGroup, userGroupAdd, userGroupDelete, userImage, userGroupAllDelete } = userInfo.actions;
+export const { userId, userGroup, userGroupAdd, userGroupDelete, userImage, userDayGroupAllDelete } = userInfo.actions;
 export default userInfo.reducer;
