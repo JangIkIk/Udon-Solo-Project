@@ -81,17 +81,10 @@ router.delete("/join/:id", async (req, res) => {
       (list) => list.id !== Number(groupId)
     );
 
-
-      // 해당그룹에 진행중인 일정 ID
       const groupMeetIdArr = await groupDetaiMeet(groupId);
       const groupMeetId = groupMeetIdArr.map( list => list.id);
-      
-
-      
+        
       if(groupMeetIdArr.length > 0){
-        //    // 그룹에 상관없이 유저가 가지고있는 모임 ID
-        console.log("groupMeetId:",groupMeetId);
-        console.log("decode.userId:",decode.userId);
         await DetaiMeetAttendDelete(decode.userId, groupMeetId);
         const cueerntUserDayGroup = await userGroupDetaiMeetAttend(decode.userId);
         const parse = JSON.parse(cueerntUserDayGroup.userDayGroup);

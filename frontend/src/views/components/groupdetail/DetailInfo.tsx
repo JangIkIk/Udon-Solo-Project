@@ -142,7 +142,7 @@ export const DetailInfo = () => {
   const navite = useNavigate();
   const dispatch = useAppDispatch();
 
-  
+  // console.log(groubDetailInfo);
 
   useEffect(() => {
     axios

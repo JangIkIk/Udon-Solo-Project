@@ -156,7 +156,6 @@ function SignUpPage() {
           type="tel"
           text="'-' 를제외한 10자이상 11자이하의 숫자만입력해주세요."
           regex={/^01[01679][0-9]{3,4}[0-9]{4,4}$/}
-          buttons="인증하기"
           placeholder="ex: 01034344444"
         >
           휴대폰 ✅
