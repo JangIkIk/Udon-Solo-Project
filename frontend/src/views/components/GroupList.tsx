@@ -3,16 +3,17 @@ import "@styles/index.css";
 import { useNavigate } from "react-router-dom";
 
 export interface GroupListType {
-  id: number,
-  groupRegion: string,
-  groupImg: string,
-  groupTitle: string,
-  groupPeople: string,
-  groupContent: string,
+  id: number;
+  groupRegion: string;
+  groupImg: string;
+  groupTitle: string;
+  groupPeople: string;
+  groupContent: string;
+  groupTag: string;
 }
 
 type GroupListTypeProps = {
-  item: GroupListType,
+  item: GroupListType;
 };
 
 const Layout = styled.div`
@@ -69,7 +70,16 @@ const Layout = styled.div`
 
     .list-content2{
       font-size: 1rem;
-      text-align: right;
+      display:flex;
+    }
+
+    .list-tag{
+      margin-right: auto;
+    }
+    .list-tag{
+      border: 1px solid black;
+      padding: 5px;
+      border-radius: 10px;
     }
     
   }
@@ -81,6 +91,7 @@ export const GroupList = ({ item }: GroupListTypeProps) => {
   const clickGroup = () => {
     navigate("/group", { state: item });
   };
+  // console.log(item);
 
   return (
     <Layout onClick={clickGroup}>
@@ -95,8 +106,8 @@ export const GroupList = ({ item }: GroupListTypeProps) => {
           <span>{item.groupContent}</span>
         </div>
         <div className="list-content2">
-          <span>{item.groupRegion}</span>
-          <span> | </span>
+          <span className="list-tag">#{item.groupTag}</span>
+          <span>{`${item.groupRegion}`}</span>
           <span>{`인원 ${item.groupPeople}`}</span>
         </div>
       </div>
