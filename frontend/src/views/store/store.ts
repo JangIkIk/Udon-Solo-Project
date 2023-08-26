@@ -1,6 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import userInfo from "../slice/userSimple-slice";
+import searchSlice from "../slice/serach-slice";
 
 
 
@@ -34,6 +35,8 @@ const persistedReducer = persistReducer(persistConfig, userInfo);
 export const store = configureStore({
     reducer: {
         userInfo: persistedReducer,
+        search: searchSlice
+        
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({
