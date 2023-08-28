@@ -13,7 +13,7 @@ const simpleGroupList = () =>{
     })
   }
 
-  // 그룹별 상세정보조회 --- 기능
+  // 그룹별 상세정보조회
 const groupDetailInfo = ( groupId )=>{
   return new Promise( (resolve, reject)=>{
     db.get('SELECT * FROM groupInfo WHERE id = ?', [groupId], (err, row) => {
@@ -26,7 +26,20 @@ const groupDetailInfo = ( groupId )=>{
   })
 }
 
-// 그룹 모임정보조회 --- 기능
+// 그룹 모임 전체조회
+const groupDetailMeetAll = ()=>{
+  return new Promise ((resolve, reject)=>{
+    db.all('SELECT * FROM groupDetailMeet', [], (err,rows)=>{
+      if(err){
+        reject(err);
+      } else{
+        resolve(rows);
+      }
+    })
+  })
+}
+
+// 그룹 모임정보 그룹별 조회
 const groupDetaiMeet = ( groupId )=>{
   return new Promise ((resolve, reject)=>{
     db.all('SELECT * FROM groupDetailMeet WHERE groupInfoId =?', [groupId], (err, row)=>{
@@ -39,7 +52,7 @@ const groupDetaiMeet = ( groupId )=>{
   })
 }
 
-// 가입리스트 조회 --- 비기능
+// 가입리스트 조회
 const myJoinList = (userId) => {
 
   return new Promise( (resolve, reject) => {
@@ -54,7 +67,7 @@ const myJoinList = (userId) => {
 
 }
 
-// 가입리스트 추가 --- 기능
+// 가입리스트 추가
 const myJoinListAdd = (list, userId) =>{
 
   return new Promise ( (resolve, reject) => {
@@ -69,7 +82,7 @@ const myJoinListAdd = (list, userId) =>{
 
 }
 
-// 그룹 찜리스트 조회 --- 비기능
+// 그룹 찜리스트 조회
 const myKeepList = ( userId) => {
 
   return new Promise( (resolve, reject) => {
@@ -84,7 +97,7 @@ const myKeepList = ( userId) => {
   
 }
 
-// 찜리스트 추가 --- 기능
+// 찜리스트 추가
 const myKeepListAdd = ( list, userId) => {
   return new Promise ( (resolve, reject) => {
     db.run('UPDATE users SET userKeepList = ? WHERE userId = ?', [list, userId], (err) => {
@@ -97,7 +110,7 @@ const myKeepListAdd = ( list, userId) => {
   })
 }
 
-// 그룹모임참여 --- 기능
+// 그룹모임참여
 const DetaiMeetAttendAdd = ( detailMeetId, userName, userImage, userId )=>{
   return new Promise( (resolve, reject)=>{
     db.run('INSERT INTO detailMeetUser ( groupDetailMeetId, meetUserName, meetUserImg, meetUserId ) VALUES (?, ?, ?, ?)', [detailMeetId, userName, userImage, userId], (err)=>{
@@ -110,7 +123,7 @@ const DetaiMeetAttendAdd = ( detailMeetId, userName, userImage, userId )=>{
   })
 }
 
-// 유저 그룹모임 참여 조회 --- 비기능
+// 유저 그룹모임 참여 조회
 const userGroupDetaiMeetAttend = ( userId ) => {
   return new Promise( (resolve, reject) => {
     db.get('SELECT userDayGroup FROM users WHERE userId = ?',[userId], (err, row)=>{
@@ -124,7 +137,7 @@ const userGroupDetaiMeetAttend = ( userId ) => {
   
 }
 
-// 그룹모임참여 ID (users) --- 비기능
+// 그룹모임참여 ID (users)
 const MeetAttendAddIdAdd = (listId, userId)=>{
   return new Promise ( (resolve, reject) => {
     db.run('UPDATE users SET userDayGroup = ? WHERE userId = ?', [listId, userId], (err) => {
@@ -139,7 +152,7 @@ const MeetAttendAddIdAdd = (listId, userId)=>{
 
 
 
-// 그룹모임 선택 삭제 --- 기능
+// 그룹모임 선택 삭제
 const DetaiMeetAttendCancel = (userId, groupDetailMeetId)=>{
   return new Promise( (resolve, reject) => {
     db.run('DELETE FROM detailMeetUser WHERE meetUserId = ? AND  groupDetailMeetId = ?', [userId, groupDetailMeetId], (err)=>{
@@ -152,7 +165,7 @@ const DetaiMeetAttendCancel = (userId, groupDetailMeetId)=>{
   })
 }
 
-// 그룹모임 탈퇴 삭제 --- 기능
+// 그룹모임 탈퇴 삭제
 const DetaiMeetAttendDelete = (userId, groupMeetId) => {
   const groupMeetIdLength = groupMeetId.map(()=> '?').join(', ')
   return new Promise( (resolve, reject) => {
@@ -167,7 +180,7 @@ const DetaiMeetAttendDelete = (userId, groupMeetId) => {
 }
 
 
-// 그룹모임 유저 조회 --- 비기능
+// 그룹모임 유저 조회
 const groupDetaiMeetAttend = ()=>{
     return new Promise( (resolve, reject) => {
       db.all('SELECT * FROM detailMeetUser',[],(err, rows)=>{
@@ -179,14 +192,6 @@ const groupDetaiMeetAttend = ()=>{
       })
     })
 }
-
-/*
-  현재문제점은 userKeepList 와 userJoinList는 값이 할당되면 users테이블의 각 프로퍼티에다가 문자열로
-  할당하였기때문에 바로 연동이 되고있다. 하지만 userDayGroup은 users테이블에 프로퍼티가 존재하지만,
-  유저가 각모임에대해서 참여했을경우 detailMeetUser테이블에 유저의 정보를 저장하고 
-  users테이블의 userDayGroup에 값을 저장하지 않아서 값이 없는걸로 인식되고있다.
-*/
-
 
   module.exports = {
     simpleGroupList,
@@ -201,5 +206,6 @@ const groupDetaiMeetAttend = ()=>{
     DetaiMeetAttendCancel,
     DetaiMeetAttendDelete,
     MeetAttendAddIdAdd,
-    userGroupDetaiMeetAttend
+    userGroupDetaiMeetAttend,
+    groupDetailMeetAll
   };

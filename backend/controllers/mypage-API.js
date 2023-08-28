@@ -71,16 +71,21 @@ router.patch('/', upload.single('userImage'), async(req, res) => {
       userIntroduce,
     } = req.body;
     let imageFile = req.file ?  req.file : req.body.userImage;
+    let isNull = userActivity
   
     if(!imageFile){
       imageFile = null;
     } else if(imageFile.filename){
-      imageFile = `http://localhost:4000/${imageFile.filename}`
+      imageFile = `${process.env.IMAGE_FILEPATCH}/${imageFile.filename}`
+    }
+
+    if(isNull === ""){
+      isNull = null;
     }
 
     try{
       const decode = jwt.verify(token,access);
-      await myProfileSetting([imageFile, userName,userGender,userYears,userActivity,userIntroduce],decode.userId);
+      await myProfileSetting([imageFile, userName,userGender,userYears,isNull,userIntroduce],decode.userId);
       const userdata = await myProfile(decode.userId);
       userdata.userJoinList = JSON.parse(userdata.userJoinList) ?? null;
       userdata.userKeepList = JSON.parse(userdata.userKeepList) ?? null;
