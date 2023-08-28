@@ -91,7 +91,6 @@ export const GroupList = ({ item }: GroupListTypeProps) => {
   const clickGroup = () => {
     navigate("/group", { state: item });
   };
-  // console.log(item);
 
   return (
     <Layout onClick={clickGroup}>

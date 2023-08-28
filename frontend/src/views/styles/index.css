@@ -26,10 +26,3 @@
   flex: 1;
 }
 
-
-.test{
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden;
-}
-

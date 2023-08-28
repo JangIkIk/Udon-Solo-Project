@@ -142,8 +142,6 @@ export const DetailInfo = () => {
   const navite = useNavigate();
   const dispatch = useAppDispatch();
 
-  // console.log(groubDetailInfo);
-
   useEffect(() => {
     axios
       .get<GroupListType>(`/api/group/list/${location.state.id}`)
@@ -285,6 +283,7 @@ export const DetailInfo = () => {
         <ImgBase src={groubDetailInfo?.groupImg} alt="그룹사진" />
       </div>
       <div className="detailinfo-content">
+        <p>{groubDetailInfo?.groupTag}</p>
         <h3>{groubDetailInfo?.groupTitle}</h3>
         <p>{groubDetailInfo?.groupContent}</p>
         <div className="detailinfo-time">

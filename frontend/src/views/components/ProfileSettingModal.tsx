@@ -167,7 +167,7 @@ export const ProfileSettingModal = ({ setIsModal, userData, setUserData } : Prof
     
         if(userState.userActivity === null){
             formData.delete("userActivity");
-        } else{
+        }else{
             formData.set("userActivity",userState.userActivity);
         }
 
