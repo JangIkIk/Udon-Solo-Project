@@ -20,8 +20,12 @@ const searchSlice = createSlice({
         setSearchFilter: (state, action: PayloadAction<string[]>)=>{
             state.searchFilter = action.payload;
         },
+        deleteSearchFilter: (state, action: PayloadAction<string>)=>{
+            const newFilter = state.searchFilter.filter( filter => filter !== action.payload)
+            state.searchFilter = newFilter;
+        }
     }
 })
 
-export const { setSearchText, setSearchFilter } = searchSlice.actions;
+export const { setSearchText, setSearchFilter, deleteSearchFilter } = searchSlice.actions;
 export default searchSlice.reducer;

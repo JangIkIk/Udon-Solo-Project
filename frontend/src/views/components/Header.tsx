@@ -9,7 +9,7 @@ import {
 } from "@components/AllComponent"
 import React, { useState } from "react";
 import { useAppDispatch } from "@store/store.ts";
-import { setSearchText, setSearchFilter } from "@slice/serach-slice";
+import { setSearchText, setSearchFilter, deleteSearchFilter } from "@slice/serach-slice";
 
 const Layout = styled.div`
 display: flex;
@@ -99,6 +99,8 @@ function Header() {
       if (event.key === "Enter" && search.trim() !== ""){
         dispatch(setSearchText(search));
         setModal(false);
+      }else if(event.key === "Enter" && search.trim() === ""){
+        dispatch(setSearchText(search));
       }
     };
 
@@ -125,6 +127,7 @@ function Header() {
     const tagDelete = ( tagDelete: string)=>{
       const newTag = tags.filter(( tag )=> tag !== tagDelete)
       setTags(newTag);
+      dispatch(deleteSearchFilter(tagDelete));
     }
     
   return (

@@ -16,28 +16,32 @@ const Layout = styled(BaseLayout)`
 const HomePage = () => {
   const [groupList, setGroupList] = useState<GroupListType[]>([]);
   const selector = useAppSelector((state) => state.search);
-  
-  
+
   const filteredList = useMemo(()=>{    
     if (selector.searchText === "") {
       return groupList;
     } else{
             let result:GroupListType[] = [];
             let tags:GroupListType[] = [];
+            let tagsStr;
             let region:GroupListType[] = [];
+            let regionStr;      
             let title:GroupListType[] = [];
-
+            
             for(let i = 0 ; i < groupList.length ; i++){
+              regionStr = selector.searchFilter.includes(groupList[i].groupRegion);
+              tagsStr = selector.searchFilter.includes(groupList[i].groupTag);
+              
               if(groupList[i].groupTitle.includes(selector.searchText)){
                 title.push(groupList[i]);
-                  if(selector.searchFilter.includes(groupList[i].groupTag)){
+                  if(tagsStr){
                     tags.push(groupList[i]);
-                        if(selector.searchFilter.includes(groupList[i].groupRegion)){
+                        if(regionStr){
                           result.push(groupList[i]);
                         }
-                  } else if(selector.searchFilter.includes(groupList[i].groupRegion)){
-                      region.push(groupList[i]);
-                        if(selector.searchFilter.includes(groupList[i].groupTag)){
+                  } else if(regionStr){
+                        region.push(groupList[i]);
+                        if(tagsStr){
                           result.push(groupList[i]);
                         }
                   }
@@ -54,7 +58,7 @@ const HomePage = () => {
             }
     }
 
-  },[selector,groupList])
+  },[selector.searchText, selector.searchFilter, groupList])
 
   useEffect(() => {
     if (selector.searchText === "") {
@@ -63,6 +67,8 @@ const HomePage = () => {
         .then((res) => setGroupList(res.data));
     } 
   }, []);
+
+  
 
   return (
     <Layout>
