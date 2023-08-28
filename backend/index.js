@@ -2,6 +2,8 @@
 require('dotenv').config();
 //DB파일 생성및 테이블 생성
 require('./models/table-Queries');
+//임시데이터 추가
+require('./createData');
 const express = require('express');
 const app = express();
 const port = 4000;
