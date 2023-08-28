@@ -158,7 +158,7 @@ function MyPage() {
             </SpanFlex>
             <SpanFlex>
               <BiBeenHere />{" "}
-              {userData && userData.userActivity !== ""
+              {userData && userData.userActivity !== null 
                 ? userData.userActivity
                 : "지역없음"}
             </SpanFlex>

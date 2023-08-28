@@ -196,11 +196,10 @@ export const Detailmeetimg = ({ item }: DetailmeetimgProps) => {
           </ul>
         </div>
         <div className="group-info-meet-info-button">
-          {meetPeople !== 10 ? selector.userDayGroup.includes(item.id) ? (
-            <button className="button-red" onClick={() => noAttending(item.id)}>취소</button>
-          ) : (
-            <button className="button-blue" onClick={() => attend(item.id)}>참여</button>
-          ) : <button onClick={() => alert("인원을 초과하였습니다.")} className="button-gray" >만석</button>}
+          {meetPeople === 10 && !selector.userDayGroup.includes(item.id) ? <button onClick={() => alert("인원을 초과하였습니다.")} className="button-gray" >만석</button> : null}
+          {meetPeople === 10 && selector.userDayGroup.includes(item.id) ? <button className="button-red" onClick={() => noAttending(item.id)}>취소</button> : null}
+          {meetPeople !== 10 && !selector.userDayGroup.includes(item.id) ? <button className="button-blue" onClick={() => attend(item.id)}>참여</button> : null}
+          {meetPeople !== 10 && selector.userDayGroup.includes(item.id) ? <button className="button-red" onClick={() => noAttending(item.id)}>취소</button>  : null}
         </div>
       </div>
     </Layout>
