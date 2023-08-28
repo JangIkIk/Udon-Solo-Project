@@ -1,99 +1,53 @@
-> 설치한 패키지
-```
-npm i @reduxjs/toolkit
-npm i axios
-npm i react
-npm i react-dom
-npm i react-icons
-npm i react-redux
-npm i react-router-dom
-npm i redux-persist
-npm i styled-components
-npm i typescript
-npm i @types/react -D
-npm i @types/react-dom -D
-npm i @types/styled-components -D
-npm install @craco/craco --save-dev --legacy-peer-deps ?? -> 어떤역할?
-```
+### __[구현한 기능구분]__
+  - 회원가입(공통)
+  - 로그인(회원기능)
+  - 마이페이지(회원기능)
+    > 프로필이미지변경
+    
+    > 이름변경
 
-구조변경후 확인
-```
--> SignUpPage.tsx (엔드포인트 변경)
--> LoginPage.tsx (엔드포인트 변경)
--> users-API.js (모듈 재배치)
--> HomePage.tsx (엔드포인트 변경)
+    > 성별변경
+
+    > 생년월일 변경
+
+    > 활동지역 변경
+
+    > 간단한 자기소개글
+  - 그룹찜하기(회원기능)
+  - 그룹가입하기(회원기능)
+  - 그룹탈퇴하기(회원기능)
+  - 그룹 모임참여하기(회원기능)
+  - 그룹 모임취소하기(회원기능)
+  - 검색
+    > 조건검색
 
 
+### __수정할 Css부분__
 
-현재 파일의 구분
+1. myPage 프로필이미지 이미지에따라 크기변경수정
+2. 검색창부분 input 왼쪽라인 뭉개짐
+3. DetailInfo 이미지부분 반응형수정
+4. DetailInfo 정보부분 반응형수정
+5. 마이페이지부분 반응형 다시확인
+6. 참여버튼 꽉찼을경우는 참여버튼 비화성화
+7. DetailInfo <- 화살표에 뒤로가기 글씨추가
+8. header 상단부분 다크모드 언어변경 제거
+9. 검색태그 없을경우 사이즈 최소화?
+10. 회원가입 인증하기 버튼 없애기
+11. 회원가입 조건 충족하지않을경우 가입하기 비활성화
+12. 마이페이지첫 부분 이름,년도,성별,지역 조금 꾸미기?
+13. 반응형 크기 점검
 
--backend
-|controllers
-|    |group-API.js
-|    |mypage-API.js
-|    |users-API.js
-|models
-|    |group-Queries.js
-|    |mypage-Queries.js
-|    |users-Queries.js
-|    |table-Queries.js
-|index.js
+### __추가해야할 기능 및 점검__
 
-
-
-
-```
-
-
-///// 임시
-
-[설치한패키지]
-```
-npx i create-react-app udon --template typescript
-npm i axios
-npm i styled-components
-npm i express
-npm i nodemon   
-npm i sqlite3
-npm i @reduxjs/toolkit
-npm i react-router-dom
-npm i react-icons
-
-npm i @craco/craco --save-dev
-npm i @types/styled-components--save-dev
-```
-
-[역할구분]
-- Client : React(TypeScript)
-- ApiServer : Express
-- DB : sqlite3
-- 상태관리 : Redux-toolkit
+1. 일정시간 간격으로 DB리셋
+2. 리프레시토큰 재점검
 
 [반응형]
 최소 320 X 568
 최대 1080 X 2400
 
-
-[보완 및 추가 해야할부분]
-- [로그인]
-    - css보완(전체적인)
-- [회원가입]
-    - css - (비밀번호 확인부분 체크빠짐)
-    - css - (필수항목 입력안되었을시 가입하기 버튼 비활성화)
-    - 휴대폰 인증시 이메일 or 카톡인증으로?
-    - 휴대폰 유효성검사 017제외하기
-- [홈]
-    - css보완(전체적인)
-- [마이페이지]
-    - 
-    
-
-    
-
-
-[완료한기능]
-
-[문서]
+[참고문서]
 - JWT : https://github.com/auth0/node-jsonwebtoken
 - sqlite3 Github : https://github.com/TryGhost/node-sqlite3
 - sqlite 쿼리문 : https://www.sqlite.org/lang.html
@@ -102,8 +56,7 @@ npm i @types/styled-components--save-dev
 - 정규표현식 테스트: https://regex101.com/ 
 - React: https://ko.legacy.reactjs.org/
 - axios: https://axios-http.com/kr/
-
-----
+-----
 
 
 
