@@ -8,7 +8,6 @@ import { useAppDispatch } from "@store/store";
 import { userId, userGroup, userImage } from "@slice/userSimple-slice";
 
 const Layout = styled(BaseLayout)`
-
   display: flex;
   flex-direction: column;
   align-items:center;
@@ -17,7 +16,7 @@ const Layout = styled(BaseLayout)`
 
   .loginpage-info{
     padding: 5rem;
-    background-color: slategrey;
+    border: 1px solid black;
     border-radius: 10px;
     display:flex;
     flex-direction: column;
@@ -31,7 +30,6 @@ const Layout = styled(BaseLayout)`
         flex-direction: column;
         display:flex;
         gap: 1rem;
-        
 
         & > a,button{
             border-radius: 10px;
@@ -43,6 +41,11 @@ const Layout = styled(BaseLayout)`
         & > button{
             color: white;
             background-color: ${colors.buttonCreateColor};
+        }
+
+        & > a{
+          color: white;
+          background-color: gray;
         }
   }
 
@@ -65,6 +68,14 @@ function LoginPage() {
     loginPassword: "",
     keepCheck: false,
   });
+
+  const testUser = ()=>{
+    setLoginData( prev => ({
+      ...prev,
+      loginId: "test123",
+      loginPassword: "test123!"
+    }))
+  }
 
   const handleLogin = () => {
     axios
@@ -157,6 +168,7 @@ function LoginPage() {
           <button onClick={handleLogin}>로그인하기</button>
           <a href="/signup">회원가입</a>
           <a href="/">홈으로 가기</a>
+          <button onClick={testUser}>테스트아이디입력</button>
         </div>
       </div>
     </Layout>

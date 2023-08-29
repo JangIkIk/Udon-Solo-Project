@@ -30,7 +30,16 @@ const Layout = styled(BaseLayout)`
     gap: 1rem;
 
     .mypage-photo {
-      width: 5rem;
+      width: 6rem;
+      height: 6rem;
+
+      & > img{
+        border-radius: 50%;
+        width:100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
     }
 
     .mypage-content {
@@ -133,16 +142,9 @@ function MyPage() {
       ) : null}
       <div className="mypage-info">
         <div className="mypage-photo">
-          <ImgBase
-            src={
-              userData && userData.userImage !== null
+          <img src={userData && userData.userImage !== null
                 ? userData.userImage
-                : `${process.env.PUBLIC_URL}/images/simple.png`
-            }
-            alt="#"
-            fit="contain"
-            borderRadius={"50%"}
-          />
+                : `${process.env.PUBLIC_URL}/images/simple.png`}/>
         </div>
         <div className="mypage-content">
           <div>

@@ -16,7 +16,7 @@ display: flex;
 ${fixedBase}
 top:0;
 height:8rem;
-background-color: yellow;
+background-color: rgb(244, 238, 238);
 
 header {
   flex:1;
@@ -31,7 +31,6 @@ header {
       gap:1rem;
 
     .title {
-      // input leftrk 짤리는 이유는 ? 
       font-size:1rem;
       flex: 1;
     }
@@ -55,16 +54,28 @@ header {
         border-radius: 50%;
         ${baseHover}
 
-        .filter{
+        .filter-search{
           display:flex;
+          font-size:1rem;
           justify-content: center;
           align-items: center;
           right:0;
           left:0;
           top:100%;
-          background-color:red;
+          background-color:rgb(255, 183, 183);
           position: absolute;
           height: 50%;
+
+
+          & > label button{
+            padding: 10px;
+            border: 1px solid black;
+          }
+
+          #region{
+            margin: 10px;
+            padding: 0.8rem;
+          }
         }
       }
     }
@@ -73,10 +84,10 @@ header {
       display:flex;
       gap: 2rem;
       font-size:1rem;
-      span{
-          padding:0.2rem;
+      & > span{
+          padding:0.5rem;
           border-radius: 5px;
-          ${baseBorder}
+          border: 1px solid black;
       }
   }
 }
@@ -89,6 +100,7 @@ function Header() {
     const [tags, setTags] = useState<string[]>([]);
     const [filterText, setFilterText] = useState<string>("");
     const dispatch = useAppDispatch();
+
 
     const searchClick = ()=>{
       dispatch(setSearchText(search));
@@ -106,6 +118,11 @@ function Header() {
 
     const tagEnter = (event: React.KeyboardEvent<HTMLInputElement>) => {
 
+      if(tags.length === 7){
+        alert("필터를 더이상입력할수없습니다.");
+        return 
+      }
+
       if (event.key === "Enter" && filterText.trim() !== ""){
         setTags( prev => [...prev, filterText]);
         setFilterText("");
@@ -115,6 +132,11 @@ function Header() {
     
 
     const tagClick = () =>{
+
+      if(tags.length === 7){
+        alert("필터를 더이상입력할수없습니다.");
+        return 
+      }
 
         if(filterText.trim() !== ""){
           setTags( prevTags => [...prevTags, filterText]);
@@ -142,7 +164,7 @@ function Header() {
             </label>
             <label htmlFor="searach-value" onClick={()=> setModal(!modal)}>
               <BiRightIndent />
-              {modal ? <div className="filter" onClick={(e) => e.stopPropagation()}>
+              {modal ? <div className="filter-search" onClick={(e) => e.stopPropagation()}>
                 <label htmlFor="region">
                   <span>지역 or 키워드:</span>
                   <input id="region" placeholder="지역과 관심모임을 지정하세요!" value={filterText} onKeyUp={tagEnter} onChange={({target})=>setFilterText(target.value)}/>

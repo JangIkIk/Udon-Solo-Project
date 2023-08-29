@@ -31,6 +31,12 @@ const Layout = styled(BaseLayout)<styleProps>`
                   font-size: 1.5rem;
                   ${flex_row_align_center}
                   cursor: pointer;
+
+                  & > span{
+                    left: 20px;
+                    top: 20px;
+                    position: absolute;
+                  }
                 }
                
               }
@@ -85,7 +91,7 @@ function GroupDetailPage() {
       <div className="grouppage-header">
         <header>
           <div onClick={() => navigate(-1)} className="group-page-icon">
-            <BiLeftArrowAlt />
+            <span>뒤로가기</span>
           </div>
           <h2>{location.state.groupTitle}</h2>
         </header>

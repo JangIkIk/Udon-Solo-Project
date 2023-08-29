@@ -16,6 +16,8 @@ const Layout = styled.div<{gender?: string}>`
     ${flex_row_all_cneter};
 
     .profile-setting{
+        padding: 10px;
+        border-radius: 10px;
         background-color: white;
         display:flex;
         flex-direction: column;

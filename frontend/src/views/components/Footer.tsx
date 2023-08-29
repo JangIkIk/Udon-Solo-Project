@@ -20,6 +20,7 @@ const Layout = styled.div`
   font-size: 1.5rem;
   bottom: 0;
   height: 4.5rem;
+  background-color: rgb(244, 238, 238);
 
   .in-box {
     padding: 0.5rem;

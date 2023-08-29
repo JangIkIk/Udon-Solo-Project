@@ -20,7 +20,7 @@ export const baseBorder = css`
 export const baseHover = css`
   &:hover {
     cursor: pointer;
-    background-color: ${colors.hoverColor};
+    background-color: white;
   }
 `;
 
@@ -230,7 +230,7 @@ export const PasswordInput = ({
   return (
     <PasswordInputLayout styles={passwordRegex}>
       <label className="passwordinput-original">
-        <span>비밀번호 ✅</span>
+        <span>비밀번호</span>
         <input
           type="password"
           name="userPassword"

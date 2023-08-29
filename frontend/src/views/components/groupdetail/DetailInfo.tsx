@@ -22,6 +22,10 @@ const Layout = styled.div<{ keepText: boolean; joinListCheck: boolean }>`
     ${flex_row_justify_center}
     margin: 0 auto;
     width: 100%;
+
+    & > img{
+      width: 100%;
+    }
   }
 
   .detailinfo-content {
@@ -280,7 +284,7 @@ export const DetailInfo = () => {
   return (
     <Layout keepText={keepText} joinListCheck={joinListCheck}>
       <div className="detailinfo-photo">
-        <ImgBase src={groubDetailInfo?.groupImg} alt="그룹사진" />
+        <img src={groubDetailInfo?.groupImg}/>
       </div>
       <div className="detailinfo-content">
         <p>{groubDetailInfo?.groupTag}</p>
