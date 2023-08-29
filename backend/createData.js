@@ -9,15 +9,15 @@ const { simpleGroupList, groupDetailMeetAll} = require('./models/group-Queries')
 // db.run(`DROP TABLE users`);
 
 /*-------------------------------TestID-----------------------------------------------*/
-// const testUser = ["test123","test123!","홍길동","01000000000","2000-01-01","남",null,null,null,null,null]
+const testUser = ["test123","test123!","홍길동","01000000000","2000-01-01","남",null,null,null,null,null]
 
-// db.run(
-//   `INSERT INTO users (userId, userPassword, userName, userPhone, userYears, userGender, userActivity, userIntroduce, userKeepList, userImage, userDayGroup) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-//   testUser,
-//   (err) => {
-//     if (err) return console.error(err.message);
-//   }
-// );
+db.run(
+  `INSERT INTO users (userId, userPassword, userName, userPhone, userYears, userGender, userActivity, userIntroduce, userKeepList, userImage, userDayGroup) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+  testUser,
+  (err) => {
+    if (err) return console.error(err.message);
+  }
+);
 /*-------------------------------TestID-----------------------------------------------*/
 
 
@@ -88,7 +88,7 @@ const createUser = async()=>{
   }
 
   const createGroupMeetDay = async()=>{
-    const meetingPlace = "카톡방에서 공지";
+    const meetingPlace = "카톡방 공지";
     const meetingMoney = "이용료 + @";
 
    
@@ -432,7 +432,7 @@ const createGroup = ()=>{
     createGroupMeetDay();
 }
 
-// createGroup();
+createGroup();
 /*-------------------------------group-----------------------------------------------*/
 
   
