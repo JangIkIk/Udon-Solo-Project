@@ -17,7 +17,7 @@ const uploadsDir = path.join(__dirname, process.env.UPLOAD_DIR);
 //CORS 설정
 app.use(
     cors({
-        origin: "*",
+        origin: process.env.CORS_ORIGIN,
         credentials: true,
     })
 );
